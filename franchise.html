@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Star Wars | Orden para ver</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Header -->
+      <header class="navbar">
+        <div class="container">
+          <div class="logo">
+            <a href="/" class="logo-text" style="text-decoration: none; color: inherit;">Ordenparaver</a>
+          </div>
+          <nav class="nav-links">
+            <a href="/">Cronologías</a>
+            <a href="#" class="active">Franquicias</a>
+            <a href="#">Novedades</a>
+            <a href="#">Comunidad</a>
+          </nav>
+          <div class="nav-actions">
+            <div class="language-selector">
+              <span class="lang-icon">🌐</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Franchise Hero -->
+      <section class="franchise-header">
+        <div class="container">
+          <span class="context-tag">Destacado de Franquicia</span>
+          <h1 class="franchise-title">Star Wars</h1>
+          <p class="franchise-summary">Explora la épica saga de una galaxia muy, muy lejana. Desde el ascenso de la República hasta el conflicto final contra la Primera Orden, curamos cada momento en su orden temporal exacto.</p>
+        </div>
+      </section>
+
+      <!-- Timeline Section -->
+      <section class="timeline-section">
+        <div class="container">
+          
+          <!-- Controls -->
+          <div class="timeline-controls">
+            <div class="toggle-group">
+              <button class="toggle-btn active">Orden Cronológico</button>
+              <button class="toggle-btn">Orden de Estreno</button>
+            </div>
+            
+            <div class="filter-group">
+              <span class="filter-label">Filtrar por:</span>
+              <button class="filter-btn active">Todo</button>
+              <button class="filter-btn">Películas</button>
+              <button class="filter-btn">Series</button>
+              <button class="filter-btn">Animación</button>
+            </div>
+          </div>
+
+          <div class="timeline-container relative">
+            <div class="timeline-line"></div>
+            <!-- Dynamic elements will be injected here via src/main.js -->
+
+          </div> <!-- End Timeline Container -->
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="main-footer">
+        <div class="container">
+          <div class="footer-bottom">
+            <div class="footer-logo">Ordenparaver</div>
+            <div class="copyright">© 2024 Ordenparaver - El Curador Digital. Todos los derechos galácticos reservados.</div>
+            <div class="footer-links">
+              <a href="#">Política de Privacidad</a>
+              <a href="#">Términos de Servicio</a>
+              <a href="#">Contactar Especialista</a>
+              <a href="#">Documentación API</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
