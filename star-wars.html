@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Star Wars | Orden para ver</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Header -->
+      <header class="navbar">
+        <div class="container">
+          <div class="logo">
+            <a href="/" class="logo-text" style="text-decoration: none; color: inherit;">Ordenparaver</a>
+          </div>
+          <nav class="nav-links">
+            <a href="/">Timelines</a>
+            <a href="#" class="active">Franchises</a>
+            <a href="#">Newest</a>
+            <a href="#">Community</a>
+          </nav>
+          <div class="nav-actions">
+            <div class="language-selector">
+              <span class="lang-icon">🌐</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Franchise Hero -->
+      <section class="franchise-header">
+        <div class="container">
+          <span class="context-tag">Franchise Spotlight</span>
+          <h1 class="franchise-title">Star Wars</h1>
+          <p class="franchise-summary">Explora la épica saga de una galaxia muy, muy lejana. Desde el ascenso de la República hasta el conflicto final contra la Primera Orden, curamos cada momento en su orden temporal exacto.</p>
+        </div>
+      </section>
+
+      <!-- Timeline Section -->
+      <section class="timeline-section">
+        <div class="container">
+          
+          <!-- Controls -->
+          <div class="timeline-controls">
+            <div class="toggle-group">
+              <button class="toggle-btn active">Orden Cronológico</button>
+              <button class="toggle-btn">Orden de Estreno</button>
+            </div>
+            
+            <div class="filter-group">
+              <span class="filter-label">Filtrar por:</span>
+              <button class="filter-btn active">Todo</button>
+              <button class="filter-btn">Películas</button>
+              <button class="filter-btn">Series</button>
+              <button class="filter-btn">Animación</button>
+            </div>
+          </div>
+
+          <div class="timeline-line"></div>
+
+          <!-- Item 1: Episode I -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content-wrapper">
+              <div class="timeline-info">
+                <div class="item-year">32 BBY</div>
+                <div class="item-subtitle">La Amenaza Fantasma</div>
+              </div>
+              <div class="item-card">
+                <div class="card-poster-wrapper">
+                  <img src="/images/posters/ep1.png" alt="Episodio I" class="card-poster" />
+                  <span class="poster-badge">Película</span>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-item-title">Star Wars: Episodio I</h3>
+                  <p class="card-item-year">1999</p>
+                  <p class="card-item-desc">Dos caballeros Jedi escapan de un bloqueo hostil para encontrar aliados y descubren a un joven que puede traer el equilibrio a la Fuerza.</p>
+                  <div class="card-actions">
+                    <a href="#" class="action-btn-sm">Detalles</a>
+                    <a href="#" class="trailer-link"><span>▶</span> Ver Tráiler</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 2: Clone Wars -->
+          <div class="timeline-item opposite">
+            <div class="timeline-dot purple"></div>
+            <div class="timeline-content-wrapper">
+              <div class="timeline-info">
+                <div class="item-year">22-19 BBY</div>
+                <div class="item-subtitle">The Clone Wars</div>
+              </div>
+              <div class="item-card">
+                <div class="card-poster-wrapper">
+                  <img src="/images/posters/clone-wars.png" alt="The Clone Wars" class="card-poster" />
+                  <span class="poster-badge">Animación</span>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-item-title">The Clone Wars</h3>
+                  <p class="card-item-year">2008 - 2020</p>
+                  <p class="card-item-desc">Sigue las aventuras de Anakin Skywalker, Obi-Wan Kenobi y Ahsoka Tano durante el conflicto galáctico que definió el destino de la galaxia.</p>
+                  <div class="card-actions">
+                    <a href="#" class="action-btn-sm">Episodios</a>
+                    <a href="#" class="trailer-link"><span>▶</span> Ver Tráiler</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 3: Episode III -->
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content-wrapper">
+              <div class="timeline-info">
+                <div class="item-year">19 BBY</div>
+                <div class="item-subtitle">La Venganza de los Sith</div>
+              </div>
+              <div class="item-card">
+                <div class="card-poster-wrapper">
+                  <img src="/images/posters/ep3.png" alt="Episodio III" class="card-poster" />
+                  <span class="poster-badge">Película</span>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-item-title">Episodio III</h3>
+                  <p class="card-item-year">2005</p>
+                  <p class="card-item-desc">Tres años después de las Guerras Clon, los Jedi rescatan al Canciller Palpatine del Conde Dooku. Anakin se ve tentado por el lado oscuro.</p>
+                  <div class="card-actions">
+                    <a href="#" class="action-btn-sm">Detalles</a>
+                    <a href="#" class="trailer-link"><span>▶</span> Ver Tráiler</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 4: Obi-Wan -->
+          <div class="timeline-item opposite">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content-wrapper">
+              <div class="timeline-info">
+                <div class="item-year">9 BBY</div>
+                <div class="item-subtitle">Obi-Wan Kenobi</div>
+              </div>
+              <div class="item-card">
+                <div class="card-poster-wrapper">
+                  <img src="/images/posters/obi-wan.png" alt="Obi-Wan Kenobi" class="card-poster" />
+                  <span class="poster-badge">Serie</span>
+                </div>
+                <div class="card-body">
+                  <h3 class="card-item-title">Obi-Wan Kenobi</h3>
+                  <p class="card-item-year">2022</p>
+                  <p class="card-item-desc">Diez años después de los eventos del Episodio III, el maestro Jedi exiliado vela por el joven Luke Skywalker mientras huye de los Inquisidores.</p>
+                  <div class="card-actions">
+                    <a href="#" class="action-btn-sm">Episodios</a>
+                    <a href="#" class="trailer-link"><span>▶</span> Ver Tráiler</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="main-footer">
+        <div class="container">
+          <div class="footer-bottom">
+            <div class="footer-logo">Ordenparaver</div>
+            <div class="copyright">© 2024 Ordenparaver - The Digital Curator. All galactic rights reserved.</div>
+            <div class="footer-links">
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Contact Specialist</a>
+              <a href="#">API Documentation</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
