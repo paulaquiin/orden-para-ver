@@ -1,4 +1,5 @@
 import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders } from './tmdb.js';
+import './components.js';
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', async () => {

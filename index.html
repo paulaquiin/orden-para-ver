@@ -15,29 +15,7 @@
   <body>
     <div id="app">
       <!-- Header / Nav -->
-      <header class="navbar">
-        <div class="container">
-          <div class="logo">
-            <span class="logo-text">Ordenparaver</span>
-          </div>
-          <nav class="nav-links">
-            <a href="/" class="active">Cronologías</a>
-            <a href="/star-wars.html">Franquicias</a>
-            <a href="/novedades.html">Novedades</a>
-          </nav>
-          <div class="nav-actions" style="display:flex; align-items:center;">
-            <div class="nav-search" style="display:flex; align-items:center; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.1);">
-              <input type="text" placeholder="Buscar saga..." class="nav-search-input" style="background:transparent; border:none; color:white; outline:none; width: 140px; font-size: 0.85rem;" />
-              <button class="nav-search-btn" style="background:none; border:none; cursor:pointer; color:#b0b0bc; display:flex; align-items:center; padding:2px;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#b0b0bc'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <app-header></app-header>
 
       <!-- Hero Section -->
       <section class="hero">
@@ -141,26 +119,7 @@
        </section>
 
        <!-- Footer -->
-       <footer class="main-footer">
-         <div class="container">
-            <div class="footer-top">
-              <div class="footer-logo">Ordenparaver</div>
-              <nav class="footer-links">
-                <a href="#">Política de Privacidad</a>
-                <a href="#">Términos de Servicio</a>
-                <a href="#">Referencia API</a>
-                <a href="#">Contacto</a>
-              </nav>
-            </div>
-            <div class="footer-bottom">
-              <div class="copyright">© 2024 Ordenparaver - El Curador Digital</div>
-              <div class="footer-socials">
-                <span class="social-icon">🌐</span>
-                <span class="social-icon">🔗</span>
-              </div>
-            </div>
-         </div>
-       </footer>
+       <app-footer></app-footer>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>
