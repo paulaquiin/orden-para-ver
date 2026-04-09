@@ -62,15 +62,15 @@
 
           <div class="timeline-grid">
             <!-- Marvel Card (Main) -->
-            <div class="card card-large mcu-card">
+            <div class="card card-large mcu-card" onclick="window.location.href='/franchise.html?collection_id=86311'" style="cursor: pointer;">
               <div class="card-badges">
                 <span class="badge badge-orange">CRONOLÓGICO</span>
-                <span class="badge badge-dark">34 PELÍCULAS</span>
+                <span class="badge badge-dark">SAGA AVENGERS</span>
               </div>
               <div class="card-content">
-                <h3 class="card-title">Universo Cinematográfico de Marvel</h3>
-                <p class="card-desc">Desde el inicio de los tiempos con los Eternos hasta el multiverso actual.</p>
-                <button class="btn btn-glass">Ver Cronología</button>
+                <h3 class="card-title">Saga de Los Vengadores</h3>
+                <p class="card-desc">Desde el inicio de la iniciativa hasta el enfrentamiento final.</p>
+                <button class="btn btn-glass" onclick="window.location.href='/franchise.html?collection_id=86311'; event.stopPropagation();">Ver Cronología</button>
               </div>
             </div>
 
@@ -81,17 +81,17 @@
               </div>
               <div class="card-content">
                 <h3 class="card-title">Star Wars</h3>
-                <a href="/franchise.html?collection_id=10" class="card-link">Explorar Saga →</a>
+                <a href="/franchise.html?collection_id=10" class="card-link" onclick="event.stopPropagation();">Explorar Saga →</a>
               </div>
             </div>
 
-            <div class="card card-vertical dc-card">
+            <div class="card card-vertical dc-card" onclick="window.location.href='/franchise.html?collection_id=263'" style="cursor: pointer;">
               <div class="card-badges">
                 <span class="badge badge-dark">UPDATED</span>
               </div>
               <div class="card-content">
-                <h3 class="card-title">DC Universe</h3>
-                <a href="#" class="card-link">Explorar Saga →</a>
+                <h3 class="card-title">Saga Batman</h3>
+                <a href="/franchise.html?collection_id=263" class="card-link" onclick="event.stopPropagation();">Explorar Saga →</a>
               </div>
             </div>
           </div>
