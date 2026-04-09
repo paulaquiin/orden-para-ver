@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (collectionId) {
       // Dynamic TMDB collection
       const collectionData = await fetchCollectionDetails(collectionId);
-      if (collectionData && !collectionData.success === false) {
+      if (collectionData && collectionData.id) {
         pageTitle = collectionData.name;
         pageSummary = collectionData.overview || `Explora la saga completa de ${collectionData.name}.`;
         
