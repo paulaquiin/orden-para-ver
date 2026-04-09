@@ -42,7 +42,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           const providersData = await fetchWatchProviders('movie', part.id);
           let flatrateES = [];
           if (providersData && providersData.results && providersData.results.ES) {
-            flatrateES = providersData.results.ES.flatrate || [];
+            let rawProviders = providersData.results.ES.flatrate || [];
+            // Filtro para eliminar redundancias como "Netflix Standart", "Netflix Basic with Ads", etc.
+            flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
           }
 
           return {
@@ -77,7 +79,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const providersData = await fetchWatchProviders('tv', tvData.id);
         let flatrateES = [];
         if (providersData && providersData.results && providersData.results.ES) {
-          flatrateES = providersData.results.ES.flatrate || [];
+          let rawProviders = providersData.results.ES.flatrate || [];
+          flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
         }
 
         rawItems = seasons.map(season => ({
