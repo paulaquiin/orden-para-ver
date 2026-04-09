@@ -101,8 +101,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.title = `${pageTitle} | Orden para ver`;
       const titleEl = document.querySelector('.franchise-title');
       const sumEl = document.querySelector('.franchise-summary');
+      const ctxEl = document.querySelector('.context-tag');
+      
       if (titleEl) titleEl.textContent = pageTitle;
       if (sumEl) sumEl.textContent = pageSummary;
+      if (ctxEl) ctxEl.textContent = tvId ? 'SERIE DE TELEVISIÓN' : 'CRONOLOGÍA OFICIAL';
 
       if (timelineContainer) {
         timelineContainer.innerHTML = '<div class="timeline-line"></div>';
