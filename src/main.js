@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- Dynamic Franchise Loading ---
   const urlParams = new URLSearchParams(window.location.search);
   const collectionId = urlParams.get('collection_id');
+  const tvId = urlParams.get('tv_id');
 
   if (window.location.pathname.includes('franchise.html')) {
     let rawItems = [];
@@ -57,6 +58,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         }));
         
         rawItems = enrichedParts;
+      }
+    } else if (tvId) {
+      // Dynamic TMDB TV Show
+      const tvData = await fetchTMDBDetails('tv', tvId);
+      if (tvData && tvData.id) {
+        pageTitle = tvData.name;
+        pageSummary = tvData.overview || `Explora todas las temporadas de ${tvData.name}.`;
+        
+        let seasons = tvData.seasons || [];
+        seasons.sort((a, b) => {
+          const dateA = new Date(a.air_date || '9999-12-31');
+          const dateB = new Date(b.air_date || '9999-12-31');
+          return dateA - dateB;
+        });
+
+        // Obtener providers de la serie entera, ya que no suele variar por temporada
+        const providersData = await fetchWatchProviders('tv', tvData.id);
+        let flatrateES = [];
+        if (providersData && providersData.results && providersData.results.ES) {
+          flatrateES = providersData.results.ES.flatrate || [];
+        }
+
+        rawItems = seasons.map(season => ({
+          title: season.name,
+          releaseYear: season.air_date ? season.air_date.substring(0, 4) : '',
+          description: season.overview || 'Sin descripción disponible.',
+          poster: getImageUrl(season.poster_path || tvData.poster_path),
+          fallbackType: 'Temporada',
+          dotColor: 'purple',
+          rawDate: season.air_date || '',
+          providers: flatrateES
+        }));
       }
     }
 
@@ -131,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       }
     } else if (timelineContainer) {
-      timelineContainer.innerHTML = '<h2 style="color:white; text-align:center;">Colección no encontrada en TMDB.</h2>';
+      timelineContainer.innerHTML = '<h2 style="color:white; text-align:center;">Saga o Serie no encontrada en TMDB.</h2>';
     }
   }
 
