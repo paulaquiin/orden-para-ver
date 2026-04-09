@@ -140,9 +140,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           const dotClass = item.dotColor === 'purple' ? 'purple' : '';
 
           const providersHTML = item.providers && item.providers.length > 0 
-            ? `<div class="card-providers" style="display:flex; gap:6px;">
+            ? `<div class="card-providers" style="display:flex; gap:8px;">
                 ${item.providers.slice(0, 4).map(p => `
-                  <img src="${getImageUrl(p.logo_path, 'w92')}" title="${p.provider_name}" alt="${p.provider_name}" style="width:30px; height:30px; border-radius:6px; object-fit:cover; border: 1px solid rgba(255,255,255,0.1);"/>
+                  <img src="${getImageUrl(p.logo_path, 'w92')}" title="${p.provider_name}" alt="${p.provider_name}" style="width:40px; height:40px; border-radius:8px; object-fit:cover; border: 1px solid rgba(255,255,255,0.1);"/>
                 `).join('')}
               </div>`
             : '<span style="font-size: 0.75rem; opacity: 0.5;">No disp. streaming</span>';
@@ -162,8 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                       <p class="card-item-desc">${item.description}</p>
                       ${item.description.length > 130 ? `<span onclick="this.previousElementSibling.classList.toggle('expanded'); this.textContent = this.textContent === 'Leer más' ? 'Leer menos' : 'Leer más'" style="color:var(--accent-orange); font-size:0.8rem; font-weight:600; cursor:pointer; display:inline-block; margin-bottom:15px; margin-top:2px;">Leer más</span>` : '<div style="margin-bottom:15px;"></div>'}
                     </div>
-                    <div class="card-actions" style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1rem;">
-                      <a href="#" class="action-btn-sm" style="margin:0;">Detalles</a>
+                    <div class="card-actions" style="display:flex; align-items:center; justify-content:flex-end; width:100%; margin-top:1rem;">
                       ${providersHTML}
                     </div>
                   </div>
@@ -185,8 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                       <p class="card-item-desc">${item.description}</p>
                       ${item.description.length > 130 ? `<span onclick="this.previousElementSibling.classList.toggle('expanded'); this.textContent = this.textContent === 'Leer más' ? 'Leer menos' : 'Leer más'" style="color:var(--accent-orange); font-size:0.8rem; font-weight:600; cursor:pointer; display:inline-block; margin-bottom:15px; margin-top:2px;">Leer más</span>` : '<div style="margin-bottom:15px;"></div>'}
                     </div>
-                    <div class="card-actions" style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1rem;">
-                      <a href="#" class="action-btn-sm" style="margin:0;">Detalles</a>
+                    <div class="card-actions" style="display:flex; align-items:center; justify-content:flex-end; width:100%; margin-top:1rem;">
                       ${providersHTML}
                     </div>
                   </div>
