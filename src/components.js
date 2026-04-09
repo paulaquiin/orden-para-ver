@@ -47,8 +47,9 @@ class AppFooter extends HTMLElement {
           <div class="footer-bottom">
             <p>© 2024 Ordenparaver. El Curador Digital.</p>
             <div class="footer-socials">
-              <div class="social-icon">𝕏</div>
-              <div class="social-icon">In</div>
+              <a href="https://www.linkedin.com/in/paula-quintana-36856b204/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                <div class="social-icon">In</div>
+              </a>
             </div>
           </div>
         </div>
