@@ -24,13 +24,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (collectionId) {
-      // Dynamic TMDB collection
-      const collectionData = await fetchCollectionDetails(collectionId);
-      if (collectionData && collectionData.id) {
-        pageTitle = collectionData.name;
-        pageSummary = collectionData.overview || `Explora la saga completa de ${collectionData.name}.`;
-        
-        let parts = collectionData.parts || [];
+      // Soporte para Mega-Franquicias (Múltiples IDs separados por coma)
+      const ids = collectionId.split(',');
+      let allParts = [];
+      
+      for (const id of ids) {
+        const collectionData = await fetchCollectionDetails(id);
+        if (collectionData && collectionData.id) {
+          if (!pageTitle) { // Toma el título y resumen de la primera colección principal
+            // Si hay varias, le damos un nombre de Mega-Franquicia
+            pageTitle = ids.length > 1 ? collectionData.name.replace(/Collection|Colección/gi, '').trim() + ' (Mega-Franquicia)' : collectionData.name;
+            pageSummary = collectionData.overview || `Explora la saga completa de ${collectionData.name}.`;
+          }
+          if (collectionData.parts) {
+            allParts = allParts.concat(collectionData.parts);
+          }
+        }
+      }
+
+      if (allParts.length > 0) {
+        // Eliminar duplicados en caso de películas que existan en varias colecciones cruzadas
+        const uniquePartsMap = new Map();
+        allParts.forEach(part => uniquePartsMap.set(part.id, part));
+        let parts = Array.from(uniquePartsMap.values());
+
         // Sort parts by release date
         parts.sort((a, b) => {
           const dateA = new Date(a.release_date || '9999-12-31');
@@ -43,7 +60,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           let flatrateES = [];
           if (providersData && providersData.results && providersData.results.ES) {
             let rawProviders = providersData.results.ES.flatrate || [];
-            // Filtro para eliminar redundancias como "Netflix Standart", "Netflix Basic with Ads", etc.
             flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
           }
 
@@ -189,9 +205,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let found = false;
 
-    // 1. Priorizamos encontrar una Colección Oficial (Franquicia de películas)
+    // 1. Priorizamos encontrar Colecciones y formamos Mega-Franquicias si es necesario
     if (collectionResults && collectionResults.results && collectionResults.results.length > 0) {
-      window.location.href = `/franchise.html?collection_id=${collectionResults.results[0].id}`;
+      // Normalizamos la búsqueda (quitando guiones o espacios) para que "spiderman" coincida con "Spider-Man"
+      const normalizedKeyword = query.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/g, ''); 
+
+      // Recolectamos todas las colecciones en los primeros 5 resultados que compartan la base del nombre
+      const similarCollections = collectionResults.results
+         .slice(0, 5)
+         .filter(c => {
+             const normalizedName = c.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+             return normalizedName.includes(normalizedKeyword);
+         });
+
+      if (similarCollections.length > 1) {
+         // FUSIONAMOS LAS SAGAS!
+         const mergedIds = similarCollections.map(c => c.id).join(',');
+         window.location.href = `/franchise.html?collection_id=${mergedIds}`;
+      } else {
+         // O cargamos la única coincidencia exacta
+         window.location.href = `/franchise.html?collection_id=${collectionResults.results[0].id}`;
+      }
       found = true;
     } 
     // 2. Si no es colección, miramos si el mejor resultado en multi-search es una Serie de TV
