@@ -56,6 +56,18 @@ export async function fetchCollectionDetails(collectionId) {
   }
 }
 
+export async function fetchWatchProviders(type, id) {
+  try {
+    const url = `https://api.themoviedb.org/3/${type}/${id}/watch/providers`;
+    const response = await fetch(url, OPTIONS);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching watch providers TMDB:", error);
+    return null;
+  }
+}
+
 export function getImageUrl(path, size = 'w500') {
   if (!path) return 'https://via.placeholder.com/220x330/1a1a1a/444444?text=No+Poster';
   return `https://image.tmdb.org/t/p/${size}${path}`;

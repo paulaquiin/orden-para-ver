@@ -1,4 +1,4 @@
-import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails } from './tmdb.js';
+import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders } from './tmdb.js';
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', async () => {
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (timelineContainer) {
       timelineContainer.innerHTML = `
         <div class="timeline-line"></div>
-        <div style="text-align:center; color: white; padding: 2rem; font-family: 'Outfit', sans-serif;">Cargando saga desde TMDB...</div>
+        <div style="text-align:center; color: white; padding: 2rem; font-family: 'Outfit', sans-serif;">Cargando saga y plataformas desde TMDB...</div>
       `;
     }
 
@@ -37,15 +37,26 @@ document.addEventListener('DOMContentLoaded', async () => {
           return dateA - dateB;
         });
 
-        rawItems = parts.map(part => ({
-          title: part.title,
-          releaseYear: part.release_date ? part.release_date.substring(0, 4) : '',
-          description: part.overview || 'Sin descripción disponible.',
-          poster: getImageUrl(part.poster_path),
-          fallbackType: 'Película',
-          dotColor: 'orange',
-          rawDate: part.release_date || ''
+        const enrichedParts = await Promise.all(parts.map(async (part) => {
+          const providersData = await fetchWatchProviders('movie', part.id);
+          let flatrateES = [];
+          if (providersData && providersData.results && providersData.results.ES) {
+            flatrateES = providersData.results.ES.flatrate || [];
+          }
+
+          return {
+            title: part.title,
+            releaseYear: part.release_date ? part.release_date.substring(0, 4) : '',
+            description: part.overview || 'Sin descripción disponible.',
+            poster: getImageUrl(part.poster_path),
+            fallbackType: 'Película',
+            dotColor: 'orange',
+            rawDate: part.release_date || '',
+            providers: flatrateES
+          };
         }));
+        
+        rawItems = enrichedParts;
       }
     }
 
@@ -66,6 +77,14 @@ document.addEventListener('DOMContentLoaded', async () => {
           const cardClass = isOpposite ? 'left-content' : 'right-content';
           const dotClass = item.dotColor === 'purple' ? 'purple' : '';
 
+          const providersHTML = item.providers && item.providers.length > 0 
+            ? `<div class="card-providers" style="display:flex; gap:6px;">
+                ${item.providers.slice(0, 4).map(p => `
+                  <img src="${getImageUrl(p.logo_path, 'w92')}" title="${p.provider_name}" alt="${p.provider_name}" style="width:30px; height:30px; border-radius:6px; object-fit:cover; border: 1px solid rgba(255,255,255,0.1);"/>
+                `).join('')}
+              </div>`
+            : '<span style="font-size: 0.75rem; opacity: 0.5;">No disp. streaming</span>';
+
           const itemHTML = `
             <div class="timeline-item ${oppositeClass}">
               ${isOpposite ? `<div class="item-card-wrapper ${cardClass}">
@@ -78,9 +97,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3 class="card-item-title">${item.title}</h3>
                     <p class="card-item-year">${item.releaseYear}</p>
                     <p class="card-item-desc">${item.description}</p>
-                    <div class="card-actions">
-                      <a href="#" class="action-btn-sm">Detalles</a>
-                      <a href="#" class="trailer-link"><span>▶</span> Ver Tráiler</a>
+                    <div class="card-actions" style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1rem;">
+                      <a href="#" class="action-btn-sm" style="margin:0;">Detalles</a>
+                      ${providersHTML}
                     </div>
                   </div>
                 </div>
@@ -98,9 +117,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3 class="card-item-title">${item.title}</h3>
                     <p class="card-item-year">${item.releaseYear}</p>
                     <p class="card-item-desc">${item.description}</p>
-                    <div class="card-actions">
-                      <a href="#" class="action-btn-sm">Detalles</a>
-                      <a href="#" class="trailer-link"><span>▶</span> Ver Tráiler</a>
+                    <div class="card-actions" style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1rem;">
+                      <a href="#" class="action-btn-sm" style="margin:0;">Detalles</a>
+                      ${providersHTML}
                     </div>
                   </div>
                 </div>
