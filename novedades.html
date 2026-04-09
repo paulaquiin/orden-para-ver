@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Últimas Actualizaciones - Orden para Ver</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container">
+      <div class="logo">
+        <span class="logo-text">Orden<span class="gradient-text">paraver</span></span>
+      </div>
+      <nav class="nav-links">
+        <a href="/">Cronologías</a>
+        <a href="/star-wars.html">Franquicias</a>
+        <a href="/novedades.html" class="active">Novedades</a>
+      </nav>
+      <div class="nav-actions" style="display:flex; align-items:center;">
+        <div class="nav-search" style="display:flex; align-items:center; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.1);">
+          <input type="text" placeholder="Buscar saga..." class="nav-search-input" style="background:transparent; border:none; color:white; outline:none; width: 140px; font-size: 0.85rem;" />
+          <button class="nav-search-btn" style="background:none; border:none; cursor:pointer; color:#b0b0bc; display:flex; align-items:center; padding:2px;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#b0b0bc'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Updates Hero -->
+  <main class="container">
+    <section class="updates-hero" style="padding: 60px 0 40px;">
+      <h1 class="hero-title" style="text-align: left; margin-bottom: 1rem;">Últimas <span class="gradient-text">Actualizaciones</span></h1>
+      <p style="color: var(--text-gray); max-width: 600px; font-size: 1.1rem; margin-bottom: 40px;">Nuevas entradas en nuestro archivo digital. Rastreando la API de TMDB para asegurar que lo puedas ver todo en perfecto orden cronológico.</p>
+      
+      <!-- Featured Banners Grid -->
+      <div class="updates-featured-grid">
+        <!-- Wide Card -->
+        <div class="featured-card wide" style="background: linear-gradient(to top, rgba(12, 12, 17, 0.95), rgba(12, 12, 17, 0.2)), url('https://image.tmdb.org/t/p/original/1k6cwEyoA51Iuq7Yx8K4Pns4G8K.jpg');">
+          <div class="featured-card-content">
+             <span class="badge badge-orange" style="margin-bottom: 10px; display: inline-block;">NUEVA SAGA</span>
+             <h2>Dune: La colección</h2>
+             <p style="color: var(--text-gray); margin-top: 10px; max-width: 80%;">Explora la expansión cronológica de Arrakis con la nueva serie de orígenes.</p>
+             <button class="btn btn-glass" onclick="window.location.href='/franchise.html?collection_id=726871'" style="margin-top: 20px; background: var(--accent-orange); color: white; border: none;">Ver Cronología →</button>
+          </div>
+        </div>
+        
+        <!-- Narrow right card -->
+        <div class="featured-card narrow" style="background: linear-gradient(to top, rgba(12, 12, 17, 0.95), rgba(12, 12, 17, 0.2)), url('https://image.tmdb.org/t/p/original/dBB19A1N0rG9DqE59gW3y6eL4y1.jpg');">
+          <div class="featured-card-content">
+             <span class="badge badge-purple" style="margin-bottom: 10px; display: inline-block;">NUEVA TEMPORADA</span>
+             <h2 style="font-size: 1.5rem;">The Bear</h2>
+             <p style="font-size: 0.85rem; color: var(--text-gray); margin-top: 10px;">Cada momento de alta tensión en la cocina clasificado.</p>
+             <button class="btn btn-glass" onclick="window.location.href='/franchise.html?tv_id=137437'" style="margin-top: 15px; padding: 8px 16px; font-size: 0.85rem;">Explorar →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Additions Timeline -->
+    <section class="recent-additions" style="padding: 60px 0 100px;">
+       <h3 style="font-size: 1.8rem; margin-bottom: 60px;">Adiciones Recientes</h3>
+       
+       <div class="updates-timeline-container">
+          <div class="timeline-line"></div>
+          
+          <!-- Item 1: Right Side (Opposite Left) -->
+          <div class="updates-timeline-item left-tag">
+             <div class="updates-side-info">
+                <span class="universe-tag">UNIVERSO SPIDER-MAN</span>
+                <span class="info-desc">Multiverso Integrado Completo</span>
+             </div>
+             
+             <div class="updates-dot">
+                <div class="dot-inner"></div>
+             </div>
+             
+             <div class="updates-card right-content">
+                <div class="updates-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                   <div>
+                     <h4 style="font-size: 1.1rem; font-weight: 700;">Spider-Man: Colección</h4>
+                     <span class="date-added">Actualizado recientemente</span>
+                   </div>
+                   <span class="card-icon" style="opacity:0.5; font-size: 1.5rem;">🕷️</span>
+                </div>
+                <div class="updates-card-body">
+                   <p>Mapeo detallado de la Red del Destino con marcas temporales reales consultando constantemente la base de datos.</p>
+                   <a href="/franchise.html?collection_id=531241" style="display: inline-block; margin-top: 15px; color: var(--accent-peach); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Abrir Cronología →</a>
+                </div>
+             </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="updates-timeline-item right-tag">
+             <div class="updates-side-info">
+                <span class="universe-tag">MCU FASE 5</span>
+                <span class="info-desc">Ramificación de la AVT</span>
+             </div>
+             <div class="updates-dot">
+                <div class="dot-inner"></div>
+             </div>
+             <div class="updates-card left-content">
+                <div class="updates-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                   <div>
+                     <h4 style="font-size: 1.1rem; font-weight: 700;">Loki (Todas las Temporadas)</h4>
+                     <span class="date-added">Actualizado recientemente</span>
+                   </div>
+                   <span class="card-icon" style="opacity:0.5; font-size: 1.5rem;">🌀</span>
+                </div>
+                <div class="updates-card-body">
+                   <p>Toda la ramificación temporal añadida a la Sagrada Línea Temporal interactiva, directamente desde la API oficial.</p>
+                   <a href="/franchise.html?tv_id=84958" style="display: inline-block; margin-top: 15px; color: var(--accent-peach); text-decoration: none; font-size: 0.85rem; font-weight: 600;">Abrir Cronología →</a>
+                </div>
+             </div>
+          </div>
+
+          <!-- Item 3: Right Side -->
+          <div class="updates-timeline-item left-tag">
+             <div class="updates-side-info">
+                <span class="universe-tag">UNIVERSO A24</span>
+                <span class="info-desc">Lanzamiento del Nuevo Archivo</span>
+             </div>
+             
+             <div class="updates-dot">
+                <div class="dot-inner"></div>
+             </div>
+             
+             <div class="updates-card right-content">
+                <div class="updates-card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                   <div>
+                     <h4 style="font-size: 1.1rem; font-weight: 700;">Todo a la vez en todas partes</h4>
+                     <span class="date-added">Añadido recientemente</span>
+                   </div>
+                   <span class="card-icon" style="opacity:0.5; font-size: 1.5rem;">👁️</span>
+                </div>
+                <div class="updates-card-body">
+                   <p>Vista de línea temporal simultánea experimental. Explora el multiverso en tiempo real y salta de universo.</p>
+                </div>
+             </div>
+          </div>
+          
+       </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-logo">Orden<span class="gradient-text">paraver</span></div>
+        <div class="footer-links">
+          <a href="#">Privacidad</a>
+          <a href="#">Términos</a>
+          <a href="#">API Documentation</a>
+          <a href="#">Contacto</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 Ordenparaver. El Curador Digital.</p>
+        <div class="footer-socials">
+          <div class="social-icon">𝕏</div>
+          <div class="social-icon">In</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
