@@ -1,0 +1,62 @@
+const TMDB_TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZDAzYjIwNDA5ZDM2YzdhNDZmZjZhMDU2Mzk3ZTgyMiIsIm5iZiI6MTc3NTY4NDQ2My4yNjMsInN1YiI6IjY5ZDZjYjZmMjBmOTYyM2Q2NGI0MWRmNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-hO8p1zU_Zprbir5h1W6mc79dyONrpxRBcWiYILwe7w';
+
+const OPTIONS = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+    Authorization: `Bearer ${TMDB_TOKEN}`
+  }
+};
+
+export async function fetchTMDBDetails(type, id) {
+  try {
+    const url = `https://api.themoviedb.org/3/${type}/${id}?language=es-ES`;
+    const response = await fetch(url, OPTIONS);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching TMDB data:", error);
+    return null;
+  }
+}
+
+export async function searchTMDB(query) {
+  try {
+    const url = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}&language=es-ES&page=1`;
+    const response = await fetch(url, OPTIONS);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error("Error searching TMDB:", error);
+    return null;
+  }
+}
+
+export async function searchCollectionTMDB(query) {
+  try {
+    const url = `https://api.themoviedb.org/3/search/collection?query=${encodeURIComponent(query)}&language=es-ES&page=1`;
+    const response = await fetch(url, OPTIONS);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error("Error searching collection in TMDB:", error);
+    return null;
+  }
+}
+
+export async function fetchCollectionDetails(collectionId) {
+  try {
+    const url = `https://api.themoviedb.org/3/collection/${collectionId}?language=es-ES`;
+    const response = await fetch(url, OPTIONS);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching collection TMDB:", error);
+    return null;
+  }
+}
+
+export function getImageUrl(path, size = 'w500') {
+  if (!path) return 'https://via.placeholder.com/220x330/1a1a1a/444444?text=No+Poster';
+  return `https://image.tmdb.org/t/p/${size}${path}`;
+}

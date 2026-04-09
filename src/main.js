@@ -1,32 +1,66 @@
-import { franchises } from './data.js';
+import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails } from './tmdb.js';
 
 // Initialize the app
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('Orden para ver - App Initialized');
 
   // --- Dynamic Franchise Loading ---
   const urlParams = new URLSearchParams(window.location.search);
-  const franchiseId = urlParams.get('id');
+  const collectionId = urlParams.get('collection_id');
 
-  if (window.location.pathname.includes('franchise.html') && franchiseId) {
-    const data = franchises[franchiseId];
+  if (window.location.pathname.includes('franchise.html')) {
+    let rawItems = [];
+    let pageTitle = '';
+    let pageSummary = '';
 
-    if (data) {
-      // 1. Update Headings
-      document.title = `${data.title} | Orden para ver`;
+    const timelineContainer = document.querySelector('.timeline-container');
+    
+    if (timelineContainer) {
+      timelineContainer.innerHTML = `
+        <div class="timeline-line"></div>
+        <div style="text-align:center; color: white; padding: 2rem; font-family: 'Outfit', sans-serif;">Cargando saga desde TMDB...</div>
+      `;
+    }
+
+    if (collectionId) {
+      // Dynamic TMDB collection
+      const collectionData = await fetchCollectionDetails(collectionId);
+      if (collectionData && !collectionData.success === false) {
+        pageTitle = collectionData.name;
+        pageSummary = collectionData.overview || `Explora la saga completa de ${collectionData.name}.`;
+        
+        let parts = collectionData.parts || [];
+        // Sort parts by release date
+        parts.sort((a, b) => {
+          const dateA = new Date(a.release_date || '9999-12-31');
+          const dateB = new Date(b.release_date || '9999-12-31');
+          return dateA - dateB;
+        });
+
+        rawItems = parts.map(part => ({
+          title: part.title,
+          releaseYear: part.release_date ? part.release_date.substring(0, 4) : '',
+          description: part.overview || 'Sin descripción disponible.',
+          poster: getImageUrl(part.poster_path),
+          fallbackType: 'Película',
+          dotColor: 'orange',
+          rawDate: part.release_date || ''
+        }));
+      }
+    }
+
+    // Render Timeline if we have items
+    if (rawItems.length > 0) {
+      document.title = `${pageTitle} | Orden para ver`;
       const titleEl = document.querySelector('.franchise-title');
       const sumEl = document.querySelector('.franchise-summary');
-      if (titleEl) titleEl.textContent = data.title;
-      if (sumEl) sumEl.textContent = data.summary;
+      if (titleEl) titleEl.textContent = pageTitle;
+      if (sumEl) sumEl.textContent = pageSummary;
 
-      // 2. Render Timeline
-      const timelineContainer = document.querySelector('.timeline-container');
       if (timelineContainer) {
-        // Clear out loading skeleton or previous data
         timelineContainer.innerHTML = '<div class="timeline-line"></div>';
 
-        data.items.forEach((item, index) => {
-          // Calculate class toggles based on alternate grid
+        rawItems.forEach((item, index) => {
           const isOpposite = index % 2 !== 0;
           const oppositeClass = isOpposite ? 'opposite' : '';
           const cardClass = isOpposite ? 'left-content' : 'right-content';
@@ -38,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="item-card">
                   <div class="card-poster-wrapper">
                     <img src="${item.poster}" alt="${item.title}" class="card-poster" onerror="this.src='https://via.placeholder.com/220x330/1a1a1a/444444?text=Poster'"/>
-                    <span class="poster-badge">${item.type}</span>
+                    <span class="poster-badge">${item.fallbackType}</span>
                   </div>
                   <div class="card-body">
                     <h3 class="card-item-title">${item.title}</h3>
@@ -58,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="item-card">
                   <div class="card-poster-wrapper">
                     <img src="${item.poster}" alt="${item.title}" class="card-poster" onerror="this.src='https://via.placeholder.com/220x330/1a1a1a/444444?text=Poster'"/>
-                    <span class="poster-badge">${item.type}</span>
+                    <span class="poster-badge">${item.fallbackType}</span>
                   </div>
                   <div class="card-body">
                     <h3 class="card-item-title">${item.title}</h3>
@@ -74,13 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
               }
             </div>
           `;
-
           timelineContainer.insertAdjacentHTML('beforeend', itemHTML);
         });
       }
-    } else {
-      const container = document.querySelector('.timeline-container');
-      if(container) container.innerHTML = '<h2 style="color:white; text-align:center;">Franquicia no encontrada.</h2>';
+    } else if (timelineContainer) {
+      timelineContainer.innerHTML = '<h2 style="color:white; text-align:center;">Colección no encontrada en TMDB.</h2>';
     }
   }
 
@@ -89,10 +121,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.querySelector('.search-btn');
 
   if (searchBtn && searchInput) {
-    searchBtn.addEventListener('click', () => {
+    searchBtn.addEventListener('click', async () => {
       const query = searchInput.value.trim();
       if (query) {
-        alert(`Buscando cronología para: ${query}... (Esta es una demo)`);
+        const originalText = searchBtn.textContent;
+        searchBtn.textContent = '...';
+        
+        // Buscamos directamente la colección en TMDB
+        const collectionResults = await searchCollectionTMDB(query);
+        if (collectionResults && collectionResults.results && collectionResults.results.length > 0) {
+          const firstCollection = collectionResults.results[0];
+          window.location.href = `/franchise.html?collection_id=${firstCollection.id}`;
+          return;
+        }
+
+        searchBtn.textContent = originalText;
+        alert('Lo sentimos, no encontramos una colección en TMDB para esa búsqueda.');
       } else {
         searchInput.focus();
       }
@@ -116,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Simple card hover effect enhancement (already handled by CSS, but could add JS triggers)
+  // Simple card hover effect enhancement
   const cards = document.querySelectorAll('.card');
   cards.forEach(card => {
     card.addEventListener('mouseenter', () => {
@@ -124,3 +168,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+
