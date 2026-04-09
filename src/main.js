@@ -171,62 +171,80 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // Search input interaction
+  // Universal Search Function
+  async function executeSearch(query, btnElement) {
+    if (!query) return;
+    
+    const originalText = btnElement.textContent;
+    btnElement.textContent = '...';
+    
+    // Búsqueda multi-dimensional (Colecciones de cine + Series de TV)
+    const [collectionResults, multiResults] = await Promise.all([
+      searchCollectionTMDB(query),
+      searchTMDB(query)
+    ]);
+
+    let found = false;
+
+    // 1. Priorizamos encontrar una Colección Oficial (Franquicia de películas)
+    if (collectionResults && collectionResults.results && collectionResults.results.length > 0) {
+      window.location.href = `/franchise.html?collection_id=${collectionResults.results[0].id}`;
+      found = true;
+    } 
+    // 2. Si no es colección, miramos si el mejor resultado en multi-search es una Serie de TV
+    else if (multiResults && multiResults.results && multiResults.results.length > 0) {
+      const firstResult = multiResults.results[0];
+      
+      if (firstResult.media_type === 'tv') {
+        window.location.href = `/franchise.html?tv_id=${firstResult.id}`;
+        found = true;
+      } 
+      // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
+      else if (firstResult.media_type === 'movie') {
+        const movieDetails = await fetchTMDBDetails('movie', firstResult.id);
+        if (movieDetails && movieDetails.belongs_to_collection) {
+          window.location.href = `/franchise.html?collection_id=${movieDetails.belongs_to_collection.id}`;
+          found = true;
+        }
+      }
+    }
+
+    btnElement.textContent = originalText;
+    
+    if (!found) {
+      alert('Lo sentimos, no encontramos una saga o serie en TMDB para esa búsqueda.');
+    }
+  }
+
+  // Setup Big Hero Search
   const searchInput = document.querySelector('.search-input');
   const searchBtn = document.querySelector('.search-btn');
 
   if (searchBtn && searchInput) {
-    searchBtn.addEventListener('click', async () => {
+    searchBtn.addEventListener('click', () => {
       const query = searchInput.value.trim();
-      if (query) {
-        const originalText = searchBtn.textContent;
-        searchBtn.textContent = '...';
-        
-        // Búsqueda multi-dimensional (Colecciones de cine + Series de TV)
-        const [collectionResults, multiResults] = await Promise.all([
-          searchCollectionTMDB(query),
-          searchTMDB(query)
-        ]);
-
-        let found = false;
-
-        // 1. Priorizamos encontrar una Colección Oficial (Franquicia de películas)
-        if (collectionResults && collectionResults.results && collectionResults.results.length > 0) {
-          window.location.href = `/franchise.html?collection_id=${collectionResults.results[0].id}`;
-          found = true;
-        } 
-        // 2. Si no es colección, miramos si el mejor resultado en multi-search es una Serie de TV
-        else if (multiResults && multiResults.results && multiResults.results.length > 0) {
-          const firstResult = multiResults.results[0];
-          
-          if (firstResult.media_type === 'tv') {
-            window.location.href = `/franchise.html?tv_id=${firstResult.id}`;
-            found = true;
-          } 
-          // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
-          else if (firstResult.media_type === 'movie') {
-            const movieDetails = await fetchTMDBDetails('movie', firstResult.id);
-            if (movieDetails && movieDetails.belongs_to_collection) {
-              window.location.href = `/franchise.html?collection_id=${movieDetails.belongs_to_collection.id}`;
-              found = true;
-            }
-          }
-        }
-
-        searchBtn.textContent = originalText;
-        
-        if (!found) {
-          alert('Lo sentimos, no encontramos una saga o serie en TMDB para esa búsqueda.');
-        }
-      } else {
-        searchInput.focus();
-      }
+      if (query) executeSearch(query, searchBtn);
+      else searchInput.focus();
     });
 
     searchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        searchBtn.click();
-      }
+      if (e.key === 'Enter') searchBtn.click();
+    });
+  }
+
+  // Setup Navbar Mini Search
+  const navSearchInput = document.querySelector('.nav-search-input');
+  const navSearchBtn = document.querySelector('.nav-search-btn');
+
+  if (navSearchBtn && navSearchInput) {
+    navSearchBtn.addEventListener('click', () => {
+      const query = navSearchInput.value.trim();
+      if (query) executeSearch(query, navSearchBtn);
+      else navSearchInput.focus();
+    });
+
+    navSearchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') navSearchBtn.click();
     });
   }
 
