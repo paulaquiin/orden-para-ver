@@ -179,16 +179,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         const originalText = searchBtn.textContent;
         searchBtn.textContent = '...';
         
-        // Buscamos directamente la colección en TMDB
-        const collectionResults = await searchCollectionTMDB(query);
+        // Búsqueda multi-dimensional (Colecciones de cine + Series de TV)
+        const [collectionResults, multiResults] = await Promise.all([
+          searchCollectionTMDB(query),
+          searchTMDB(query)
+        ]);
+
+        let found = false;
+
+        // 1. Priorizamos encontrar una Colección Oficial (Franquicia de películas)
         if (collectionResults && collectionResults.results && collectionResults.results.length > 0) {
-          const firstCollection = collectionResults.results[0];
-          window.location.href = `/franchise.html?collection_id=${firstCollection.id}`;
-          return;
+          window.location.href = `/franchise.html?collection_id=${collectionResults.results[0].id}`;
+          found = true;
+        } 
+        // 2. Si no es colección, miramos si el mejor resultado en multi-search es una Serie de TV
+        else if (multiResults && multiResults.results && multiResults.results.length > 0) {
+          const firstResult = multiResults.results[0];
+          
+          if (firstResult.media_type === 'tv') {
+            window.location.href = `/franchise.html?tv_id=${firstResult.id}`;
+            found = true;
+          } 
+          // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
+          else if (firstResult.media_type === 'movie') {
+            const movieDetails = await fetchTMDBDetails('movie', firstResult.id);
+            if (movieDetails && movieDetails.belongs_to_collection) {
+              window.location.href = `/franchise.html?collection_id=${movieDetails.belongs_to_collection.id}`;
+              found = true;
+            }
+          }
         }
 
         searchBtn.textContent = originalText;
-        alert('Lo sentimos, no encontramos una colección en TMDB para esa búsqueda.');
+        
+        if (!found) {
+          alert('Lo sentimos, no encontramos una saga o serie en TMDB para esa búsqueda.');
+        }
       } else {
         searchInput.focus();
       }
