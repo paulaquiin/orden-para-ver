@@ -120,7 +120,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       const ctxEl = document.querySelector('.context-tag');
       
       if (titleEl) titleEl.textContent = pageTitle;
-      if (sumEl) sumEl.textContent = pageSummary;
+      if (sumEl) {
+        if (pageSummary.length > 200) {
+          sumEl.innerHTML = `<span class="clamped-text" style="display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">${pageSummary}</span><span onclick="this.previousElementSibling.style.webkitLineClamp = this.previousElementSibling.style.webkitLineClamp === '3' ? 'unset' : '3'; this.textContent = this.textContent === 'Leer más' ? 'Leer menos' : 'Leer más'" style="color:var(--accent-orange); font-size:0.9rem; font-weight:600; cursor:pointer; display:inline-block; margin-top:8px;">Leer más</span>`;
+        } else {
+          sumEl.textContent = pageSummary;
+        }
+      }
       if (ctxEl) ctxEl.textContent = tvId ? 'SERIE DE TELEVISIÓN' : 'CRONOLOGÍA OFICIAL';
 
       if (timelineContainer) {
@@ -151,7 +157,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                   <div class="card-body">
                     <h3 class="card-item-title">${item.title}</h3>
                     <p class="card-item-year">${item.releaseYear}</p>
-                    <p class="card-item-desc">${item.description}</p>
+                    <div>
+                      <p class="card-item-desc">${item.description}</p>
+                      ${item.description.length > 130 ? `<span onclick="this.previousElementSibling.classList.toggle('expanded'); this.textContent = this.textContent === 'Leer más' ? 'Leer menos' : 'Leer más'" style="color:var(--accent-orange); font-size:0.8rem; font-weight:600; cursor:pointer; display:inline-block; margin-bottom:15px; margin-top:2px;">Leer más</span>` : '<div style="margin-bottom:15px;"></div>'}
+                    </div>
                     <div class="card-actions" style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1rem;">
                       <a href="#" class="action-btn-sm" style="margin:0;">Detalles</a>
                       ${providersHTML}
@@ -171,7 +180,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                   <div class="card-body">
                     <h3 class="card-item-title">${item.title}</h3>
                     <p class="card-item-year">${item.releaseYear}</p>
-                    <p class="card-item-desc">${item.description}</p>
+                    <div>
+                      <p class="card-item-desc">${item.description}</p>
+                      ${item.description.length > 130 ? `<span onclick="this.previousElementSibling.classList.toggle('expanded'); this.textContent = this.textContent === 'Leer más' ? 'Leer menos' : 'Leer más'" style="color:var(--accent-orange); font-size:0.8rem; font-weight:600; cursor:pointer; display:inline-block; margin-bottom:15px; margin-top:2px;">Leer más</span>` : '<div style="margin-bottom:15px;"></div>'}
+                    </div>
                     <div class="card-actions" style="display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:1rem;">
                       <a href="#" class="action-btn-sm" style="margin:0;">Detalles</a>
                       ${providersHTML}

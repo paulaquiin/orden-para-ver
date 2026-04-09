@@ -778,12 +778,15 @@ body {
   font-size: 0.9rem;
   color: var(--text-gray);
   line-height: 1.6;
-  margin-bottom: 25px;
-  /* Reduced clamping for more text */
+  margin-bottom: 5px;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.card-item-desc.expanded {
+  -webkit-line-clamp: unset;
 }
 
 .card-actions {
