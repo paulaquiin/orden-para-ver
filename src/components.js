@@ -9,8 +9,8 @@ class AppHeader extends HTMLElement {
           </div>
           <nav class="nav-links">
             <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
-            <a href="/pages/contenido.html" class="${currentPath.includes('contenido') ? 'active' : ''}">Contenido</a>
-            <a href="/pages/novedades.html" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
+            <a href="/contenidos/" class="${currentPath.includes('contenidos') ? 'active' : ''}">Contenido</a>
+            <a href="/novedades/" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
           </nav>
           <div class="nav-actions" style="display:flex; align-items:center;">
             <div class="nav-search" style="display:flex; align-items:center; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.1);">
@@ -38,8 +38,8 @@ class AppFooter extends HTMLElement {
           <div class="footer-top">
             <div class="footer-logo">Orden<span class="gradient-text">paraver</span></div>
             <div class="footer-links">
-              <a href="/pages/privacidad.html">Privacidad</a>
-              <a href="/pages/terminos.html">Términos</a>
+              <a href="/privacidad/">Privacidad</a>
+              <a href="/terminos/">Términos</a>
               <a href="https://developer.themoviedb.org/docs" target="_blank" rel="noopener noreferrer">Documentación API</a>
             </div>
           </div>

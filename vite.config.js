@@ -6,11 +6,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        franchise: resolve(__dirname, 'franchise.html'),
-        contenido: resolve(__dirname, 'pages/contenido.html'),
-        novedades: resolve(__dirname, 'pages/novedades.html'),
-        privacidad: resolve(__dirname, 'pages/privacidad.html'),
-        terminos: resolve(__dirname, 'pages/terminos.html'),
+        franchise: resolve(__dirname, 'franchise/index.html'),
+        contenidos: resolve(__dirname, 'contenidos/index.html'),
+        novedades: resolve(__dirname, 'novedades/index.html'),
+        privacidad: resolve(__dirname, 'privacidad/index.html'),
+        terminos: resolve(__dirname, 'terminos/index.html'),
       },
     },
   },
