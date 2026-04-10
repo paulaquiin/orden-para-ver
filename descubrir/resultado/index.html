@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Ruta Personalizada | Orden para ver</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .result-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+        .ai-content {
+            line-height: 1.8;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+        .ai-content h1, .ai-content h2, .ai-content h3 {
+            color: white;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .ai-content strong { color: var(--accent-orange); }
+        .ai-content ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .ai-content li { margin-bottom: 0.8rem; }
+        
+        .result-header { text-align: center; margin-bottom: 40px; }
+        .result-header h1 { font-size: 3rem; margin-bottom: 10px; }
+        
+        .action-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <app-header></app-header>
+
+    <main class="container">
+        <div class="result-container">
+            <header class="result-header">
+                <span class="context-tag" style="background: rgba(255,140,90,0.1); color: var(--accent-orange);">IA GENERATIVA ACTIVADA</span>
+                <h1 class="gradient-text">Tu Ruta Maestra</h1>
+                <p id="userContext" style="color: var(--text-gray); font-size: 0.9rem;"></p>
+            </header>
+
+            <div id="aiResult" class="ai-content">
+                <!-- Se inyectará aquí el resultado -->
+                <p>Cargando tu destino...</p>
+            </div>
+
+            <div class="action-btns">
+                <button class="btn" onclick="window.location.href='/descubrir/'" style="background: rgba(255,255,255,0.05);">Nueva Ruta</button>
+                <button class="btn" onclick="window.location.href='/contenidos/'" style="background: var(--accent-orange); color: white;">Explorar Tudo</button>
+            </div>
+        </div>
+    </main>
+
+    <app-footer></app-footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const result = localStorage.getItem('ai_route_result');
+            const genres = JSON.parse(localStorage.getItem('user_genres') || '[]');
+            
+            if (!result) {
+                window.location.href = '/descubrir/';
+                return;
+            }
+
+            // Mostrar contexto
+            document.getElementById('userContext').textContent = `Basada en tu interés por: ${genres.join(', ')}`;
+
+            // Renderizado súper básico de Markdown para la demo
+            const formattedResult = result
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negritas
+                .replace(/### (.*?)\n/g, '<h3>$1</h3>') // H3
+                .replace(/## (.*?)\n/g, '<h2>$1</h2>') // H2
+                .replace(/\* (.*?)\n/g, '<li>$1</li>') // Listas
+                .replace(/\n\n/g, '<br><br>') // Párrafos
+                .replace(/<li>(.*?<\/li>)/g, '<ul><li>$1</ul>'); // Envolver listas (muy simplista)
+
+            document.getElementById('aiResult').innerHTML = formattedResult;
+        });
+    </script>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
