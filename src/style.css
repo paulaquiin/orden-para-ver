@@ -728,8 +728,8 @@ body {
 .card-poster-wrapper {
   position: relative;
   width: 220px;
-  height: auto;
-  min-height: 100%;
+  flex-shrink: 0;
+  aspect-ratio: 2 / 3;
 }
 
 .card-poster {

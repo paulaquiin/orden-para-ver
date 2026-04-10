@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacidad | Orden para ver</title>
+  <meta name="description" content="Política de privacidad de Orden para ver." />
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    .legal-content {
+      padding: 6rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .legal-content h1 {
+      font-size: 3rem;
+      color: var(--text-primary);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .legal-content h2 {
+      color: var(--text-primary);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .legal-content p {
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <app-header></app-header>
+
+    <main class="legal-content">
+      <h1 class="gradient-text">Política de Privacidad</h1>
+
+      <h2>1. Información que recopilamos</h2>
+      <p>En "Orden para ver" valoramos tu privacidad. Al utilizar nuestra plataforma para consultar el orden cronológico
+        de tus franquicias o series favoritas, no requerimos que te registres ni proporciones información de
+        identificación personal para acceder al contenido y las funciones principales.</p>
+
+      <h2>2. Uso de servicios de terceros</h2>
+      <p>Nuestra plataforma utiliza la API de <strong>The Movie Database (TMDB)</strong> para obtener y mostrar la
+        información de las películas y series, incluyendo carteles, sinopsis, fechas de estreno y plataformas de
+        streaming. TMDB puede recopilar ciertos datos como direcciones IP según su propia política de privacidad.</p>
+      <p>Además, este sitio utiliza analíticas básicas y servicios de entrega de contenido (CDN) que pueden registrar
+        automáticamente determinada información técnica y no personal para garantizar el funcionamiento correcto y la
+        seguridad de la aplicación web.</p>
+
+      <h2>3. Uso de Cookies</h2>
+      <p>Utilizamos cookies técnicas y de rendimiento estrictamente necesarias para el funcionamiento del sitio y poder
+        ofrecerte una mejor experiencia de navegación. Estas cookies no rastrean información personal identificable. Si
+        decides continuar navegando, consideramos que aceptas y entiendes su uso.</p>
+
+      <h2>4. Alojamiento y Analítica</h2>
+      <p>Esta plataforma puede estar alojada en servicios descentralizados o en la nube como Vercel o Netlify, los
+        cuales aplican medidas estándar de seguridad sobre el tráfico, garantizando la privacidad en la medida técnica
+        posible de forma anónima.</p>
+
+      <h2>5. Cambios en esta política</h2>
+      <p>Nos reservamos el derecho de actualizar o modificar esta política de privacidad en cualquier momento. Cualquier
+        cambio será reflejado inmediatamente en esta página, por lo que te recomendamos revisarla de manera periódica si
+        tienes dudas.</p>
+
+      <p style="margin-top: 3rem; font-size: 0.9rem; opacity: 0.7;">Última actualización: Abril 2026</p>
+    </main>
+
+    <app-footer></app-footer>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

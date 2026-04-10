@@ -38,14 +38,13 @@ class AppFooter extends HTMLElement {
           <div class="footer-top">
             <div class="footer-logo">Orden<span class="gradient-text">paraver</span></div>
             <div class="footer-links">
-              <a href="#">Privacidad</a>
-              <a href="#">Términos</a>
-              <a href="#">API Documentation</a>
-              <a href="#">Contacto</a>
+              <a href="/privacidad.html">Privacidad</a>
+              <a href="/terminos.html">Términos</a>
+              <a href="https://developer.themoviedb.org/docs" target="_blank" rel="noopener noreferrer">Documentación API</a>
             </div>
           </div>
           <div class="footer-bottom">
-            <p>© 2024 Ordenparaver. El Curador Digital.</p>
+            <p>© 2024 Ordenparaver. Paula Quintana González.</p>
             <div class="footer-socials">
               <a href="https://www.linkedin.com/in/paula-quintana-36856b204/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                 <div class="social-icon">In</div>
