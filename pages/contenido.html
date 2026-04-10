@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contenido | Orden para ver</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .contents-hero {
+            position: relative;
+            padding: 100px 0 60px;
+            background: linear-gradient(to top, var(--bg-color), rgba(12, 12, 17, 0.4)), url('/images/mcu-banner.png');
+            background-size: cover;
+            background-position: center;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+        }
+        .hero-badge {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .hero-title-large {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+        .hero-description {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Section Headings */
+        .content-section {
+            padding: 60px 0;
+        }
+        .section-header-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .section-header-compact h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        .see-all {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Master Franchises Grid */
+        .master-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .master-card {
+            height: 450px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        .master-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.2); }
+        .master-card img { width: 100%; height: 100%; object-fit: cover; }
+        .master-card-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 25px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+        .master-card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 5px; }
+        .master-card-info { color: var(--text-gray); font-size: 0.75rem; }
+
+        /* Tendencias Row */
+        .trends-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .trend-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            border: 1px solid var(--glass-border);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 180px;
+            cursor: pointer;
+        }
+        .trend-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(2px);
+        }
+        .trend-content { position: relative; z-index: 1; }
+        .trend-rank { color: var(--accent-orange); font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; display: block; }
+        .trend-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+        .trend-desc { color: var(--text-gray); font-size: 0.85rem; }
+
+        /* Format Pills */
+        .format-grid {
+            display: flex;
+            gap: 15px;
+        }
+        .format-pill {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .format-pill:hover { background: rgba(255,255,255,0.05); }
+        .format-icon { font-size: 1.2rem; filter: grayscale(1); }
+        .format-name { font-weight: 600; font-size: 0.9rem; }
+
+        /* Curated Collections */
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .collection-card {
+            height: 150px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+        }
+        .collection-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .collection-card-title {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 968px) {
+            .master-grid, .trends-grid, .collections-grid { grid-template-columns: 1fr; }
+            .format-grid { flex-wrap: wrap; }
+            .format-pill { width: calc(50% - 8px); flex: none; }
+            .hero-title-large { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <app-header></app-header>
+
+    <main>
+        <!-- Featured Hero -->
+        <section class="contents-hero">
+            <div class="container">
+                <span class="hero-badge">FEATURED UNIVERSE</span>
+                <h1 class="hero-title-large">Marvel Cinematic Universe</h1>
+                <p class="hero-description">Experience the entire saga of Earth's Mightiest Heroes from the Big Bang to the end of the multiverse in perfect chronological order.</p>
+                <div class="hero-btns">
+                    <button class="btn" style="background: var(--accent-orange); color: white;" onclick="window.location.href='/franchise.html?collection_id=86311'">View Timeline</button>
+                    <button class="btn btn-glass" style="display:flex; align-items:center; gap: 8px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        Details
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Master Franchises -->
+            <section class="content-section">
+                <div class="section-header-compact">
+                    <h2>Franquicias Maestras</h2>
+                    <a href="#" class="see-all">See all →</a>
+                </div>
+                <div class="master-grid">
+                    <div class="master-card" onclick="window.location.href='/franchise.html?collection_id=10'">
+                        <img src="/images/star-wars.png" alt="Star Wars">
+                        <div class="master-card-overlay">
+                            <div class="master-card-title">Star Wars</div>
+                            <div class="master-card-info">12 entries • Canon</div>
+                        </div>
+                    </div>
+                    <div class="master-card" onclick="window.location.href='/franchise.html?collection_id=86311'">
+                        <img src="/images/mcu-banner.png" alt="Marvel MCU">
+                        <div class="master-card-overlay">
+                            <div class="master-card-title">Marvel (MCU)</div>
+                            <div class="master-card-info">42 entries • Phase 5</div>
+                        </div>
+                    </div>
+                    <div class="master-card" onclick="window.location.href='/franchise.html?collection_id=263'">
+                        <img src="/images/dc-universe.png" alt="DC Universe">
+                        <div class="master-card-overlay">
+                            <div class="master-card-title">DC Universe</div>
+                            <div class="master-card-info">33 entries • Rebooting</div>
+                        </div>
+                    </div>
+                    <div class="master-card">
+                        <img src="https://images.unsplash.com/photo-1547721064-da6cfb341d50?auto=format&fit=crop&q=80&w=400" alt="Wizarding World">
+                        <div class="master-card-overlay">
+                            <div class="master-card-title">Wizarding World</div>
+                            <div class="master-card-info">11 entries • Complete</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trending -->
+            <section class="content-section">
+                <div class="section-header-compact">
+                    <h2>Tendencias</h2>
+                </div>
+                <div class="trends-grid">
+                    <div class="trend-card" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600')">
+                        <div class="trend-content">
+                            <span class="trend-rank">#1 TODAY</span>
+                            <div class="trend-title">Middle-earth</div>
+                            <div class="trend-desc">The Second Age to the fall of Sauron.</div>
+                        </div>
+                    </div>
+                    <div class="trend-card" style="background-image: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=600')">
+                        <div class="trend-content">
+                            <span class="trend-rank">#2 TODAY</span>
+                            <div class="trend-title">Foundation</div>
+                            <div class="trend-desc">Asimov's epic across thousands of years.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- By Format -->
+            <section class="content-section">
+                <div class="section-header-compact">
+                    <h2>Por Formato</h2>
+                </div>
+                <div class="format-grid">
+                    <div class="format-pill">
+                        <span class="format-icon">🎬</span>
+                        <span class="format-name">Películas</span>
+                    </div>
+                    <div class="format-pill">
+                        <span class="format-icon">📺</span>
+                        <span class="format-name">Series TV</span>
+                    </div>
+                    <div class="format-pill">
+                        <span class="format-icon">💊</span>
+                        <span class="format-name">Animación</span>
+                    </div>
+                    <div class="format-pill">
+                        <span class="format-icon">📚</span>
+                        <span class="format-name">Novelas</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Curated Collections -->
+            <section class="content-section">
+                <div class="section-header-compact">
+                    <h2>Colecciones Curadas</h2>
+                </div>
+                <div class="collections-grid">
+                    <div class="collection-card">
+                        <img src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=400" alt="Space Operas">
+                        <div class="collection-card-title">Space Operas</div>
+                    </div>
+                    <div class="collection-card">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=400" alt="High Fantasy">
+                        <div class="collection-card-title">High Fantasy</div>
+                    </div>
+                    <div class="collection-card">
+                        <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?auto=format&fit=crop&q=80&w=400" alt="Street Level">
+                        <div class="collection-card-title">Street Level</div>
+                    </div>
+                    <div class="collection-card">
+                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&q=80&w=400" alt="Multiverse Sagas">
+                        <div class="collection-card-title">Multiverse Sagas</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <app-footer></app-footer>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

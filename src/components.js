@@ -9,7 +9,7 @@ class AppHeader extends HTMLElement {
           </div>
           <nav class="nav-links">
             <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
-            <a href="/franchise.html?collection_id=10" class="${currentPath.includes('star-wars') || currentPath.includes('franchise') ? 'active' : ''}">Franquicias</a>
+            <a href="/pages/contenido.html" class="${currentPath.includes('contenido') ? 'active' : ''}">Contenido</a>
             <a href="/pages/novedades.html" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
           </nav>
           <div class="nav-actions" style="display:flex; align-items:center;">
