@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿No sabes por dónde empezar? | Orden para ver</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .discover-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .discover-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .discover-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+        .progress-container {
+            width: 300px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            margin: 0 auto 60px;
+            position: relative;
+            border-radius: 2px;
+        }
+        .progress-bar {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 33%;
+            background: var(--accent-orange);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255,140,90,0.4);
+        }
+
+        .step-section {
+            margin-bottom: 80px;
+            text-align: left;
+        }
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,140,90,0.1);
+            color: var(--accent-orange);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 15px;
+        }
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Step 1: Genres */
+        .genres-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .genre-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .genre-card:hover { border-color: var(--accent-orange); background: rgba(255,140,90,0.02); }
+        .genre-card.active { 
+            border-color: var(--accent-orange); 
+            background: rgba(255,140,90,0.05);
+            box-shadow: inset 0 0 15px rgba(255,140,90,0.1);
+        }
+        .genre-icon { font-size: 1.8rem; margin-bottom: 12px; display: block; filter: grayscale(1); transition: 0.3s; }
+        .genre-card.active .genre-icon { filter: grayscale(0); }
+        .genre-name { font-size: 0.85rem; font-weight: 500; color: var(--text-gray); }
+        .genre-card.active .genre-name { color: white; }
+
+        /* Step 2: Time */
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .time-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            padding: 40px 30px;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .time-card.recommended {
+            border-color: var(--accent-orange);
+            background: rgba(255,140,90,0.02);
+        }
+        .rec-tag {
+            position: absolute;
+            top: -12px; left: 50%;
+            transform: translateX(-50%);
+            background: #ff8c5a;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .time-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-orange); margin-bottom: 15px; display: block; }
+        .time-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+        .time-desc { font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+        .time-card.active { border-color: var(--accent-orange); background: rgba(255,140,90,0.05); }
+
+        /* Step 3: Knowledge */
+        .knowledge-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .knowledge-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .knowledge-card.active { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
+        .knowledge-icon { 
+            width: 48px; height: 48px; border-radius: 12px; 
+            background: rgba(255,255,255,0.05); 
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+        .knowledge-content h4 { font-size: 1.1rem; margin-bottom: 4px; }
+        .knowledge-content p { font-size: 0.85rem; color: var(--text-gray); }
+
+        .generate-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .generate-btn {
+            background: var(--accent-orange);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(255,140,90,0.3);
+        }
+        .generate-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,140,90,0.4); }
+        .wait-note { margin-top: 20px; font-size: 0.85rem; color: var(--text-gray); opacity: 0.6; }
+
+        @media (max-width: 768px) {
+            .genres-grid { grid-template-columns: repeat(3, 1fr); }
+            .time-grid, .knowledge-grid { grid-template-columns: 1fr; }
+            .discover-header h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <app-header></app-header>
+
+    <main class="discover-page">
+        <header class="discover-header">
+            <h1 class="gradient-text">¿No sabes por dónde empezar?</h1>
+            <p>Configura tu experiencia cinematográfica ideal en 3 simples pasos.</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <!-- Step 1 -->
+        <section class="step-section">
+            <div>
+                <span class="step-number">1</span>
+                <h2 class="step-title">¿Qué géneros te apasionan?</h2>
+            </div>
+            <div class="genres-grid">
+                <div class="genre-card" onclick="this.classList.toggle('active')">
+                    <span class="genre-icon">🚀</span>
+                    <span class="genre-name">Ciencia Ficción</span>
+                </div>
+                <div class="genre-card" onclick="this.classList.toggle('active')">
+                    <span class="genre-icon">🪄</span>
+                    <span class="genre-name">Fantasía</span>
+                </div>
+                <div class="genre-card" onclick="this.classList.toggle('active')">
+                    <span class="genre-icon">💀</span>
+                    <span class="genre-name">Terror</span>
+                </div>
+                <div class="genre-card" onclick="this.classList.toggle('active')">
+                    <span class="genre-icon">⚔️</span>
+                    <span class="genre-name">Acción</span>
+                </div>
+                <div class="genre-card" onclick="this.classList.toggle('active')">
+                    <span class="genre-icon">💊</span>
+                    <span class="genre-name">Animación</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2 -->
+        <section class="step-section">
+            <div>
+                <span class="step-number">2</span>
+                <h2 class="step-title">¿Cuánto tiempo tienes?</h2>
+            </div>
+            <div class="time-grid">
+                <div class="time-card" onclick="selectCard(this, 'time-card')">
+                    <span class="time-value">10</span>
+                    <h3 class="time-title">Vistazo rápido</h3>
+                    <p class="time-desc">Solo las películas esenciales. Ideal para un fin de semana intenso.</p>
+                </div>
+                <div class="time-card recommended active" onclick="selectCard(this, 'time-card')">
+                    <span class="rec-tag">RECOMENDADO</span>
+                    <span class="time-value">✨</span>
+                    <h3 class="time-title">Experiencia completa</h3>
+                    <p class="time-desc">La cronología definitiva mezclando películas y series canon.</p>
+                </div>
+                <div class="time-card" onclick="selectCard(this, 'time-card')">
+                    <span class="time-value">♾️</span>
+                    <h3 class="time-title">Inmersión total</h3>
+                    <p class="time-desc">Todo el universo: cortos, cómics, audiolibros y escenas eliminadas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3 -->
+        <section class="step-section">
+            <div>
+                <span class="step-number">3</span>
+                <h2 class="step-title">Nivel de conocimiento</h2>
+            </div>
+            <div class="knowledge-grid">
+                <div class="knowledge-card" onclick="selectCard(this, 'knowledge-card')">
+                    <div class="knowledge-icon">🎓</div>
+                    <div class="knowledge-content">
+                        <h4>Novato total</h4>
+                        <p>Quiero que me guíen de la mano sin spoilers.</p>
+                    </div>
+                </div>
+                <div class="knowledge-card active" onclick="selectCard(this, 'knowledge-card')">
+                    <div class="knowledge-icon">✔️</div>
+                    <div class="knowledge-content">
+                        <h4>Fan veterano buscando orden</h4>
+                        <p>Ya conozco la historia, pero quiero el canon perfecto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="generate-container">
+            <button class="generate-btn" onclick="generateRoute()">Generar mi Ruta</button>
+            <p class="wait-note">Tardaremos solo unos segundos en curar tu lista personalizada.</p>
+        </div>
+    </main>
+
+    <app-footer></app-footer>
+
+    <script>
+        function selectCard(el, className) {
+            document.querySelectorAll('.' + className).forEach(card => card.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function generateRoute() {
+            const btn = document.querySelector('.generate-btn');
+            btn.textContent = 'Analizando universos...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                window.location.href = '/contenidos/';
+            }, 1500);
+        }
+    </script>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
