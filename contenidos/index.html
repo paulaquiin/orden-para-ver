@@ -10,7 +10,7 @@
         .contents-hero {
             position: relative;
             padding: 100px 0 60px;
-            background: linear-gradient(to top, var(--bg-color), rgba(12, 12, 17, 0.4)), url('/images/mcu-banner.png');
+            background: linear-gradient(to top, var(--bg-color), rgba(12, 12, 17, 0.4)), url('https://image.tmdb.org/t/p/original/njFixYzIxX8jsn6KMSEtAzi4avi.jpg');
             background-size: cover;
             background-position: center;
             min-height: 500px;
@@ -19,11 +19,12 @@
         }
         .hero-badge {
             font-size: 0.75rem;
-            color: var(--text-gray);
+            color: var(--accent-orange);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 1rem;
             display: block;
+            font-weight: 700;
         }
         .hero-title-large {
             font-size: 4.5rem;
@@ -57,14 +58,6 @@
             font-size: 1.75rem;
             font-weight: 700;
         }
-        .see-all {
-            color: var(--text-gray);
-            text-decoration: none;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
 
         /* Master Franchises Grid */
         .master-grid {
@@ -95,35 +88,41 @@
         /* Tendencias Row */
         .trends-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(6, 1fr);
+            grid-auto-rows: 200px;
             gap: 20px;
         }
         .trend-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 40px;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            border: 1px solid var(--glass-border);
             background-size: cover;
             background-position: center;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            align-items: flex-end;
+            border: 1px solid var(--glass-border);
             position: relative;
             overflow: hidden;
-            min-height: 180px;
             cursor: pointer;
+            transition: var(--transition);
         }
+        .trend-card:hover { transform: scale(1.02); border-color: var(--accent-orange); }
         .trend-card::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(2px);
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
         }
+        
+        /* Layout dinámico de tendencias */
+        .trend-card:nth-child(1) { grid-column: span 3; grid-row: span 2; }
+        .trend-card:nth-child(2) { grid-column: span 3; grid-row: span 1; }
+        .trend-card:nth-child(3) { grid-column: span 3; grid-row: span 1; }
+        .trend-card:nth-child(4) { grid-column: span 2; grid-row: span 1; }
+        .trend-card:nth-child(5) { grid-column: span 4; grid-row: span 1; }
+
         .trend-content { position: relative; z-index: 1; }
-        .trend-rank { color: var(--accent-orange); font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; display: block; }
-        .trend-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
-        .trend-desc { color: var(--text-gray); font-size: 0.85rem; }
+        .trend-rank { color: var(--accent-orange); font-size: 0.7rem; font-weight: 800; margin-bottom: 8px; display: block; border: 1px solid var(--accent-orange); display: inline-block; padding: 2px 8px; border-radius: 4px; }
+        .trend-title { font-size: 1.3rem; font-weight: 700; margin-top: 10px; }
 
         /* Format Pills */
         .format-grid {
@@ -143,38 +142,18 @@
             transition: var(--transition);
         }
         .format-pill:hover { background: rgba(255,255,255,0.05); }
-        .format-icon { font-size: 1.2rem; filter: grayscale(1); }
-        .format-name { font-weight: 600; font-size: 0.9rem; }
-
-        /* Curated Collections */
-        .collections-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-        .collection-card {
-            height: 150px;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            border: 1px solid var(--glass-border);
-        }
-        .collection-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .collection-card-title {
-            position: absolute;
-            inset: 0;
+        .format-icon { 
+            width: 20px; 
+            height: 20px; 
+            color: var(--accent-orange);
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1rem;
-            text-align: center;
-            padding: 20px;
         }
+        .format-name { font-weight: 600; font-size: 0.9rem; }
 
         @media (max-width: 968px) {
-            .master-grid, .trends-grid, .collections-grid { grid-template-columns: 1fr; }
+            .master-grid, .trends-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+            .trend-card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 200px; }
             .format-grid { flex-wrap: wrap; }
             .format-pill { width: calc(50% - 8px); flex: none; }
             .hero-title-large { font-size: 3rem; }
@@ -188,15 +167,11 @@
         <!-- Featured Hero -->
         <section class="contents-hero">
             <div class="container">
-                <span class="hero-badge">FEATURED UNIVERSE</span>
-                <h1 class="hero-title-large">Marvel Cinematic Universe</h1>
-                <p class="hero-description">Experience the entire saga of Earth's Mightiest Heroes from the Big Bang to the end of the multiverse in perfect chronological order.</p>
+                <span class="hero-badge">UNIVERSO DESTACADO</span>
+                <h1 class="hero-title-large">Jurassic World</h1>
+                <p class="hero-description">65 millones de años de evolución. Descubre el orden cronológico completo desde el parque original de Hammond hasta el dominio global de los dinosaurios.</p>
                 <div class="hero-btns">
-                    <button class="btn" style="background: var(--accent-orange); color: white;" onclick="window.location.href='/franchise/?collection_id=86311'">View Timeline</button>
-                    <button class="btn btn-glass" style="display:flex; align-items:center; gap: 8px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                        Details
-                    </button>
+                    <button class="btn" style="background: var(--accent-orange); color: white;" onclick="window.location.href='/franchise/?collection_id=328'">Ver Cronología</button>
                 </div>
             </div>
         </section>
@@ -206,58 +181,73 @@
             <section class="content-section">
                 <div class="section-header-compact">
                     <h2>Franquicias Maestras</h2>
-                    <a href="#" class="see-all">See all →</a>
                 </div>
                 <div class="master-grid">
-                    <div class="master-card" onclick="window.location.href='/franchise/?collection_id=10'">
-                        <img src="/images/star-wars.png" alt="Star Wars">
+                    <div class="master-card" onclick="window.location.href='/franchise/?collection_id=645'">
+                        <img src="https://image.tmdb.org/t/p/w500/yq0BOIp4cMfGon8n1vAqnFy7BwN.jpg" alt="John Wick">
                         <div class="master-card-overlay">
-                            <div class="master-card-title">Star Wars</div>
-                            <div class="master-card-info">12 entries • Canon</div>
+                            <div class="master-card-title">John Wick</div>
+                            <div class="master-card-info">4 entregas • Acción Pura</div>
                         </div>
                     </div>
-                    <div class="master-card" onclick="window.location.href='/franchise/?collection_id=86311'">
-                        <img src="/images/mcu-banner.png" alt="Marvel MCU">
+                    <div class="master-card" onclick="window.location.href='/franchise/?collection_id=9485'">
+                        <img src="https://image.tmdb.org/t/p/w500/pCM9fXulC0fZ2sAqxOo9JlOxPmX.jpg" alt="Fast & Furious">
                         <div class="master-card-overlay">
-                            <div class="master-card-title">Marvel (MCU)</div>
-                            <div class="master-card-info">42 entries • Phase 5</div>
+                            <div class="master-card-title">Fast & Furious</div>
+                            <div class="master-card-info">11 entregas • Saga Familia</div>
                         </div>
                     </div>
-                    <div class="master-card" onclick="window.location.href='/franchise/?collection_id=263'">
-                        <img src="/images/dc-universe.png" alt="DC Universe">
+                    <div class="master-card" onclick="window.location.href='/franchise/?collection_id=87359'">
+                        <img src="https://image.tmdb.org/t/p/w500/208jd4TkKxRkDvUHiSB1QvfiWPw.jpg" alt="Mission Impossible">
                         <div class="master-card-overlay">
-                            <div class="master-card-title">DC Universe</div>
-                            <div class="master-card-info">33 entries • Rebooting</div>
+                            <div class="master-card-title">Misión Imposible</div>
+                            <div class="master-card-info">7 entregas • Espionaje</div>
                         </div>
                     </div>
-                    <div class="master-card">
-                        <img src="https://images.unsplash.com/photo-1547721064-da6cfb341d50?auto=format&fit=crop&q=80&w=400" alt="Wizarding World">
+                    <div class="master-card" onclick="window.location.href='/franchise/?tv_id=1399'">
+                        <img src="https://image.tmdb.org/t/p/w500/cjrSkULmG2btwLOEvWZCeO5KRY2.jpg" alt="Game of Thrones">
                         <div class="master-card-overlay">
-                            <div class="master-card-title">Wizarding World</div>
-                            <div class="master-card-info">11 entries • Complete</div>
+                            <div class="master-card-title">Juego de Tronos</div>
+                            <div class="master-card-info">8 temporadas • Fantasía Épica</div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Trending -->
+            <!-- Trending (5 Items) -->
             <section class="content-section">
                 <div class="section-header-compact">
-                    <h2>Tendencias</h2>
+                    <h2>Tendencias Actuales</h2>
                 </div>
                 <div class="trends-grid">
-                    <div class="trend-card" style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=600')">
+                    <div class="trend-card" style="background-image: url('https://image.tmdb.org/t/p/w1280/foGkPxpw9h8zln81j63mix5B7m8.jpg')">
                         <div class="trend-content">
-                            <span class="trend-rank">#1 TODAY</span>
-                            <div class="trend-title">Middle-earth</div>
-                            <div class="trend-desc">The Second Age to the fall of Sauron.</div>
+                            <span class="trend-rank">#1 HOY</span>
+                            <div class="trend-title">The Witcher</div>
                         </div>
                     </div>
-                    <div class="trend-card" style="background-image: url('https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=600')">
+                    <div class="trend-card" style="background-image: url('https://image.tmdb.org/t/p/w1280/bq28ajZaoMyzEIm6REelqyqtEDZ.jpg')">
                         <div class="trend-content">
-                            <span class="trend-rank">#2 TODAY</span>
-                            <div class="trend-title">Foundation</div>
-                            <div class="trend-desc">Asimov's epic across thousands of years.</div>
+                            <span class="trend-rank">#2 HOY</span>
+                            <div class="trend-title">The Boys</div>
+                        </div>
+                    </div>
+                    <div class="trend-card" style="background-image: url('https://image.tmdb.org/t/p/w1280/8zbAoryWbtH0DKdev8abFAjdufy.jpg')">
+                        <div class="trend-content">
+                            <span class="trend-rank">#3 HOY</span>
+                            <div class="trend-title">Stranger Things</div>
+                        </div>
+                    </div>
+                    <div class="trend-card" style="background-image: url('https://image.tmdb.org/t/p/w1280/q8eejQcg1bAqImEV8jh8RtBD4uH.jpg')">
+                        <div class="trend-content">
+                            <span class="trend-rank">#4 HOY</span>
+                            <div class="trend-title">Arcane</div>
+                        </div>
+                    </div>
+                    <div class="trend-card" style="background-image: url('https://image.tmdb.org/t/p/w1280/wHNwlE6ftEpgjVbdhLXOtv1hLs0.jpg')">
+                        <div class="trend-content">
+                            <span class="trend-rank">#5 HOY</span>
+                            <div class="trend-title">The Bear</div>
                         </div>
                     </div>
                 </div>
@@ -266,49 +256,32 @@
             <!-- By Format -->
             <section class="content-section">
                 <div class="section-header-compact">
-                    <h2>Por Formato</h2>
+                    <h2>Explorar por Formato</h2>
                 </div>
                 <div class="format-grid">
                     <div class="format-pill">
-                        <span class="format-icon">🎬</span>
+                        <span class="format-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m11 3 3 18"/><path d="m3 9 18 3"/><path d="m3 15 18-3"/></svg>
+                        </span>
                         <span class="format-name">Películas</span>
                     </div>
                     <div class="format-pill">
-                        <span class="format-icon">📺</span>
-                        <span class="format-name">Series TV</span>
+                        <span class="format-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="7 2 12 7 17 2"/></svg>
+                        </span>
+                        <span class="format-name">Series de TV</span>
                     </div>
                     <div class="format-pill">
-                        <span class="format-icon">💊</span>
+                        <span class="format-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                        </span>
                         <span class="format-name">Animación</span>
                     </div>
                     <div class="format-pill">
-                        <span class="format-icon">📚</span>
-                        <span class="format-name">Novelas</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Curated Collections -->
-            <section class="content-section">
-                <div class="section-header-compact">
-                    <h2>Colecciones Curadas</h2>
-                </div>
-                <div class="collections-grid">
-                    <div class="collection-card">
-                        <img src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=400" alt="Space Operas">
-                        <div class="collection-card-title">Space Operas</div>
-                    </div>
-                    <div class="collection-card">
-                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=400" alt="High Fantasy">
-                        <div class="collection-card-title">High Fantasy</div>
-                    </div>
-                    <div class="collection-card">
-                        <img src="https://images.unsplash.com/photo-1514539079130-25950c84af65?auto=format&fit=crop&q=80&w=400" alt="Street Level">
-                        <div class="collection-card-title">Street Level</div>
-                    </div>
-                    <div class="collection-card">
-                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&q=80&w=400" alt="Multiverse Sagas">
-                        <div class="collection-card-title">Multiverse Sagas</div>
+                        <span class="format-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M6 18h14"/></svg>
+                        </span>
+                        <span class="format-name">Novelas Gráficas</span>
                     </div>
                 </div>
             </section>
