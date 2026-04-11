@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const collectionId = urlParams.get('collection_id');
   const tvId = urlParams.get('tv_id');
 
-  if (window.location.pathname.includes('franchise.html')) {
+  if (window.location.pathname.includes('/franchise') || window.location.pathname.includes('franchise.html')) {
     let rawItems = [];
     let pageTitle = '';
     let pageSummary = '';
@@ -232,10 +232,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (similarCollections.length > 1) {
          // FUSIONAMOS LAS SAGAS!
          const mergedIds = similarCollections.map(c => c.id).join(',');
-         window.location.href = `/franchise.html?collection_id=${mergedIds}`;
+         window.location.href = `/franchise/?collection_id=${mergedIds}`;
       } else {
          // O cargamos la única coincidencia exacta
-         window.location.href = `/franchise.html?collection_id=${collectionResults.results[0].id}`;
+         window.location.href = `/franchise/?collection_id=${collectionResults.results[0].id}`;
       }
       found = true;
     } 
@@ -244,14 +244,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       const firstResult = multiResults.results[0];
       
       if (firstResult.media_type === 'tv') {
-        window.location.href = `/franchise.html?tv_id=${firstResult.id}`;
+        window.location.href = `/franchise/?tv_id=${firstResult.id}`;
         found = true;
       } 
       // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
       else if (firstResult.media_type === 'movie') {
         const movieDetails = await fetchTMDBDetails('movie', firstResult.id);
         if (movieDetails && movieDetails.belongs_to_collection) {
-          window.location.href = `/franchise.html?collection_id=${movieDetails.belongs_to_collection.id}`;
+          window.location.href = `/franchise/?collection_id=${movieDetails.belongs_to_collection.id}`;
           found = true;
         }
       }
