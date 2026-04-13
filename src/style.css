@@ -502,28 +502,309 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive */
-@media (max-width: 968px) {
-  .timeline-grid {
-    grid-template-columns: 1fr;
-  }
-  .timeline-subgrid {
-    grid-template-columns: 1fr;
-  }
-  .philosophies-grid {
-    grid-template-columns: 1fr;
-  }
-  .hero-title {
-    font-size: 2.5rem;
-  }
-  .footer-top {
-    flex-direction: column;
-    gap: 30px;
-  }
-  .nav-links {
-    display: none; /* Add a mobile menu later if needed */
-  }
+/* ============================================
+   NAV ACTIONS & SEARCH (desktop)
+   ============================================ */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
+
+.nav-search {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-search-input {
+  background: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  width: 140px;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.nav-search-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b0b0bc;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  transition: var(--transition);
+}
+
+.nav-search-btn:hover { color: #fff; }
+
+/* Hamburger - hidden on desktop */
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  padding: 6px;
+  border-radius: 8px;
+  transition: var(--transition);
+}
+.hamburger-btn:hover { background: var(--glass-bg); }
+
+/* Mobile nav dropdown */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background: rgba(12, 12, 17, 0.98);
+  border-top: 1px solid var(--glass-border);
+  padding: 8px 0 16px;
+  backdrop-filter: blur(20px);
+}
+
+.mobile-nav a {
+  color: var(--text-gray);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 14px 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+  transition: var(--transition);
+}
+.mobile-nav a:last-of-type { border-bottom: none; }
+.mobile-nav a.active,
+.mobile-nav a:hover { color: var(--text-white); }
+
+.mobile-nav-search {
+  display: flex;
+  align-items: center;
+  margin: 16px 1.5rem 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.mobile-nav-search .nav-search-input {
+  width: 100%;
+}
+
+.mobile-nav.open {
+  display: flex;
+}
+
+/* ============================================
+   RESPONSIVE — Generic Container
+   ============================================ */
+@media (max-width: 1024px) {
+  .container { padding: 0 2rem; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 1.25rem; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 1rem; }
+}
+
+/* ============================================
+   RESPONSIVE — Navbar
+   ============================================ */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-search { display: none; }
+  .hamburger-btn { display: flex; }
+}
+
+/* ============================================
+   RESPONSIVE — Home Page
+   ============================================ */
+@media (max-width: 968px) {
+  /* Hero */
+  .hero { padding: 80px 0 40px; }
+  .hero-title { font-size: 2.5rem; }
+
+  /* Cards grid */
+  .timeline-grid { grid-template-columns: 1fr; }
+  .timeline-subgrid { grid-template-columns: 1fr; }
+
+  /* Philosophies */
+  .philosophies-grid { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .footer-top { flex-direction: column; gap: 30px; text-align: center; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  
+  /* Section title center */
+  .section-title-center { font-size: 2rem; }
+}
+
+@media (max-width: 640px) {
+  /* Hero */
+  .hero { padding: 60px 0 40px; }
+  .hero-title { font-size: 2rem; letter-spacing: -0.5px; }
+  .search-container { flex-direction: column; gap: 8px; }
+  .search-btn { padding: 14px; border-radius: 10px; font-size: 0.95rem; }
+  .search-input { padding: 12px 16px; }
+
+  /* Section headers */
+  .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .section-title { font-size: 1.5rem; }
+  .section-title-center { font-size: 1.75rem; margin-bottom: 2rem; }
+
+  /* Card */
+  .card-title { font-size: 1.2rem; }
+  .card-promo { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+  /* Philosophy */
+  .philosophy-item { padding: 30px 24px; }
+  .philosophy-item h3 { font-size: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 1.6rem; }
+  .hero-stats { font-size: 0.65rem; }
+}
+
+/* ============================================
+   RESPONSIVE — Franchise / Timeline Detail
+   ============================================ */
+@media (max-width: 968px) {
+  .franchise-title { font-size: 2.5rem; }
+
+  /* Timeline line moves to left edge */
+  .timeline-line { left: 16px; }
+
+  /* All items become single-column, left-aligned */
+  .timeline-item,
+  .timeline-item.opposite {
+    display: flex;
+    flex-direction: column;
+    padding-left: 48px;
+    padding-right: 0;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  /* Dot sticks to left edge */
+  .timeline-dot {
+    position: absolute;
+    left: 6px;
+    top: 0;
+    grid-column: unset;
+  }
+
+  /* Cards full width */
+  .item-card-wrapper,
+  .timeline-item.opposite .item-card-wrapper {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  .item-card { width: 100%; max-width: 100%; }
+
+  /* Connector lines hidden on mobile */
+  .timeline-item .left-content.item-card-wrapper::after,
+  .timeline-item .right-content.item-card-wrapper::before {
+    display: none;
+  }
+
+  /* Controls wrap */
+  .timeline-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 24px 0 40px;
+  }
+
+  .filter-group { flex-wrap: wrap; gap: 4px; }
+  .filter-btn, .toggle-btn { padding: 6px 14px; font-size: 0.8rem; }
+  .filter-label { display: none; }
+}
+
+@media (max-width: 640px) {
+  .franchise-title { font-size: 2rem; }
+  .franchise-summary { font-size: 1rem; }
+  .franchise-header { padding: 60px 0 30px; }
+
+  /* Stack poster above content on mobile */
+  .item-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .card-poster-wrapper {
+    width: 100%;
+    height: 220px;
+    aspect-ratio: unset;
+  }
+  .card-body { padding: 20px; }
+  .card-item-title { font-size: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+  .franchise-title { font-size: 1.7rem; }
+  .card-poster-wrapper { height: 180px; }
+  .card-body { padding: 16px; }
+}
+
+/* ============================================
+   RESPONSIVE — Novedades
+   ============================================ */
+@media (max-width: 968px) {
+  .updates-featured-grid { grid-template-columns: 1fr; }
+  .featured-card { min-height: 320px; }
+
+  .updates-timeline-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .updates-timeline-item.left-tag .updates-side-info,
+  .updates-timeline-item.right-tag .updates-side-info {
+    grid-column: 1;
+    text-align: left;
+    justify-self: start;
+    padding: 0;
+  }
+  .updates-dot { display: none; }
+  .updates-timeline-item.left-tag .updates-card,
+  .updates-timeline-item.right-tag .updates-card { grid-column: 1; }
+}
+
+@media (max-width: 640px) {
+  .featured-card { padding: 24px; min-height: 280px; }
+  .featured-card h2 { font-size: 1.4rem; }
+}
+
+/* ============================================
+   RESPONSIVE — Contenidos catalog
+   ============================================ */
+@media (max-width: 968px) {
+  .master-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .trends-grid { grid-template-columns: 1fr 1fr !important; grid-auto-rows: auto !important; }
+  .trend-card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 200px; }
+  .format-grid { flex-wrap: wrap; }
+  .format-pill { width: calc(50% - 8px); flex: none; }
+}
+
+@media (max-width: 640px) {
+  .master-grid { grid-template-columns: 1fr !important; }
+  .trends-grid { grid-template-columns: 1fr !important; }
+  .master-card { height: 300px !important; }
+  .hero-title-large { font-size: 2.5rem !important; }
+  .format-pill { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .hero-title-large { font-size: 1.9rem !important; }
+  .master-card { height: 250px !important; }
+}
+
 
 /* --- Franchise Detail & Timeline Styles --- */
 .franchise-header {
@@ -827,33 +1108,7 @@ body {
   color: white;
 }
 
-@media (max-width: 1100px) {
-  .item-card { width: 380px; }
-  .item-year { font-size: 2.2rem; }
-}
 
-@media (max-width: 968px) {
-  .timeline-line { left: 40px; }
-  .timeline-dot { left: 40px; }
-  .timeline-item, .timeline-item.opposite {
-    grid-template-columns: 1fr;
-    grid-template-areas: "left" "right";
-    padding-left: 80px;
-    padding-right: 0;
-    gap: 20px;
-  }
-  .item-card-wrapper, .timeline-item.opposite .item-card-wrapper {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    justify-content: flex-start !important;
-  }
-  .timeline-info, .timeline-item.opposite .timeline-info { 
-    text-align: left !important; 
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-  .item-card { width: 100%; }
-}
 
 /* --- Novedades Page Styles --- */
 .updates-featured-grid {
@@ -912,12 +1167,4 @@ body {
 .date-added { font-size: 0.75rem; color: var(--text-gray); margin-top: 4px; display: block; }
 .updates-card-body p { font-size: 0.9rem; color: var(--text-gray); margin-top: 15px; line-height: 1.5; }
 
-@media (max-width: 968px) {
-  .updates-featured-grid { grid-template-columns: 1fr; }
-  .updates-timeline-item { grid-template-columns: 1fr; gap: 15px; }
-  .updates-timeline-item.left-tag .updates-side-info, 
-  .updates-timeline-item.right-tag .updates-side-info { grid-column: 1; text-align: left; justify-self: start; padding: 0; }
-  .updates-dot { display: none; }
-  .updates-timeline-item.left-tag .updates-card,
-  .updates-timeline-item.right-tag .updates-card { grid-column: 1; }
-}
+

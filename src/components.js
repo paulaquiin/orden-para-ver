@@ -5,27 +5,65 @@ class AppHeader extends HTMLElement {
       <header class="navbar">
         <div class="container">
           <div class="logo">
-            <span class="logo-text">Orden<span class="gradient-text">paraver</span></span>
+            <a href="/" style="text-decoration:none; color:inherit;">
+              <span class="logo-text">Orden<span class="gradient-text">paver</span></span>
+            </a>
           </div>
-          <nav class="nav-links">
+          <nav class="nav-links" id="navLinks">
             <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
             <a href="/contenidos/" class="${currentPath.includes('contenidos') ? 'active' : ''}">Contenido</a>
             <a href="/novedades/" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
           </nav>
-          <div class="nav-actions" style="display:flex; align-items:center;">
-            <div class="nav-search" style="display:flex; align-items:center; background: rgba(255,255,255,0.05); border-radius: 20px; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.1);">
-              <input type="text" placeholder="Buscar saga..." class="nav-search-input" style="background:transparent; border:none; color:white; outline:none; width: 140px; font-size: 0.85rem;" />
-              <button class="nav-search-btn" style="background:none; border:none; cursor:pointer; color:#b0b0bc; display:flex; align-items:center; padding:2px;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#b0b0bc'">
+          <div class="nav-actions">
+            <div class="nav-search">
+              <input type="text" placeholder="Buscar saga..." class="nav-search-input" />
+              <button class="nav-search-btn" aria-label="Buscar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="11" cy="11" r="8"></circle>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
               </button>
             </div>
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menú" aria-expanded="false">
+              <svg id="hamburgerIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="mobile-nav" id="mobileNav">
+          <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
+          <a href="/contenidos/" class="${currentPath.includes('contenidos') ? 'active' : ''}">Contenido</a>
+          <a href="/novedades/" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
+          <div class="mobile-nav-search">
+            <input type="text" placeholder="Buscar saga..." class="nav-search-input mobile-search-input" />
+            <button class="nav-search-btn mobile-search-btn" aria-label="Buscar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
           </div>
         </div>
       </header>
     `;
+
+    const btn = this.querySelector('#hamburgerBtn');
+    const mobileNav = this.querySelector('#mobileNav');
+    btn?.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+      btn.innerHTML = isOpen
+        ? `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+    });
+
+    // Wire mobile search to the same handler as desktop (main.js picks up .nav-search-input)
+    const mobileInput = this.querySelector('.mobile-search-input');
+    const mobileSearchBtn = this.querySelector('.mobile-search-btn');
+    mobileInput?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') mobileSearchBtn?.click();
+    });
   }
 }
 customElements.define('app-header', AppHeader);

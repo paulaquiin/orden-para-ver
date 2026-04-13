@@ -316,21 +316,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // Setup Navbar Mini Search
-  const navSearchInput = document.querySelector('.nav-search-input');
-  const navSearchBtn = document.querySelector('.nav-search-btn');
-
-  if (navSearchBtn && navSearchInput) {
-    navSearchBtn.addEventListener('click', () => {
-      const query = navSearchInput.value.trim();
-      if (query) executeSearch(query, navSearchBtn);
-      else navSearchInput.focus();
+  // Setup ALL Navbar Search Inputs (desktop + mobile)
+  document.querySelectorAll('.nav-search-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Find the closest sibling input, or fallback to any nav-search-input
+      const input = btn.closest('.nav-search, .mobile-nav-search')?.querySelector('.nav-search-input')
+                 || document.querySelector('.nav-search-input');
+      const query = input?.value.trim();
+      if (query) executeSearch(query, btn);
+      else input?.focus();
     });
+  });
 
-    navSearchInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') navSearchBtn.click();
+  document.querySelectorAll('.nav-search-input').forEach(input => {
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const btn = input.closest('.nav-search, .mobile-nav-search')?.querySelector('.nav-search-btn')
+                 || document.querySelector('.nav-search-btn');
+        btn?.click();
+      }
     });
-  }
+  });
 
   // Smooth scroll for nav links (if they had IDs)
   const navLinks = document.querySelectorAll('.nav-links a');
