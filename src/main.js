@@ -9,11 +9,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const collectionId = urlParams.get('collection_id');
   const tvId = urlParams.get('tv_id');
+  const isFranchisePage = window.location.pathname.includes('/franchise') || 
+                         window.location.pathname.includes('franchise.html') || 
+                         (/^\/contenidos\/.+$/.test(window.location.pathname) && !window.location.pathname.endsWith('index.html'));
 
-  if (window.location.pathname.includes('/franchise') || window.location.pathname.includes('franchise.html')) {
+  if (isFranchisePage) {
     let rawItems = [];
     let pageTitle = '';
     let pageSummary = '';
+
+    // Si no hay IDs pero hay un slug en el path de contenidos, intentamos buscarlo
+    if (!collectionId && !tvId && window.location.pathname.includes('/contenidos/')) {
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const slug = pathParts[pathParts.length - 1];
+        if (slug && slug !== 'contenidos') {
+            const searchResults = await searchCollectionTMDB(slug.replace(/-/g, ' '));
+            if (searchResults && searchResults.results && searchResults.results.length > 0) {
+                // Redirigimos internamente usando el ID encontrado para seguir el flujo normal
+                window.location.search = `?collection_id=${searchResults.results[0].id}`;
+                return;
+            }
+        }
+    }
 
     const timelineContainer = document.querySelector('.timeline-container');
     
@@ -130,6 +147,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       if (ctxEl) ctxEl.textContent = tvId ? 'SERIE DE TELEVISIÓN' : 'CRONOLOGÍA OFICIAL';
 
+      // --- Pretty URL Polish ---
+      // Limpiamos la URL para que quede como /contenidos/nombre-saga/
+      const slug = pageTitle.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const newPath = `/contenidos/${slug}/`;
+      if (window.location.pathname !== newPath) {
+        window.history.replaceState(null, '', newPath);
+      }
+
       if (timelineContainer) {
         timelineContainer.innerHTML = '<div class="timeline-line"></div>';
 
@@ -232,10 +257,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (similarCollections.length > 1) {
          // FUSIONAMOS LAS SAGAS!
          const mergedIds = similarCollections.map(c => c.id).join(',');
-         window.location.href = `/franchise/?collection_id=${mergedIds}`;
+         const slug = query.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+         window.location.href = `/contenidos/${slug}/?collection_id=${mergedIds}`;
       } else {
          // O cargamos la única coincidencia exacta
-         window.location.href = `/franchise/?collection_id=${collectionResults.results[0].id}`;
+         const firstColl = collectionResults.results[0];
+         const slug = firstColl.name.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+         window.location.href = `/contenidos/${slug}/?collection_id=${firstColl.id}`;
       }
       found = true;
     } 
@@ -244,14 +272,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       const firstResult = multiResults.results[0];
       
       if (firstResult.media_type === 'tv') {
-        window.location.href = `/franchise/?tv_id=${firstResult.id}`;
+        const slug = (firstResult.name || firstResult.title).toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        window.location.href = `/contenidos/${slug}/?tv_id=${firstResult.id}`;
         found = true;
       } 
       // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
       else if (firstResult.media_type === 'movie') {
         const movieDetails = await fetchTMDBDetails('movie', firstResult.id);
         if (movieDetails && movieDetails.belongs_to_collection) {
-          window.location.href = `/franchise/?collection_id=${movieDetails.belongs_to_collection.id}`;
+          const slug = movieDetails.belongs_to_collection.name.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          window.location.href = `/contenidos/${slug}/?collection_id=${movieDetails.belongs_to_collection.id}`;
           found = true;
         }
       }

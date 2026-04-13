@@ -2,6 +2,13 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  server: {
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/contenidos\/.+$/, to: '/franchise/index.html' },
+      ],
+    },
+  },
   build: {
     rollupOptions: {
       input: {
