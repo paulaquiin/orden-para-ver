@@ -1,0 +1,9 @@
+# Cloudflare Pages SPA Routing
+# Redirige todas las sub-rutas de /contenidos/* a la página de detalle de franquicia
+/contenidos/*   /contenidos/index.html  200
+
+# Redirige sub-rutas de /franchise/*
+/franchise/*    /franchise/index.html   200
+
+# Redirige sub-rutas de /descubrir/resultado/*
+/descubrir/resultado/*  /descubrir/resultado/index.html  200

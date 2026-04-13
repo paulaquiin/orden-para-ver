@@ -149,8 +149,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // --- Pretty URL Polish ---
       // Limpiamos la URL para que quede como /contenidos/nombre-saga/
-      const slug = pageTitle.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-      const newPath = `/contenidos/${slug}/`;
+      const slugSource = pageTitle
+        .toLowerCase()
+        .normalize('NFD')                          // descompone letras acentuadas
+        .replace(/[\u0300-\u036f]/g, '')           // elimina los diacríticos (á→a, é→e, etc.)
+        .replace(/\s*[-–—]\s*(colecci[oó]n|collection|saga|colección)\s*$/i, '') // quita sufijos de colección
+        .replace(/\s*[-–—]\s*$/, '')               // quita guión final suelto
+        .trim()
+        .replace(/[\s_]+/g, '-')                   // espacios → guión
+        .replace(/[^a-z0-9-]/g, '')               // elimina cualquier otro carácter raro
+        .replace(/-{2,}/g, '-')                    // colapsa guiones múltiples ("---" → "-")
+        .replace(/^-+|-+$/g, '');                  // quita guiones al inicio/final
+      const newPath = `/contenidos/${slugSource}/`;
       if (window.location.pathname !== newPath) {
         window.history.replaceState(null, '', newPath);
       }
