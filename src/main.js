@@ -267,13 +267,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (similarCollections.length > 1) {
          // FUSIONAMOS LAS SAGAS!
          const mergedIds = similarCollections.map(c => c.id).join(',');
-         const slug = query.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-         window.location.href = `/contenidos/${slug}/?collection_id=${mergedIds}`;
+         window.location.href = `/franchise/?collection_id=${mergedIds}`;
       } else {
          // O cargamos la única coincidencia exacta
          const firstColl = collectionResults.results[0];
-         const slug = firstColl.name.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-         window.location.href = `/contenidos/${slug}/?collection_id=${firstColl.id}`;
+         window.location.href = `/franchise/?collection_id=${firstColl.id}`;
       }
       found = true;
     } 
@@ -282,16 +280,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       const firstResult = multiResults.results[0];
       
       if (firstResult.media_type === 'tv') {
-        const slug = (firstResult.name || firstResult.title).toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-        window.location.href = `/contenidos/${slug}/?tv_id=${firstResult.id}`;
+        window.location.href = `/franchise/?tv_id=${firstResult.id}`;
         found = true;
       } 
       // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
       else if (firstResult.media_type === 'movie') {
         const movieDetails = await fetchTMDBDetails('movie', firstResult.id);
         if (movieDetails && movieDetails.belongs_to_collection) {
-          const slug = movieDetails.belongs_to_collection.name.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-          window.location.href = `/contenidos/${slug}/?collection_id=${movieDetails.belongs_to_collection.id}`;
+          window.location.href = `/franchise/?collection_id=${movieDetails.belongs_to_collection.id}`;
           found = true;
         }
       }
