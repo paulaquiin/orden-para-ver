@@ -20,6 +20,10 @@ export async function fetchTMDBDetails(type, id) {
   }
 }
 
+export async function fetchMovieDetails(id) {
+  return fetchTMDBDetails('movie', id);
+}
+
 export async function searchTMDB(query) {
   try {
     const url = `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}&language=es-ES&page=1`;
@@ -64,6 +68,24 @@ export async function fetchWatchProviders(type, id) {
     return await response.json();
   } catch (error) {
     console.error("Error fetching watch providers TMDB:", error);
+    return null;
+  }
+}
+
+export async function discoverTMDB(type, params = {}) {
+  try {
+    const queryParams = new URLSearchParams({
+      language: 'es-ES',
+      sort_by: 'popularity.desc',
+      'vote_count.gte': 100,
+      ...params
+    });
+    const url = `https://api.themoviedb.org/3/discover/${type}?${queryParams.toString()}`;
+    const response = await fetch(url, OPTIONS);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error("Error discovering TMDB:", error);
     return null;
   }
 }

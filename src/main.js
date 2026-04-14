@@ -1,4 +1,4 @@
-import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders } from './tmdb.js';
+import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders, fetchMovieDetails } from './tmdb.js';
 import './components.js';
 
 // Initialize the app
@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const collectionId = urlParams.get('collection_id');
   const tvId = urlParams.get('tv_id');
+  const movieId = urlParams.get('movie_id');
   const isFranchisePage = window.location.pathname.includes('/franchise') || 
                          window.location.pathname.includes('franchise.html') || 
                          (/^\/contenidos\/.+$/.test(window.location.pathname) && !window.location.pathname.endsWith('index.html'));
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let pageSummary = '';
 
     // Si no hay IDs pero hay un slug en el path de contenidos, intentamos buscarlo
-    if (!collectionId && !tvId && window.location.pathname.includes('/contenidos/')) {
+    if (!collectionId && !tvId && !movieId && window.location.pathname.includes('/contenidos/')) {
         const pathParts = window.location.pathname.split('/').filter(Boolean);
         const slug = pathParts[pathParts.length - 1];
         if (slug && slug !== 'contenidos') {
@@ -41,7 +42,37 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
     }
 
-    if (collectionId) {
+    if (movieId) {
+      const movieData = await fetchMovieDetails(movieId);
+      if (movieData && movieData.id) {
+        // Truco: si pertenece a una colección, saltamos a la colección directamente
+        if (movieData.belongs_to_collection) {
+          window.location.search = `?collection_id=${movieData.belongs_to_collection.id}`;
+          return;
+        }
+
+        pageTitle = movieData.title;
+        pageSummary = movieData.overview || `Detalles de la película ${movieData.title}.`;
+        
+        const providersData = await fetchWatchProviders('movie', movieData.id);
+        let flatrateES = [];
+        if (providersData && providersData.results && providersData.results.ES) {
+          let rawProviders = providersData.results.ES.flatrate || [];
+          flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
+        }
+
+        rawItems = [{
+          title: movieData.title,
+          releaseYear: movieData.release_date ? movieData.release_date.substring(0, 4) : '',
+          description: movieData.overview || 'Sin descripción disponible.',
+          poster: getImageUrl(movieData.poster_path),
+          fallbackType: 'Película',
+          dotColor: 'orange',
+          rawDate: movieData.release_date || '',
+          providers: flatrateES
+        }];
+      }
+    } else if (collectionId) {
       // Soporte para Mega-Franquicias (Múltiples IDs separados por coma)
       const ids = collectionId.split(',');
       let allParts = [];
@@ -145,7 +176,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           sumEl.textContent = pageSummary;
         }
       }
-      if (ctxEl) ctxEl.textContent = tvId ? 'SERIE DE TELEVISIÓN' : 'CRONOLOGÍA OFICIAL';
+      if (ctxEl) {
+        if (tvId) ctxEl.textContent = 'SERIE DE TELEVISIÓN';
+        else if (movieId) ctxEl.textContent = 'PELÍCULA INDEPENDIENTE';
+        else ctxEl.textContent = 'CRONOLOGÍA OFICIAL';
+      }
 
       // --- Pretty URL Polish ---
       // Limpiamos la URL para que quede como /contenidos/nombre-saga/
@@ -468,13 +503,73 @@ document.addEventListener('DOMContentLoaded', async () => {
     subgrid.style.display = firstInGrid ? 'none' : 'block';
   }
 
+  // ── Explorar por Formato ──────────────────────────────────────────
+  async function initExplorePage() {
+    const isExplorePage = window.location.pathname.includes('/explorar');
+    if (!isExplorePage) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get('type'); // 'movie', 'tv', 'animation'
+    
+    const titleEl = document.getElementById('category-title');
+    const descEl = document.getElementById('category-desc');
+    const viewEl = document.getElementById('explore-view');
+
+    if (!titleEl || !viewEl) return;
+
+    let searchType = type === 'animation' ? 'movie' : type;
+    let params = {};
+    
+    if (type === 'animation') {
+      titleEl.innerHTML = `Lo mejor de la <span class="gradient-text">Animación</span>`;
+      descEl.textContent = 'Descubre las joyas animadas que han marcado un antes y un después.';
+      params.with_genres = 16;
+    } else if (type === 'tv') {
+      titleEl.innerHTML = `Mejores <span class="gradient-text">Series de TV</span>`;
+      descEl.textContent = 'Las series que todo el mundo debería ver al menos una vez.';
+    } else {
+      titleEl.innerHTML = `Mejores <span class="gradient-text">Películas</span>`;
+      descEl.textContent = 'El séptimo arte en su máxima expresión. Clásicos y éxitos modernos.';
+    }
+
+    const { discoverTMDB } = await import('./tmdb.js');
+    const data = await discoverTMDB(searchType, params);
+
+    if (data && data.results) {
+      viewEl.innerHTML = `
+        <div class="explore-grid">
+          ${data.results.map(item => `
+            <div class="explore-card" onclick="window.location.href='/franchise/?${searchType === 'movie' ? 'movie_id' : 'tv_id'}=${item.id}'">
+              <img src="${getImageUrl(item.poster_path)}" alt="${item.title || item.name}" class="explore-poster" loading="lazy">
+              <div class="explore-info">
+                <h3 class="explore-title">${item.title || item.name}</h3>
+                <div class="explore-meta">
+                  <span>${(item.release_date || item.first_air_date || '').substring(0, 4)}</span>
+                  <span class="explore-rating">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    ${item.vote_average.toFixed(1)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      viewEl.innerHTML = '<div class="loading-spinner">No hemos podido cargar los contenidos en este momento.</div>';
+    }
+  }
+
+  initExplorePage();
   initTrendingCarousel();
 
   // Re-inicializa si cambia el tamaño de ventana (ej. rotación)
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(initTrendingCarousel, 200);
+    resizeTimer = setTimeout(() => {
+      initTrendingCarousel();
+    }, 200);
   });
 });
 
