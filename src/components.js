@@ -6,7 +6,7 @@ class AppHeader extends HTMLElement {
         <div class="container">
           <div class="logo">
             <a href="/" style="text-decoration:none; color:inherit;">
-              <span class="logo-text">Orden<span class="gradient-text">paver</span></span>
+              <span class="logo-text">Orden<span class="gradient-text">paraver</span></span>
             </a>
           </div>
           <nav class="nav-links" id="navLinks">
