@@ -127,37 +127,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         rawItems = enrichedParts;
       }
     } else if (tvId) {
-      // Dynamic TMDB TV Show
-      const tvData = await fetchTMDBDetails('tv', tvId);
-      if (tvData && tvData.id) {
-        pageTitle = tvData.name;
-        pageSummary = tvData.overview || `Explora todas las temporadas de ${tvData.name}.`;
-        
-        let seasons = tvData.seasons || [];
-        seasons.sort((a, b) => {
+      // Dynamic TMDB TV Show - Soporte para Mega-Series (IDs separados por coma)
+      const ids = tvId.split(',');
+      let allSeasons = [];
+      
+      for (const id of ids) {
+        const tvData = await fetchTMDBDetails('tv', id);
+        if (tvData && tvData.id) {
+          if (!pageTitle) {
+            pageTitle = ids.length > 1 ? tvData.name.split(':')[0].trim() + ' (Saga Completa)' : tvData.name;
+            pageSummary = tvData.overview || `Explora todas las temporadas de ${tvData.name}.`;
+          }
+          
+          let seasons = tvData.seasons || [];
+          // Marcamos cada temporada con su serie de origen si hay varias
+          seasons.forEach(s => {
+            s.seriesName = tvData.name;
+            s.parentId = tvData.id;
+          });
+          
+          allSeasons = allSeasons.concat(seasons);
+        }
+      }
+
+      if (allSeasons.length > 0) {
+        // Ordenamos todas las temporadas de todas las series por fecha de estreno
+        allSeasons.sort((a, b) => {
           const dateA = new Date(a.air_date || '9999-12-31');
           const dateB = new Date(b.air_date || '9999-12-31');
           return dateA - dateB;
         });
 
-        // Obtener providers de la serie entera, ya que no suele variar por temporada
-        const providersData = await fetchWatchProviders('tv', tvData.id);
+        // Obtener providers de las series principales (usamos el primero para simplicidad, o extendemos)
+        const providersData = await fetchWatchProviders('tv', ids[0]);
         let flatrateES = [];
         if (providersData && providersData.results && providersData.results.ES) {
           let rawProviders = providersData.results.ES.flatrate || [];
           flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
         }
 
-        rawItems = seasons.map(season => ({
-          title: season.name,
-          releaseYear: season.air_date ? season.air_date.substring(0, 4) : '',
-          description: season.overview || 'Sin descripción disponible.',
-          poster: getImageUrl(season.poster_path || tvData.poster_path),
-          fallbackType: 'Temporada',
-          dotColor: 'purple',
-          rawDate: season.air_date || '',
-          providers: flatrateES
-        }));
+        rawItems = allSeasons
+          .filter(s => s.season_number > 0) // Normalmente ignoramos especiales (E0)
+          .map(season => ({
+            title: ids.length > 1 ? `${season.seriesName} - ${season.name}` : season.name,
+            releaseYear: season.air_date ? season.air_date.substring(0, 4) : '',
+            description: season.overview || `Temporada ${season.season_number} de ${season.seriesName}.`,
+            poster: getImageUrl(season.poster_path),
+            fallbackType: 'Temporada',
+            dotColor: 'purple',
+            rawDate: season.air_date || '',
+            providers: flatrateES
+          }));
       }
     }
 
@@ -311,18 +331,37 @@ document.addEventListener('DOMContentLoaded', async () => {
       found = true;
     } 
     // 2. Si no es colección, miramos si el mejor resultado en multi-search es una Serie de TV
+    // 2. Si no es colección, miramos si hay Series de TV
     else if (multiResults && multiResults.results && multiResults.results.length > 0) {
-      const firstResult = multiResults.results[0];
+      const tvResults = multiResults.results.filter(r => r.media_type === 'tv');
       
-      if (firstResult.media_type === 'tv') {
-        window.location.href = `/franchise/?tv_id=${firstResult.id}`;
+      if (tvResults.length > 0) {
+        const normalizedKeyword = query.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/g, '');
+        
+        // Buscamos series que compartan el nombre base (ej: "Los Protegidos")
+        const similarTV = tvResults
+          .slice(0, 5)
+          .filter(t => {
+            const normalizedName = (t.name || t.original_name).toLowerCase().replace(/[^a-z0-9]/g, '');
+            return normalizedName.includes(normalizedKeyword);
+          });
+
+        if (similarTV.length > 1) {
+          const mergedIds = similarTV.map(t => t.id).join(',');
+          window.location.href = `/franchise/?tv_id=${mergedIds}`;
+        } else {
+          window.location.href = `/franchise/?tv_id=${tvResults[0].id}`;
+        }
         found = true;
       } 
       // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
-      else if (firstResult.media_type === 'movie') {
-        const movieDetails = await fetchTMDBDetails('movie', firstResult.id);
+      else if (multiResults.results[0].media_type === 'movie') {
+        const movieDetails = await fetchTMDBDetails('movie', multiResults.results[0].id);
         if (movieDetails && movieDetails.belongs_to_collection) {
-          window.location.href = `/franchise/?collection_id=${movieDetails.belongs_to_collection.id}`;
+          window.location.search = `?collection_id=${movieDetails.belongs_to_collection.id}`;
+          return;
+        } else {
+          window.location.href = `/franchise/?movie_id=${multiResults.results[0].id}`;
           found = true;
         }
       }
