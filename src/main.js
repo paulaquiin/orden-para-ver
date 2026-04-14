@@ -347,9 +347,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             const normName = (t.name || t.original_name).toLowerCase();
             const normSeed = queryBase.toLowerCase();
             const isMatch = normName.includes(normSeed);
+
+            // Si ambos tienen país definido y son DISTINTOS, descartamos (ej: ES vs CO)
+            if (res.origin_country?.length > 0 && t.origin_country?.length > 0) {
+              if (res.origin_country[0] !== t.origin_country[0]) return false;
+            }
+
             const countryMatch = res.origin_country?.[0] && t.origin_country?.includes(res.origin_country[0]);
             const langMatch = res.original_language && t.original_language === res.original_language;
-            return isMatch && (countryMatch || langMatch || !t.origin_country);
+            
+            // Aceptamos si el nombre coincide Y (el país coincide O el idioma coincide O no tiene país definido como ADN)
+            return isMatch && (countryMatch || langMatch || !t.origin_country || t.origin_country.length === 0);
           });
 
           if (sameUniverse.length > 1) {
