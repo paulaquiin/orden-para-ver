@@ -23,6 +23,7 @@ class AppHeader extends HTMLElement {
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
               </button>
+              <div class="search-results-overlay"></div>
             </div>
             <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menú" aria-expanded="false">
               <svg id="hamburgerIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -43,6 +44,7 @@ class AppHeader extends HTMLElement {
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
             </button>
+            <div class="search-results-overlay"></div>
           </div>
         </div>
       </header>

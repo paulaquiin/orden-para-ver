@@ -138,7 +138,95 @@ body {
   border-radius: 16px;
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(10px);
+  z-index: 100; /* Higher priority in hero */
 }
+
+.search-results-overlay {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: #0c0c11; /* Fully opaque background */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  z-index: 5000;
+  max-height: 480px;
+  overflow-y: auto;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.9);
+  display: none;
+  animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nav-search .search-results-overlay {
+  width: 320px;
+  right: 0;
+  left: auto;
+  border-radius: 20px;
+}
+
+.mobile-nav-search .search-results-overlay {
+  top: calc(100% + 5px);
+  border-radius: 12px;
+}
+
+.search-results-overlay.active {
+  display: block;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 18px; /* Increased padding */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.search-result-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.res-img {
+  width: 45px;
+  height: 65px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #222;
+}
+
+.res-info {
+  flex: 1;
+}
+
+.res-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.res-meta {
+  font-size: 0.8rem;
+  color: var(--text-gray);
+}
+
+.res-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-tv { border: 1px solid var(--accent-peach); color: var(--accent-peach); }
+.badge-movie { border: 1px solid var(--accent-orange); color: var(--accent-orange); }
+.badge-coll { background: var(--accent-orange); color: white; }
 
 .search-input {
   flex: 1;
@@ -537,6 +625,7 @@ body {
   border-radius: 20px;
   padding: 4px 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative; /* Para el overlay */
 }
 
 .nav-search-input {
@@ -624,6 +713,7 @@ body {
   border-radius: 12px;
   padding: 10px 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative; /* Para el overlay */
 }
 
 .mobile-nav-search .nav-search-input {

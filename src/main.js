@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const collectionId = urlParams.get('collection_id');
   const tvId = urlParams.get('tv_id');
   const movieId = urlParams.get('movie_id');
-  const isFranchisePage = window.location.pathname.includes('/franchise') || 
-                         window.location.pathname.includes('franchise.html') || 
-                         (/^\/contenidos\/.+$/.test(window.location.pathname) && !window.location.pathname.endsWith('index.html'));
+  const isFranchisePage = window.location.pathname.includes('/franchise') ||
+    window.location.pathname.includes('franchise.html') ||
+    (/^\/contenidos\/.+$/.test(window.location.pathname) && !window.location.pathname.endsWith('index.html'));
 
   if (isFranchisePage) {
     let rawItems = [];
@@ -21,20 +21,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Si no hay IDs pero hay un slug en el path de contenidos, intentamos buscarlo
     if (!collectionId && !tvId && !movieId && window.location.pathname.includes('/contenidos/')) {
-        const pathParts = window.location.pathname.split('/').filter(Boolean);
-        const slug = pathParts[pathParts.length - 1];
-        if (slug && slug !== 'contenidos') {
-            const searchResults = await searchCollectionTMDB(slug.replace(/-/g, ' '));
-            if (searchResults && searchResults.results && searchResults.results.length > 0) {
-                // Redirigimos internamente usando el ID encontrado para seguir el flujo normal
-                window.location.search = `?collection_id=${searchResults.results[0].id}`;
-                return;
-            }
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const slug = pathParts[pathParts.length - 1];
+      if (slug && slug !== 'contenidos') {
+        const searchResults = await searchCollectionTMDB(slug.replace(/-/g, ' '));
+        if (searchResults && searchResults.results && searchResults.results.length > 0) {
+          // Redirigimos internamente usando el ID encontrado para seguir el flujo normal
+          window.location.search = `?collection_id=${searchResults.results[0].id}`;
+          return;
         }
+      }
     }
 
     const timelineContainer = document.querySelector('.timeline-container');
-    
+
     if (timelineContainer) {
       timelineContainer.innerHTML = `
         <div class="timeline-line"></div>
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         pageTitle = movieData.title;
         pageSummary = movieData.overview || `Detalles de la película ${movieData.title}.`;
-        
+
         const providersData = await fetchWatchProviders('movie', movieData.id);
         let flatrateES = [];
         if (providersData && providersData.results && providersData.results.ES) {
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Soporte para Mega-Franquicias (Múltiples IDs separados por coma)
       const ids = collectionId.split(',');
       let allParts = [];
-      
+
       for (const id of ids) {
         const collectionData = await fetchCollectionDetails(id);
         if (collectionData && collectionData.id) {
@@ -123,14 +123,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             providers: flatrateES
           };
         }));
-        
+
         rawItems = enrichedParts;
       }
     } else if (tvId) {
       // Dynamic TMDB TV Show - Soporte para Mega-Series (IDs separados por coma)
       const ids = tvId.split(',');
       let allSeasons = [];
-      
+
       for (const id of ids) {
         const tvData = await fetchTMDBDetails('tv', id);
         if (tvData && tvData.id) {
@@ -138,14 +138,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             pageTitle = ids.length > 1 ? tvData.name.split(':')[0].trim() + ' (Saga Completa)' : tvData.name;
             pageSummary = tvData.overview || `Explora todas las temporadas de ${tvData.name}.`;
           }
-          
+
           let seasons = tvData.seasons || [];
           // Marcamos cada temporada con su serie de origen si hay varias
           seasons.forEach(s => {
             s.seriesName = tvData.name;
             s.parentId = tvData.id;
           });
-          
+
           allSeasons = allSeasons.concat(seasons);
         }
       }
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const titleEl = document.querySelector('.franchise-title');
       const sumEl = document.querySelector('.franchise-summary');
       const ctxEl = document.querySelector('.context-tag');
-      
+
       if (titleEl) titleEl.textContent = pageTitle;
       if (sumEl) {
         if (pageSummary.length > 200) {
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const cardClass = isOpposite ? 'left-content' : 'right-content';
           const dotClass = item.dotColor === 'purple' ? 'purple' : '';
 
-          const providersHTML = item.providers && item.providers.length > 0 
+          const providersHTML = item.providers && item.providers.length > 0
             ? `<div class="card-providers" style="display:flex; gap:8px;">
                 ${item.providers.slice(0, 4).map(p => `
                   <img src="${getImageUrl(p.logo_path, 'w92')}" title="${p.provider_name}" alt="${p.provider_name}" style="width:40px; height:40px; border-radius:8px; object-fit:cover; border: 1px solid rgba(255,255,255,0.1);"/>
@@ -258,8 +258,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                   </div>
                 </div>
               </div>
-              <div class="timeline-dot ${dotClass}"></div>` 
-              : 
+              <div class="timeline-dot ${dotClass}"></div>`
+              :
               `<div class="timeline-dot ${dotClass}"></div>
               <div class="item-card-wrapper ${cardClass}">
                 <div class="item-card">
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   </div>
                 </div>
               </div>`
-              }
+            }
             </div>
           `;
           timelineContainer.insertAdjacentHTML('beforeend', itemHTML);
@@ -291,87 +291,113 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  // Helper to get image URL for results
+  function getResImage(path) {
+    return path ? `https://image.tmdb.org/t/p/w200${path}` : 'https://via.placeholder.com/200x300?text=Sin+Imagen';
+  }
+
+  // Render search results in the smart overlay
+  async function showSmartResults(results, btnElement) {
+    // Find the closest overlay relative to the container that triggered the search
+    const overlay = btnElement.closest('.search-container, .nav-search, .mobile-nav-search')?.querySelector('.search-results-overlay')
+                    || document.getElementById('searchResults');
+    
+    if (!overlay) return;
+
+    overlay.innerHTML = '';
+    overlay.classList.add('active');
+
+    results.forEach(res => {
+      const item = document.createElement('div');
+      item.className = 'search-result-item';
+      
+      let badgeClass = 'badge-movie';
+      let typeLabel = 'PELÍCULA';
+      if (res.media_type === 'tv') { 
+        badgeClass = 'badge-tv'; 
+        typeLabel = 'SERIE TV';
+      }
+      if (res.isCollection) {
+        badgeClass = 'badge-coll';
+        typeLabel = 'SAGA / COLECCIÓN';
+      }
+
+      const year = res.release_date || res.first_air_date ? (res.release_date || res.first_air_date).substring(0, 4) : 'TBA';
+      const country = res.origin_country && res.origin_country.length > 0 ? ` (${res.origin_country[0]})` : '';
+
+      item.innerHTML = `
+        <img src="${getResImage(res.poster_path)}" class="res-img" alt="${res.name || res.title}">
+        <div class="res-info">
+          <div class="res-title">${res.name || res.title}</div>
+          <div class="res-meta">${year}${country}</div>
+        </div>
+        <span class="res-badge ${badgeClass}">${typeLabel}</span>
+      `;
+
+      item.onclick = async () => {
+        overlay.classList.remove('active');
+        if (res.isCollection) {
+          window.location.href = `/franchise/?collection_id=${res.id}`;
+        } else if (res.media_type === 'tv') {
+          // BÚSQUEDA INTELIGENTE DE SECUELAS PARA SERIES
+          const queryBase = (res.name || res.original_name).split(':')[0].trim();
+          const multi = await searchTMDB(queryBase);
+          const sameUniverse = multi.results.filter(t => {
+            if (t.media_type !== 'tv') return false;
+            const normName = (t.name || t.original_name).toLowerCase();
+            const normSeed = queryBase.toLowerCase();
+            const isMatch = normName.includes(normSeed);
+            const countryMatch = res.origin_country?.[0] && t.origin_country?.includes(res.origin_country[0]);
+            const langMatch = res.original_language && t.original_language === res.original_language;
+            return isMatch && (countryMatch || langMatch || !t.origin_country);
+          });
+
+          if (sameUniverse.length > 1) {
+            window.location.href = `/franchise/?tv_id=${sameUniverse.map(t => t.id).join(',')}`;
+          } else {
+            window.location.href = `/franchise/?tv_id=${res.id}`;
+          }
+        } else {
+          const movieDetails = await fetchTMDBDetails('movie', res.id);
+          if (movieDetails && movieDetails.belongs_to_collection) {
+            window.location.href = `/franchise/?collection_id=${movieDetails.belongs_to_collection.id}`;
+          } else {
+            window.location.href = `/franchise/?movie_id=${res.id}`;
+          }
+        }
+      };
+
+      overlay.appendChild(item);
+    });
+
+    // Close overlay on click outside
+    const closeOverlay = (e) => {
+      if (!overlay.contains(e.target) && !btnElement.contains(e.target)) {
+        overlay.classList.remove('active');
+        document.removeEventListener('click', closeOverlay);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', closeOverlay), 10);
+  }
+
   // Universal Search Function
   async function executeSearch(query, btnElement) {
     if (!query) return;
-    
+
     const originalText = btnElement.textContent;
     btnElement.textContent = '...';
-    
-    // Búsqueda multi-dimensional (Colecciones de cine + Series de TV)
-    const [collectionResults, multiResults] = await Promise.all([
+
+    // Búsqueda multi-dimensional
+    const [collRes, multiRes] = await Promise.all([
       searchCollectionTMDB(query),
       searchTMDB(query)
     ]);
-
-    let found = false;
-
-    // 1. Priorizamos encontrar Colecciones y formamos Mega-Franquicias si es necesario
-    if (collectionResults && collectionResults.results && collectionResults.results.length > 0) {
-      // Normalizamos la búsqueda (quitando guiones o espacios) para que "spiderman" coincida con "Spider-Man"
-      const normalizedKeyword = query.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/g, ''); 
-
-      // Recolectamos todas las colecciones en los primeros 5 resultados que compartan la base del nombre
-      const similarCollections = collectionResults.results
-         .slice(0, 5)
-         .filter(c => {
-             const normalizedName = c.name.toLowerCase().replace(/[^a-z0-9]/g, '');
-             return normalizedName.includes(normalizedKeyword);
-         });
-
-      if (similarCollections.length > 1) {
-         // FUSIONAMOS LAS SAGAS!
-         const mergedIds = similarCollections.map(c => c.id).join(',');
-         window.location.href = `/franchise/?collection_id=${mergedIds}`;
-      } else {
-         // O cargamos la única coincidencia exacta
-         const firstColl = collectionResults.results[0];
-         window.location.href = `/franchise/?collection_id=${firstColl.id}`;
-      }
-      found = true;
-    } 
-    // 2. Si no es colección, miramos si el mejor resultado en multi-search es una Serie de TV
-    // 2. Si no es colección, miramos si hay Series de TV
-    else if (multiResults && multiResults.results && multiResults.results.length > 0) {
-      const tvResults = multiResults.results.filter(r => r.media_type === 'tv');
-      
-      if (tvResults.length > 0) {
-        const normalizedKeyword = query.toLowerCase().split(' ')[0].replace(/[^a-z0-9]/g, '');
-        
-        // Buscamos series que compartan el nombre base (ej: "Los Protegidos")
-        const similarTV = tvResults
-          .slice(0, 5)
-          .filter(t => {
-            const normalizedName = (t.name || t.original_name).toLowerCase().replace(/[^a-z0-9]/g, '');
-            return normalizedName.includes(normalizedKeyword);
-          });
-
-        if (similarTV.length > 1) {
-          const mergedIds = similarTV.map(t => t.id).join(',');
-          window.location.href = `/franchise/?tv_id=${mergedIds}`;
-        } else {
-          window.location.href = `/franchise/?tv_id=${tvResults[0].id}`;
-        }
-        found = true;
-      } 
-      // 3. (Extra) Si es peli al azar pero forma parte de una saga que el motor de collections no indexó perfectamente
-      else if (multiResults.results[0].media_type === 'movie') {
-        const movieDetails = await fetchTMDBDetails('movie', multiResults.results[0].id);
-        if (movieDetails && movieDetails.belongs_to_collection) {
-          window.location.search = `?collection_id=${movieDetails.belongs_to_collection.id}`;
-          return;
-        } else {
-          window.location.href = `/franchise/?movie_id=${multiResults.results[0].id}`;
-          found = true;
-        }
-      }
-    }
-
     btnElement.textContent = originalText;
-    
-    if (!found) {
-      alert('Lo sentimos, no encontramos una saga o serie en TMDB para esa búsqueda.');
-    }
+    const allResults = [];
+    if (collRes.results) { collRes.results.slice(0, 3).forEach(c => allResults.push({ ...c, isCollection: true })); }
+    if (multiRes.results) { multiRes.results.slice(0, 8).forEach(r => { if (r.media_type === 'tv' || r.media_type === 'movie') { if (!allResults.find(x => x.id === r.id)) { allResults.push(r); } } }); }
+    if (allResults.length === 0) { alert('Lo sentimos, no encontramos nada relevante.'); return; }
+    showSmartResults(allResults, btnElement);
   }
 
   // Setup Big Hero Search
@@ -395,7 +421,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.addEventListener('click', () => {
       // Find the closest sibling input, or fallback to any nav-search-input
       const input = btn.closest('.nav-search, .mobile-nav-search')?.querySelector('.nav-search-input')
-                 || document.querySelector('.nav-search-input');
+        || document.querySelector('.nav-search-input');
       const query = input?.value.trim();
       if (query) executeSearch(query, btn);
       else input?.focus();
@@ -406,7 +432,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         const btn = input.closest('.nav-search, .mobile-nav-search')?.querySelector('.nav-search-btn')
-                 || document.querySelector('.nav-search-btn');
+          || document.querySelector('.nav-search-btn');
         btn?.click();
       }
     });
@@ -549,7 +575,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const urlParams = new URLSearchParams(window.location.search);
     const type = urlParams.get('type'); // 'movie', 'tv', 'animation'
-    
+
     const titleEl = document.getElementById('category-title');
     const descEl = document.getElementById('category-desc');
     const viewEl = document.getElementById('explore-view');
@@ -558,7 +584,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let searchType = type === 'animation' ? 'movie' : type;
     let params = {};
-    
+
     if (type === 'animation') {
       titleEl.innerHTML = `Lo mejor de la <span class="gradient-text">Animación</span>`;
       descEl.textContent = 'Descubre las joyas animadas que han marcado un antes y un después.';
