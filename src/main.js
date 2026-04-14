@@ -14,28 +14,83 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.pathname.includes('franchise.html') ||
     (/^\/contenidos\/.+$/.test(window.location.pathname) && !window.location.pathname.endsWith('index.html'));
 
+  console.log('Path:', window.location.pathname);
+  console.log('isFranchisePage:', isFranchisePage);
+  console.log('Collection ID:', collectionId);
+
   if (isFranchisePage) {
     let rawItems = [];
     let pageTitle = '';
     let pageSummary = '';
 
+    // Defensa: si por alguna razón cargamos la index.html (home) siendo una página de franquicia, ocultamos la home
+    const homeSections = document.querySelectorAll('.hero, .trending');
+    homeSections.forEach(s => s.style.display = 'none');
+
     // Si no hay IDs pero hay un slug en el path de contenidos, intentamos buscarlo
     if (!collectionId && !tvId && !movieId && window.location.pathname.includes('/contenidos/')) {
       const pathParts = window.location.pathname.split('/').filter(Boolean);
       const slug = pathParts[pathParts.length - 1];
+      
       if (slug && slug !== 'contenidos') {
-        const searchResults = await searchCollectionTMDB(slug.replace(/-/g, ' '));
-        if (searchResults && searchResults.results && searchResults.results.length > 0) {
-          // Redirigimos internamente usando el ID encontrado para seguir el flujo normal
-          window.location.search = `?collection_id=${searchResults.results[0].id}`;
-          return;
+        const cleanSlug = slug.replace(/-/g, ' ').replace('saga completa', '').trim();
+        
+        // Buscamos en colecciones y en multi-search (series/movies)
+        const [collResults, multiResults] = await Promise.all([
+           searchCollectionTMDB(cleanSlug),
+           searchTMDB(cleanSlug)
+        ]);
+
+        if (collResults?.results?.length > 0) {
+           window.location.search = `?collection_id=${collResults.results[0].id}`;
+           return;
+        } else if (multiResults?.results?.length > 0) {
+           const tv = multiResults.results.find(r => r.media_type === 'tv');
+           if (tv) {
+              // Si es serie, activamos la fusión de secuelas
+              const queryBase = (tv.name || tv.original_name).split(':')[0].trim();
+              const fullUniverse = await searchTMDB(queryBase);
+              const related = fullUniverse.results.filter(t => 
+                t.media_type === 'tv' && 
+                (t.name || t.original_name).toLowerCase().includes(queryBase.toLowerCase()) &&
+                (!t.origin_country || !tv.origin_country || t.origin_country[0] === tv.origin_country[0])
+              );
+              const ids = related.length > 1 ? related.map(x => x.id).join(',') : tv.id;
+              window.location.search = `?tv_id=${ids}`;
+              return;
+           }
+           const movie = multiResults.results.find(r => r.media_type === 'movie');
+           if (movie) {
+              window.location.search = `?movie_id=${movie.id}`;
+              return;
+           }
         }
       }
     }
 
-    const timelineContainer = document.querySelector('.timeline-container');
+    let timelineContainer = document.querySelector('.timeline-container');
 
-    if (timelineContainer) {
+    if (!timelineContainer) {
+      // Si estamos en una página física que no tiene container (como la home), limpiamos e inyectamos la estructura
+      const mainElement = document.querySelector('main') || document.body;
+      mainElement.innerHTML = `
+        <section class="franchise-header">
+          <div class="container" style="text-align: center; padding-top: 100px;">
+            <h1 class="franchise-title" id="franchiseTitle">Cargando Saga...</h1>
+            <p id="franchiseSummary" style="color: var(--text-gray);">Estamos recuperando el orden cronológico.</p>
+          </div>
+        </section>
+        <section class="timeline-section">
+          <div class="container">
+            <div class="timeline-container relative">
+              <div class="timeline-line"></div>
+              <div style="text-align:center; color: white; padding: 2rem;">Sincronizando con TMDB...</div>
+            </div>
+          </div>
+        </section>
+      `;
+      timelineContainer = document.querySelector('.timeline-container');
+    } else {
       timelineContainer.innerHTML = `
         <div class="timeline-line"></div>
         <div style="text-align:center; color: white; padding: 2rem; font-family: 'Outfit', sans-serif;">Cargando saga y plataformas desde TMDB...</div>

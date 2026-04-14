@@ -5,9 +5,9 @@ export default defineConfig({
   server: {
     historyApiFallback: {
       rewrites: [
-        { from: /^\/contenidos\/.+$/, to: '/franchise/index.html' },
-      ],
-    },
+        { from: /^\/contenidos\/.*$/, to: '/franchise/index.html' }
+      ]
+    }
   },
   build: {
     rollupOptions: {
