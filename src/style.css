@@ -1007,34 +1007,100 @@ body {
    RESPONSIVE — Novedades
    ============================================ */
 @media (max-width: 968px) {
+  /* Featured cards swipeable - horizontal scroll */
   .updates-featured-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    gap: 16px;
+    padding-bottom: 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-bottom: 20px;
   }
 
-  .featured-card {
-    min-height: 320px;
-  }
-
-  .updates-timeline-item {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .updates-timeline-item.left-tag .updates-side-info,
-  .updates-timeline-item.right-tag .updates-side-info {
-    grid-column: 1;
-    text-align: left;
-    justify-self: start;
-    padding: 0;
-  }
-
-  .updates-dot {
+  .updates-featured-grid::-webkit-scrollbar {
     display: none;
   }
 
+  .featured-card {
+    flex: 0 0 85vw; /* Width for cards on mobile */
+    min-height: 380px !important; /* Increased height for better visibility */
+    scroll-snap-align: start;
+    padding: 30px !important;
+  }
+
+  .featured-card.wide, .featured-card.narrow {
+    width: 85vw !important; /* Forces consistent width for all card types on mobile */
+  }
+
+  /* Título de la sección */
+  .recent-additions h3 {
+    margin-bottom: 28px !important;
+  }
+
+  /* Convierte el contenedor en scroll horizontal tipo swipe */
+  .updates-timeline-container {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    padding-bottom: 20px;
+    padding-left: 4px;   /* no clipa el borde de la primera tarjeta */
+    padding-right: 24px; /* deja espacio para ver que hay más */
+    max-width: none;     /* anula max-width: 1000px del base */
+    margin: 0;
+    /* Oculta scrollbar visualmente pero mantiene funcionalidad */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .updates-timeline-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Oculta la línea vertical central */
+  .updates-timeline-container .timeline-line {
+    display: none;
+  }
+
+  /* Cada item = una tarjeta horizontal de ancho fijo */
+  .updates-timeline-item {
+    display: flex !important;
+    flex-direction: column;
+    flex: 0 0 80vw;
+    max-width: 320px;
+    scroll-snap-align: start;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 24px;
+    gap: 0;
+    margin-bottom: 0;
+    position: static; /* cancela el position: relative del grid */
+  }
+
+  /* Oculta el dot y el side-info */
+  .updates-dot,
+  .updates-side-info {
+    display: none;
+  }
+
+  /* La tarjeta interna ocupa todo el espacio sin bordes propios */
   .updates-timeline-item.left-tag .updates-card,
   .updates-timeline-item.right-tag .updates-card {
-    grid-column: 1;
+    grid-column: unset;
+  }
+
+  .updates-card {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
   }
 }
 
@@ -1046,6 +1112,10 @@ body {
 
   .featured-card h2 {
     font-size: 1.4rem;
+  }
+
+  .updates-timeline-item {
+    flex: 0 0 88vw;
   }
 }
 
