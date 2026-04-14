@@ -356,6 +356,126 @@ document.addEventListener('DOMContentLoaded', async () => {
       // potentially trigger animations
     });
   });
+
+  // ── Carrusel móvil: Cronologías en Tendencia ──────────────────────────
+  function initTrendingCarousel() {
+    const isMobile = window.matchMedia('(max-width: 968px)').matches;
+    const trendingSection = document.querySelector('.trending');
+    if (!trendingSection) return;
+
+    const grid = trendingSection.querySelector('.timeline-grid');
+    const subgrid = trendingSection.querySelector('.timeline-subgrid');
+    const prevBtn = trendingSection.querySelector('.nav-btn.prev');
+    const nextBtn = trendingSection.querySelector('.nav-btn.next');
+
+    if (!grid || !subgrid || !prevBtn || !nextBtn) return;
+
+    // Limpia estado anterior si se llama de nuevo (resize)
+    const existingControls = trendingSection.querySelector('.carousel-controls');
+    if (existingControls) existingControls.remove();
+    // Elimina el clon de promo si existía
+    const existingMobilePromo = trendingSection.querySelector('.mobile-promo-fixed');
+    if (existingMobilePromo) existingMobilePromo.remove();
+    trendingSection.querySelectorAll('.card').forEach(c => {
+      c.classList.remove('carousel-active');
+      c.style.display = '';
+    });
+    [grid, subgrid].forEach(g => {
+      g.classList.remove('mobile-carousel');
+      g.style.display = '';
+    });
+
+    if (!isMobile) {
+      prevBtn.style.display = '';
+      nextBtn.style.display = '';
+      return;
+    }
+
+    // Recopila todas las tarjetas: grid primero, luego subgrid — EXCEPTO .card-promo
+    const allCards = [
+      ...grid.querySelectorAll('.card'),
+      ...subgrid.querySelectorAll('.card:not(.card-promo)'),
+    ];
+
+    if (allCards.length === 0) return;
+
+    // Saca la card-promo del subgrid y la inserta como bloque fijo debajo del carrusel
+    const promoCard = subgrid.querySelector('.card-promo');
+    let mobilePromo = trendingSection.querySelector('.mobile-promo-fixed');
+    if (promoCard && !mobilePromo) {
+      mobilePromo = promoCard.cloneNode(true);
+      mobilePromo.classList.add('mobile-promo-fixed');
+      mobilePromo.style.display = '';
+      const trendingContainer = trendingSection.querySelector('.container');
+      trendingContainer.insertAdjacentElement('beforeend', mobilePromo);
+    }
+    // Oculta el original dentro del subgrid para no duplicarlo
+    if (promoCard) promoCard.style.display = 'none';
+
+    // Convierte ambos contenedores en carrusel
+    [grid, subgrid].forEach(g => g.classList.add('mobile-carousel'));
+
+    let current = 0;
+
+    // Control row: [ ← ] [dots] [ → ]
+    const controlsRow = document.createElement('div');
+    controlsRow.className = 'carousel-controls';
+
+    // Mueve las flechas originales al control row
+    const prevClone = prevBtn.cloneNode(true);
+    const nextClone = nextBtn.cloneNode(true);
+    prevClone.className = 'nav-btn carousel-arrow prev';
+    nextClone.className = 'nav-btn carousel-arrow next';
+
+    // Oculta los botones originales del header en móvil
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'carousel-dots';
+    allCards.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Ir a tarjeta ${i + 1}`);
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
+    });
+
+    controlsRow.appendChild(prevClone);
+    controlsRow.appendChild(dotsContainer);
+    controlsRow.appendChild(nextClone);
+    subgrid.insertAdjacentElement('afterend', controlsRow);
+
+    prevClone.addEventListener('click', () => goTo(current - 1));
+    nextClone.addEventListener('click', () => goTo(current + 1));
+
+    function goTo(index) {
+      const dots = dotsContainer.querySelectorAll('.carousel-dot');
+      allCards[current].classList.remove('carousel-active');
+      current = (index + allCards.length) % allCards.length;
+      const activeCard = allCards[current];
+      const activeInGrid = grid.contains(activeCard);
+      grid.style.display = activeInGrid ? 'block' : 'none';
+      subgrid.style.display = activeInGrid ? 'none' : 'block';
+      activeCard.classList.add('carousel-active');
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+
+    // Inicializa: muestra sólo la primera tarjeta
+    allCards[0].classList.add('carousel-active');
+    const firstInGrid = grid.contains(allCards[0]);
+    grid.style.display = firstInGrid ? 'block' : 'none';
+    subgrid.style.display = firstInGrid ? 'none' : 'block';
+  }
+
+  initTrendingCarousel();
+
+  // Re-inicializa si cambia el tamaño de ventana (ej. rotación)
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(initTrendingCarousel, 200);
+  });
 });
 
 

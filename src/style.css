@@ -645,6 +645,11 @@ body {
   display: flex;
 }
 
+/* .mobile-promo-fixed solo existe en móvil; en desktop se oculta */
+.mobile-promo-fixed {
+  display: none;
+}
+
 /* ============================================
    RESPONSIVE — Generic Container
    ============================================ */
@@ -697,13 +702,84 @@ body {
     font-size: 2.5rem;
   }
 
-  /* Cards grid */
-  .timeline-grid {
-    grid-template-columns: 1fr;
+  /* Cards grid → carrusel de una tarjeta */
+  .timeline-grid,
+  .timeline-subgrid {
+    display: block;  /* JS añade clase .mobile-carousel */
   }
 
-  .timeline-subgrid {
-    grid-template-columns: 1fr;
+  /* Cuando JS inicializa el carrusel */
+  .mobile-carousel {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  .mobile-carousel .card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: translateX(40px);
+    min-height: 340px;
+  }
+
+  .mobile-carousel .card.carousel-active {
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  /* Fila de controles: [ ← ] [dots] [ → ] */
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+
+  /* Dots indicadores */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+
+  .carousel-dot.active {
+    background: var(--accent-orange);
+    width: 18px;
+    border-radius: 3px;
+  }
+
+  /* Caja "Descubrir" fija debajo del carrusel — solo móvil */
+  .mobile-promo-fixed {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    margin-top: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    min-height: auto;
+    width: 100%;
   }
 
   /* Philosophies */
