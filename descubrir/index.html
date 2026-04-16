@@ -281,6 +281,22 @@
         }
 
         window.generateRoute = async function() {
+            // Validación de límite de uso (Nivel 1: Frontend)
+            const MAX_DAILY_LIMIT = 6;
+            const today = new Date().toISOString().split('T')[0];
+            let usageState = JSON.parse(localStorage.getItem('ai_daily_usage') || `{"count": 0, "date": "${today}"}`);
+            
+            if (usageState.date !== today) {
+                // Nuevo día, resetear
+                usageState = { count: 0, date: today };
+                localStorage.setItem('ai_daily_usage', JSON.stringify(usageState));
+            }
+            
+            if (usageState.count >= MAX_DAILY_LIMIT) {
+                alert('⏳ Límite diario alcanzado. Has usado tus 6 recomendaciones mágicas por hoy. ¡Vuelve mañana para seguir explorando de forma automatizada!');
+                return;
+            }
+
             const btn = document.querySelector('.generate-btn');
             const originalText = btn.textContent;
             
@@ -373,7 +389,11 @@
                 const cleanJsonStr = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
                 const resultObj = JSON.parse(cleanJsonStr);
                 
-                if (resultObj && resultObj.type === "top10" || resultObj.type === "top9") {
+                // Consumir 1 crédito de uso exitoso
+                usageState.count += 1;
+                localStorage.setItem('ai_daily_usage', JSON.stringify(usageState));
+                
+                if (resultObj && (resultObj.type === "top10" || resultObj.type === "top9")) {
                     localStorage.setItem('top9_result', JSON.stringify(resultObj.movies));
                     window.location.href = '/descubrir/resultado/';
                 } else if (resultObj && resultObj.type && resultObj.id) {
