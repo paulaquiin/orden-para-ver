@@ -281,6 +281,11 @@
                 return;
             }
 
+            let avoidSagas = [];
+            try {
+                avoidSagas = JSON.parse(localStorage.getItem('avoid_sagas') || '[]');
+            } catch (e) {}
+
             btn.disabled = true;
             btn.innerHTML = `<span style="display:flex; align-items:center; gap:10px; justify-content:center;">
                 <svg style="animation: spin 1s linear infinite;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
@@ -294,7 +299,7 @@
                     const response = await fetch('/api/generate-route', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ genres: selectedGenres, timePreference })
+                        body: JSON.stringify({ genres: selectedGenres, timePreference, avoidSagas })
                     });
 
                     if (response.ok) {
@@ -310,9 +315,16 @@
                     
                     if (!API_KEY) throw new Error("No hay API Key configurada");
 
-                    const prompt = `Actúa como un experto cinéfilo y guía de "Orden para Ver". El usuario tiene estos gustos: ${selectedGenres.join(", ")}. Su disponibilidad de tiempo es: ${timePreference}. Genera una recomendación personalizada de "ruta de visualización". Debes mencionar al menos 2 sagas de las que tenemos disponibles (Marvel MCU, Star Wars, DC, Dune, Doctor Who, Wizarding World, One Piece). La respuesta debe tener un saludo, explicar por qué esas sagas encajan con sus gustos y darle un orden sugerido. Usa un tono premium, entusiasta y usa Markdown para que quede bien formateado.`;
+                    const avoidText = avoidSagas.length > 0 ? `Importante: Excluye estrictamente las sagas con estos IDs: ${avoidSagas.join(", ")}. Sugiere algo diferente.` : `Añade cierto grado de aleatoriedad para no recomendar siempre la misma si hay alternativas válidas.`;
 
-                    const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                    const prompt = `Actúa como un experto de "Orden para Ver". El usuario busca géneros: ${selectedGenres.join(", ")} y dispone de este tiempo: ${timePreference}. 
+                    Elige UNA única saga de nuestro catálogo que mejor se adapte.
+                    ${avoidText}
+                    Catálogo disponible:
+                    [{"id": 404609, "type": "collection_id", "name": "John Wick"}, {"id": 9485, "type": "collection_id", "name": "Fast & Furious"}, {"id": 87359, "type": "collection_id", "name": "Misión Imposible"}, {"id": 328, "type": "collection_id", "name": "Jurassic Park"}, {"id": 86311, "type": "collection_id", "name": "Marvel MCU"}, {"id": 10, "type": "collection_id", "name": "Star Wars"}, {"id": 263, "type": "collection_id", "name": "Batman"}, {"id": 726871, "type": "collection_id", "name": "Dune"}, {"id": 531241, "type": "collection_id", "name": "Spider-Man"}, {"id": 1399, "type": "tv_id", "name": "Juego de Tronos"}, {"id": 71912, "type": "tv_id", "name": "The Witcher"}, {"id": 76479, "type": "tv_id", "name": "The Boys"}, {"id": 66732, "type": "tv_id", "name": "Stranger Things"}, {"id": 94605, "type": "tv_id", "name": "Arcane"}, {"id": 136315, "type": "tv_id", "name": "The Bear"}, {"id": 5724, "type": "tv_id", "name": "Doctor Who"}, {"id": 37854, "type": "tv_id", "name": "One Piece"}, {"id": 84958, "type": "tv_id", "name": "Loki"}]
+                    Devuelve ÚNICAMENTE un objeto JSON válido con las claves "type" (string) y "id" (number) de la saga elegida. Sin explicaciones ni markdown delimitador, solo el JSON nativo.`;
+
+                    const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -321,19 +333,34 @@
                     });
 
                     const aiData = await aiResponse.json();
+                    if (aiData.error) {
+                        throw new Error(aiData.error.message || "Error en la API de Google AI");
+                    }
+                    if (!aiData.candidates || aiData.candidates.length === 0) {
+                        throw new Error("No se pudo generar la recomendación en este momento.");
+                    }
                     aiText = aiData.candidates[0].content.parts[0].text;
                 }
                 
-                // 3. Guardar resultado y redirigir
-                localStorage.setItem('ai_route_result', aiText);
-                localStorage.setItem('user_genres', JSON.stringify(selectedGenres));
-                window.location.href = '/descubrir/resultado/';
+                // 3. Limpiar markdown escondido y parsear JSON para redirigir directamente
+                const cleanJsonStr = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const resultObj = JSON.parse(cleanJsonStr);
+                
+                if (resultObj && resultObj.type && resultObj.id) {
+                    avoidSagas.push(resultObj.id);
+                    if (avoidSagas.length > 4) avoidSagas.shift(); // Recordar solo las ultimas 4
+                    localStorage.setItem('avoid_sagas', JSON.stringify(avoidSagas));
+                    
+                    window.location.href = `/franchise/?${resultObj.type}=${resultObj.id}`;
+                } else {
+                    throw new Error("La IA no devolvió un ID válido de franquicia.");
+                }
 
             } catch (error) {
                 console.error(error);
                 btn.disabled = false;
                 btn.textContent = 'Reintentar Generar';
-                alert('Hubo un problema al generar tu ruta. Revisa la consola para más detalles.');
+                alert('Hubo un problema al generar tu ruta: ' + error.message);
             }
         }
     </script>
