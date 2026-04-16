@@ -4,7 +4,24 @@ export async function onRequest(context) {
     return new Response("Method Not Allowed", { status: 405 });
   }
 
+  const ip = context.request.headers.get("CF-Connecting-IP") || "anonymous";
+  const today = new Date().toISOString().split('T')[0];
+  const kvKey = `usage:${ip}:${today}`;
+
   try {
+    // 1. Verificar límite en KV (Servidor)
+    if (context.env.USAGE_KV) {
+      const currentUsage = await context.env.USAGE_KV.get(kvKey);
+      if (currentUsage && parseInt(currentUsage) >= 6) {
+        return new Response(JSON.stringify({ 
+          error: "Has agotado tus 6 consultas diarias por IP. ¡Vuelve mañana!" 
+        }), {
+          status: 429,
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+    }
+
     const { genres, timePreference, avoidSagas } = await context.request.json();
     const API_KEY = context.env.GOOGLE_AI_KEY || context.env.VITE_GOOGLE_AI_KEY;
 
@@ -54,6 +71,12 @@ export async function onRequest(context) {
     }
     
     const aiText = data.candidates[0].content.parts[0].text;
+
+    // 2. Incrementar uso en KV tras éxito
+    if (context.env.USAGE_KV) {
+      const currentCount = await context.env.USAGE_KV.get(kvKey) || 0;
+      await context.env.USAGE_KV.put(kvKey, (parseInt(currentCount) + 1).toString(), { expirationTtl: 86400 });
+    }
 
     return new Response(JSON.stringify({ result: aiText }), {
       headers: { "Content-Type": "application/json" }
