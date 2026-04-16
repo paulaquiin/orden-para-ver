@@ -258,6 +258,7 @@
     </main>
 
     <app-footer></app-footer>
+    <app-modal></app-modal>
 
     <script type="module">
         import { searchCollectionTMDB } from '/src/tmdb.js';
@@ -304,7 +305,7 @@
             }
             
             if (usageState.count >= MAX_DAILY_LIMIT) {
-                alert('⏳ Límite diario alcanzado. Has usado tus 6 recomendaciones mágicas por hoy. ¡Vuelve mañana para seguir explorando de forma automatizada!');
+                window.showAlert('Límite Alcanzado', '⏳ Has usado tus 6 recomendaciones mágicas por hoy. ¡Vuelve mañana para seguir explorando!');
                 return;
             }
 
@@ -318,11 +319,11 @@
             const timePreference = timeCard ? timeCard.querySelector('.time-title').textContent : 'No especificado';
 
             if (selectedGenres.length === 0) {
-                alert('Por favor, selecciona al menos un género para que la IA pueda ayudarte.');
+                window.showAlert('Faltan datos', 'Por favor, selecciona al menos un género para que la IA pueda ayudarte.');
                 return;
             }
             if (!timeCard) {
-                alert('Por favor, selecciona una preferencia de tiempo para completar el paso 2.');
+                window.showAlert('Faltan datos', 'Por favor, selecciona una preferencia de tiempo para completar el paso 2.');
                 return;
             }
 
@@ -421,7 +422,7 @@
                 console.error(error);
                 btn.disabled = false;
                 btn.textContent = 'Reintentar Generar';
-                alert('Hubo un problema al generar tu ruta: ' + error.message);
+                window.showAlert('Ups, algo ha fallado', 'Hubo un problema al generar tu ruta: ' + error.message);
             }
         }
     </script>
