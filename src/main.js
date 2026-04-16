@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let flatrateES = [];
         if (providersData && providersData.results && providersData.results.ES) {
           let rawProviders = providersData.results.ES.flatrate || [];
-          flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
+          flatrateES = rawProviders.filter(p => !p.provider_name.toLowerCase().includes('amazon channel'));
         }
 
         rawItems = [{
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           let flatrateES = [];
           if (providersData && providersData.results && providersData.results.ES) {
             let rawProviders = providersData.results.ES.flatrate || [];
-            flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
+            flatrateES = rawProviders.filter(p => !p.provider_name.toLowerCase().includes('amazon channel'));
           }
 
           return {
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let flatrateES = [];
         if (providersData && providersData.results && providersData.results.ES) {
           let rawProviders = providersData.results.ES.flatrate || [];
-          flatrateES = rawProviders.filter(p => p.provider_name === 'Netflix' || !p.provider_name.toLowerCase().includes('netflix'));
+          flatrateES = rawProviders.filter(p => !p.provider_name.toLowerCase().includes('amazon channel'));
         }
 
         rawItems = allSeasons
