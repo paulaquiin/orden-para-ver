@@ -280,6 +280,17 @@
             updateProgress();
         }
 
+        // Resetear botón al volver atrás en el navegador
+        window.addEventListener('pageshow', (event) => {
+            const btn = document.querySelector('.generate-btn');
+            if (btn) {
+                btn.textContent = 'Generar mi Ruta';
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            }
+        });
+
         window.generateRoute = async function() {
             // Validación de límite de uso (Nivel 1: Frontend)
             const MAX_DAILY_LIMIT = 6;
