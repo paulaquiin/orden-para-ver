@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon.png?v=5" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tu Ruta Personalizada | Orden para ver</title>
     <link rel="stylesheet" href="/src/style.css">
@@ -79,18 +81,27 @@
             // Mostrar contexto
             document.getElementById('userContext').textContent = `Basada en tu interés por: ${genres.join(', ')}`;
 
-            // Renderizado súper básico de Markdown para la demo
+            // Renderizado de Markdown mejorado
             const formattedResult = result
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negritas
-                .replace(/### (.*?)\n/g, '<h3>$1</h3>') // H3
-                .replace(/## (.*?)\n/g, '<h2>$1</h2>') // H2
-                .replace(/\* (.*?)\n/g, '<li>$1</li>') // Listas
-                .replace(/\n\n/g, '<br><br>') // Párrafos
-                .replace(/<li>(.*?<\/li>)/g, '<ul><li>$1</ul>'); // Envolver listas (muy simplista)
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/^\* (.*$)/gim, '<li>$1</li>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>');
 
-            document.getElementById('aiResult').innerHTML = formattedResult;
+            document.getElementById('aiResult').innerHTML = `<p>${formattedResult}</p>`;
+            
+            // Envolver LIs en ULs si existen
+            const content = document.getElementById('aiResult').innerHTML;
+            if (content.includes('<li>')) {
+                // Una forma simple de limpiar listas
+                document.getElementById('aiResult').innerHTML = content.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+            }
         });
     </script>
     <script type="module" src="/src/main.js"></script>
 </body>
 </html>
+

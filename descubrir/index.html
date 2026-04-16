@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon.png?v=5" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¿No sabes por dónde empezar? | Orden para ver</title>
     <link rel="stylesheet" href="/src/style.css">
@@ -256,17 +258,18 @@
 
     <app-footer></app-footer>
 
-    <script>
-        function selectCard(el, className) {
+    <script type="module">
+        import { searchCollectionTMDB } from '/src/tmdb.js';
+
+        window.selectCard = function(el, className) {
             document.querySelectorAll('.' + className).forEach(card => card.classList.remove('active'));
             el.classList.add('active');
         }
 
-        async function generateRoute() {
+        window.generateRoute = async function() {
             const btn = document.querySelector('.generate-btn');
             const originalText = btn.textContent;
             
-            // 1. Recopilar datos
             const selectedGenres = Array.from(document.querySelectorAll('.genre-card.active'))
                                       .map(card => card.querySelector('.genre-name').textContent);
             
@@ -278,7 +281,6 @@
                 return;
             }
 
-            // 2. UI Feedback
             btn.disabled = true;
             btn.innerHTML = `<span style="display:flex; align-items:center; gap:10px; justify-content:center;">
                 <svg style="animation: spin 1s linear infinite;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
@@ -286,28 +288,52 @@
             </span>`;
             
             try {
-                // Llamada a la API (Cloudflare Function)
-                const response = await fetch('/api/generate-route', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ genres: selectedGenres, timePreference })
-                });
+                // 1. Intentamos la API (Cloudflare Function)
+                let aiText = "";
+                try {
+                    const response = await fetch('/api/generate-route', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ genres: selectedGenres, timePreference })
+                    });
 
-                if (!response.ok) throw new Error('Error al conectar con la IA');
+                    if (response.ok) {
+                        const data = await response.json();
+                        aiText = data.result;
+                    } else {
+                        throw new Error("API Offline/Local");
+                    }
+                } catch (localError) {
+                    // 2. FALLBACK: Si estamos en LOCAL dev, usamos la KEY directamente
+                    console.warn("API Local no detectada, usando Fallback Directo a Google AI...");
+                    const API_KEY = import.meta.env.VITE_GOOGLE_AI_KEY;
+                    
+                    if (!API_KEY) throw new Error("No hay API Key configurada");
 
-                const data = await response.json();
+                    const prompt = `Actúa como un experto cinéfilo y guía de "Orden para Ver". El usuario tiene estos gustos: ${selectedGenres.join(", ")}. Su disponibilidad de tiempo es: ${timePreference}. Genera una recomendación personalizada de "ruta de visualización". Debes mencionar al menos 2 sagas de las que tenemos disponibles (Marvel MCU, Star Wars, DC, Dune, Doctor Who, Wizarding World, One Piece). La respuesta debe tener un saludo, explicar por qué esas sagas encajan con sus gustos y darle un orden sugerido. Usa un tono premium, entusiasta y usa Markdown para que quede bien formateado.`;
+
+                    const aiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }]
+                        })
+                    });
+
+                    const aiData = await aiResponse.json();
+                    aiText = aiData.candidates[0].content.parts[0].text;
+                }
                 
-                // 4. Guardar resultado y redirigir
-                localStorage.setItem('ai_route_result', data.result);
+                // 3. Guardar resultado y redirigir
+                localStorage.setItem('ai_route_result', aiText);
                 localStorage.setItem('user_genres', JSON.stringify(selectedGenres));
-                
                 window.location.href = '/descubrir/resultado/';
 
             } catch (error) {
                 console.error(error);
                 btn.disabled = false;
                 btn.textContent = 'Reintentar Generar';
-                alert('Hubo un problema al generar tu ruta. Asegúrate de que la API Key esté configurada en Cloudflare.');
+                alert('Hubo un problema al generar tu ruta. Revisa la consola para más detalles.');
             }
         }
     </script>
@@ -315,3 +341,4 @@
     <script type="module" src="/src/main.js"></script>
 </body>
 </html>
+

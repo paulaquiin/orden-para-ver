@@ -443,25 +443,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => document.addEventListener('click', closeOverlay), 10);
   }
 
-  // Universal Search Function
-  async function executeSearch(query, btnElement) {
-    if (!query) return;
-
-    const originalText = btnElement.textContent;
-    btnElement.textContent = '...';
-
-    // Búsqueda multi-dimensional
-    const [collRes, multiRes] = await Promise.all([
-      searchCollectionTMDB(query),
-      searchTMDB(query)
-    ]);
-    btnElement.textContent = originalText;
-    const allResults = [];
-    if (collRes.results) { collRes.results.slice(0, 3).forEach(c => allResults.push({ ...c, isCollection: true })); }
-    if (multiRes.results) { multiRes.results.slice(0, 8).forEach(r => { if (r.media_type === 'tv' || r.media_type === 'movie') { if (!allResults.find(x => x.id === r.id)) { allResults.push(r); } } }); }
-    if (allResults.length === 0) { alert('Lo sentimos, no encontramos nada relevante.'); return; }
-    showSmartResults(allResults, btnElement);
+  // --- Reactive Search Logic ---
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   }
+
+  // Universal Search Function
+  async function executeSearch(query, btnElement, isReactive = false) {
+    if (!query || query.length < 2) {
+      const overlay = btnElement.closest('.search-container, .nav-search, .mobile-nav-search')?.querySelector('.search-results-overlay')
+                      || document.getElementById('searchResults');
+      if (overlay) overlay.classList.remove('active');
+      return;
+    }
+
+    let originalText = '';
+    if (!isReactive) {
+      originalText = btnElement.textContent;
+      btnElement.textContent = '...';
+    } else {
+      btnElement.classList.add('searching');
+    }
+
+    try {
+      // Búsqueda multi-dimensional
+      const [collRes, multiRes] = await Promise.all([
+        searchCollectionTMDB(query),
+        searchTMDB(query)
+      ]);
+
+      const allResults = [];
+      if (collRes.results) { 
+        collRes.results.slice(0, 3).forEach(c => allResults.push({ ...c, isCollection: true })); 
+      }
+      if (multiRes.results) { 
+        multiRes.results.slice(0, 8).forEach(r => { 
+          if (r.media_type === 'tv' || r.media_type === 'movie') { 
+            if (!allResults.find(x => x.id === r.id)) { 
+              allResults.push(r); 
+            } 
+          } 
+        }); 
+      }
+
+      if (allResults.length > 0) {
+        showSmartResults(allResults, btnElement);
+      } else if (!isReactive) {
+        alert('Lo sentimos, no encontramos nada relevante.');
+      } else {
+        const overlay = btnElement.closest('.search-container, .nav-search, .mobile-nav-search')?.querySelector('.search-results-overlay')
+                        || document.getElementById('searchResults');
+        if (overlay) overlay.classList.remove('active');
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+    } finally {
+      if (!isReactive) {
+        btnElement.textContent = originalText;
+      } else {
+        btnElement.classList.remove('searching');
+      }
+    }
+  }
+
+  const debouncedSearch = debounce((query, btn) => executeSearch(query, btn, true), 300);
 
   // Setup Big Hero Search
   const searchInput = document.querySelector('.search-input');
@@ -477,12 +530,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     searchInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') searchBtn.click();
     });
+
+    searchInput.addEventListener('input', (e) => {
+      debouncedSearch(e.target.value.trim(), searchBtn);
+    });
   }
 
   // Setup ALL Navbar Search Inputs (desktop + mobile)
   document.querySelectorAll('.nav-search-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Find the closest sibling input, or fallback to any nav-search-input
       const input = btn.closest('.nav-search, .mobile-nav-search')?.querySelector('.nav-search-input')
         || document.querySelector('.nav-search-input');
       const query = input?.value.trim();
@@ -498,6 +554,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           || document.querySelector('.nav-search-btn');
         btn?.click();
       }
+    });
+
+    input.addEventListener('input', (e) => {
+      const btn = input.closest('.nav-search, .mobile-nav-search')?.querySelector('.nav-search-btn')
+        || document.querySelector('.nav-search-btn');
+      if (btn) debouncedSearch(e.target.value.trim(), btn);
     });
   });
 
