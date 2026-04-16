@@ -17,7 +17,7 @@ export async function onRequest(context) {
 
     const avoidText = avoidSagas && avoidSagas.length > 0 ? `Importante: Excluye estrictamente las sagas con estos IDs: ${avoidSagas.join(", ")}. Sugiere algo diferente.` : `Añade cierto grado de aleatoriedad para no recomendar siempre la misma si hay alternativas válidas.`;
 
-    const prompt = `Actúa como un experto de "Orden para Ver". El usuario busca géneros: ${genres.join(", ")} y dispone de este tiempo: ${timePreference}. 
+    const prompt = `Actúa como un experto de "Orden para Ver". El usuario busca géneros: ${genres.join(", ")} y prefiere este tipo de experiencia: ${timePreference}. 
     Elige UNA única saga de nuestro catálogo que mejor se adapte.
     ${avoidText}
     Catálogo disponible:

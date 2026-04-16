@@ -240,10 +240,10 @@
                 </div>
                 <div class="time-card" onclick="selectCard(this, 'time-card')">
                     <span class="time-value">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto;"><path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.33-6 4Z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
                     </span>
-                    <h3 class="time-title">Inmersión total</h3>
-                    <p class="time-desc">Todo el universo: cortos, cómics, audiolibros y escenas eliminadas.</p>
+                    <h3 class="time-title">Mejor valoradas</h3>
+                    <p class="time-desc">Prioriza la calidad crítica. Sagas aclamadas, premiadas y con las notas más altas.</p>
                 </div>
             </div>
         </section>
@@ -317,7 +317,7 @@
 
                     const avoidText = avoidSagas.length > 0 ? `Importante: Excluye estrictamente las sagas con estos IDs: ${avoidSagas.join(", ")}. Sugiere algo diferente.` : `Añade cierto grado de aleatoriedad para no recomendar siempre la misma si hay alternativas válidas.`;
 
-                    const prompt = `Actúa como un experto de "Orden para Ver". El usuario busca géneros: ${selectedGenres.join(", ")} y dispone de este tiempo: ${timePreference}. 
+                    const prompt = `Actúa como un experto de "Orden para Ver". El usuario busca géneros: ${selectedGenres.join(", ")} y prefiere este tipo de experiencia: ${timePreference}. 
                     Elige UNA única saga de nuestro catálogo que mejor se adapte.
                     ${avoidText}
                     Catálogo disponible:
