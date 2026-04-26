@@ -13,6 +13,7 @@ class AppHeader extends HTMLElement {
             <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
             <a href="/contenidos/" class="${currentPath.includes('contenidos') ? 'active' : ''}">Contenido</a>
             <a href="/novedades/" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
+            <a href="/blog/" class="${currentPath.includes('blog') ? 'active' : ''}">Blog</a>
           </nav>
           <div class="nav-actions">
             <div class="nav-search">
@@ -36,6 +37,7 @@ class AppHeader extends HTMLElement {
           <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
           <a href="/contenidos/" class="${currentPath.includes('contenidos') ? 'active' : ''}">Contenido</a>
           <a href="/novedades/" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
+          <a href="/blog/" class="${currentPath.includes('blog') ? 'active' : ''}">Blog</a>
           <div class="mobile-nav-search">
             <input type="text" placeholder="Buscar saga..." class="nav-search-input mobile-search-input" />
             <button class="nav-search-btn mobile-search-btn" aria-label="Buscar">

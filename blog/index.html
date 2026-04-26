@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/favicon.png?v=5" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Orden para ver</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .blog-header {
+            text-align: center;
+            padding: 80px 20px 40px;
+        }
+        .blog-header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .blog-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+        .blog-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-orange);
+            box-shadow: 0 10px 30px rgba(255,140,90,0.1);
+        }
+        .blog-poster {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--glass-border);
+        }
+    </style>
+</head>
+<body>
+    <app-header></app-header>
+
+    <main class="container" style="min-height: 70vh;">
+        <header class="blog-header">
+            <h1 class="gradient-text">Últimos Artículos</h1>
+            <p>Guías completas, curiosidades y análisis profundo sobre el orden correcto para disfrutar de tus sagas favoritas.</p>
+        </header>
+
+        <!-- BLOG_POSTS_START -->
+<div class="explore-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+
+    <div class="blog-card" onclick="window.location.href='/blog/marvel-orden/'">
+      <img src="https://via.placeholder.com/800x400/2a2a2a/ff8c5a?text=Marvel+Universe" alt="Cómo empezar a ver el Universo Marvel sin perderte" class="blog-poster" loading="lazy">
+      <div class="blog-info" style="padding: 1.5rem;">
+        <div style="font-size: 0.8rem; color: var(--accent-orange); margin-bottom: 0.5rem; font-weight: 600;">26/4/2026</div>
+        <h3 class="blog-title" style="margin-bottom: 0.5rem; font-size: 1.25rem;">Cómo empezar a ver el Universo Marvel sin perderte</h3>
+        <p class="blog-desc" style="color: var(--text-gray); font-size: 0.95rem; line-height: 1.5;">Una guía rápida y sencilla para adentrarte en el MCU con el orden cronológico definitivo.</p>
+      </div>
+    </div>
+  
+</div>
+<!-- BLOG_POSTS_END -->
+
+    </main>
+
+    <app-footer></app-footer>
+    <app-modal></app-modal>
+    
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
