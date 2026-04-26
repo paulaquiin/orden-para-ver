@@ -23,7 +23,7 @@ export async function onRequest(context) {
     }
 
     const { genres, timePreference, avoidSagas } = await context.request.json();
-    const API_KEY = context.env.GOOGLE_AI_KEY || context.env.VITE_GOOGLE_AI_KEY;
+    const API_KEY = context.env.OPENAI_API_KEY;
 
     if (!API_KEY) {
       return new Response(JSON.stringify({ error: "API Key not configured in environment" }), {
@@ -50,27 +50,36 @@ export async function onRequest(context) {
         Devuelve ÚNICAMENTE un objeto JSON válido con las claves "type" (string) y "id" (number) de la saga elegida. Sin explicaciones ni markdown delimitador, solo el JSON nativo.`;
     }
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${API_KEY}`, {
+    const aiModel = context.env.OPENAI_MODEL || 'gpt-4o-mini';
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`
+      },
       body: JSON.stringify({
-        contents: [{
-          parts: [{ text: prompt }]
-        }]
+        model: aiModel,
+        messages: [
+          { role: 'system', content: 'Eres un experto en cine y series. Responde siempre con JSON puro sin formato markdown.' },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.8,
+        max_tokens: 1024,
       })
     });
 
     const data = await response.json();
     
     if (data.error) {
-      throw new Error(`Google AI API Error: ${data.error.message || data.error.status || "Unknown error"}`);
+      throw new Error(`OpenAI API Error: ${data.error.message || data.error.type || "Unknown error"}`);
     }
     
-    if (!data.candidates || data.candidates.length === 0) {
+    if (!data.choices || data.choices.length === 0) {
       throw new Error("No recommendation was generated. The AI returned an empty response.");
     }
     
-    const aiText = data.candidates[0].content.parts[0].text;
+    const aiText = data.choices[0].message.content;
 
     // 2. Incrementar uso en KV tras éxito
     if (context.env.USAGE_KV) {
