@@ -1,4 +1,4 @@
-import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders, fetchMovieDetails } from './tmdb.js';
+import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders, fetchMovieDetails, fetchTVCredits } from './tmdb.js';
 import './components.js';
 
 // Initialize the app
@@ -50,12 +50,36 @@ document.addEventListener('DOMContentLoaded', async () => {
               // Si es serie, activamos la fusión de secuelas
               const queryBase = (tv.name || tv.original_name).split(':')[0].trim();
               const fullUniverse = await searchTMDB(queryBase);
-              const related = fullUniverse.results.filter(t => 
-                t.media_type === 'tv' && 
-                (t.name || t.original_name).toLowerCase().includes(queryBase.toLowerCase()) &&
-                (!t.origin_country || !tv.origin_country || t.origin_country[0] === tv.origin_country[0])
-              );
-              const ids = related.length > 1 ? related.map(x => x.id).join(',') : tv.id;
+              
+              const baseCredits = await fetchTVCredits(tv.id);
+              const baseActors = new Set((baseCredits?.cast || []).slice(0, 30).map(actor => actor.id));
+
+              const relatedPromises = fullUniverse.results.map(async t => {
+                if (t.media_type !== 'tv') return null;
+                if (t.id === tv.id) return tv;
+                
+                const matchesName = (t.name || t.original_name).toLowerCase().includes(queryBase.toLowerCase());
+                const matchesCountry = (!t.origin_country || !tv.origin_country || t.origin_country[0] === tv.origin_country[0]);
+                
+                if (matchesName && matchesCountry) {
+                  const tCredits = await fetchTVCredits(t.id);
+                  const tActors = (tCredits?.cast || []).slice(0, 30).map(a => a.id);
+                  let common = 0;
+                  for (let id of tActors) {
+                    if (baseActors.has(id)) common++;
+                  }
+                  if (common >= 2) return t;
+                }
+                return null;
+              });
+
+              let relatedShows = (await Promise.all(relatedPromises)).filter(Boolean);
+              
+              if (!relatedShows.find(x => x.id === tv.id)) {
+                relatedShows.unshift(tv);
+              }
+
+              const ids = relatedShows.length > 1 ? relatedShows.map(x => x.id).join(',') : tv.id;
               window.location.search = `?tv_id=${ids}`;
               return;
            }
@@ -397,23 +421,49 @@ document.addEventListener('DOMContentLoaded', async () => {
           // BÚSQUEDA INTELIGENTE DE SECUELAS PARA SERIES
           const queryBase = (res.name || res.original_name).split(':')[0].trim();
           const multi = await searchTMDB(queryBase);
-          const sameUniverse = multi.results.filter(t => {
-            if (t.media_type !== 'tv') return false;
+
+          const baseCredits = await fetchTVCredits(res.id);
+          const baseActors = new Set((baseCredits?.cast || []).slice(0, 30).map(actor => actor.id));
+
+          const candidatePromises = multi.results.map(async t => {
+            if (t.media_type !== 'tv') return null;
+            if (t.id === res.id) return res;
+
             const normName = (t.name || t.original_name).toLowerCase();
             const normSeed = queryBase.toLowerCase();
             const isMatch = normName.includes(normSeed);
 
+            if (!isMatch) return null;
+
             // Si ambos tienen país definido y son DISTINTOS, descartamos (ej: ES vs CO)
             if (res.origin_country?.length > 0 && t.origin_country?.length > 0) {
-              if (res.origin_country[0] !== t.origin_country[0]) return false;
+              if (res.origin_country[0] !== t.origin_country[0]) return null;
             }
 
             const countryMatch = res.origin_country?.[0] && t.origin_country?.includes(res.origin_country[0]);
             const langMatch = res.original_language && t.original_language === res.original_language;
             
             // Aceptamos si el nombre coincide Y (el país coincide O el idioma coincide O no tiene país definido como ADN)
-            return isMatch && (countryMatch || langMatch || !t.origin_country || t.origin_country.length === 0);
+            const isPotential = (countryMatch || langMatch || !t.origin_country || t.origin_country.length === 0);
+
+            if (isPotential) {
+               const tCredits = await fetchTVCredits(t.id);
+               const tActors = (tCredits?.cast || []).slice(0, 30).map(a => a.id);
+               let common = 0;
+               for (let id of tActors) {
+                   if (baseActors.has(id)) common++;
+               }
+               if (common >= 2) return t;
+            }
+            return null;
           });
+
+          const sameUniverseRaw = await Promise.all(candidatePromises);
+          const sameUniverse = sameUniverseRaw.filter(Boolean);
+
+          if (!sameUniverse.find(x => x.id === res.id)) {
+            sameUniverse.unshift(res);
+          }
 
           if (sameUniverse.length > 1) {
             window.location.href = `/franchise/?tv_id=${sameUniverse.map(t => t.id).join(',')}`;
