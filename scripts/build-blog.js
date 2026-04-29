@@ -99,7 +99,7 @@ function buildBlog() {
   // 2. Generar el INDEX con el nuevo diseño
   if (allPosts.length > 0) {
     const hero = allPosts[0];
-    const rest = allPosts.slice(1);
+    const allPostsForGrid = allPosts; // Include all posts in the grid
 
     // Formatear el título del Hero para resaltar palabras (la última o la más larga)
     // En la imagen, "Mesías" está en naranja e itálica.
@@ -109,7 +109,7 @@ function buildBlog() {
     const heroTitleFormatted = `${titleWords.join(' ')} <span class="accent-italic">${lastWord}</span>`;
 
     const heroHTML = `
-      <section class="blog-hero" data-category="${hero.category}" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg-dark)), url('${hero.image}');">
+      <section class="blog-hero" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg-dark)), url('${hero.image}');">
         <div class="container">
           <div class="hero-content">
             <div class="hero-badges">
@@ -126,7 +126,7 @@ function buildBlog() {
       </section>
     `;
 
-    const gridHTML = rest.map(post => `
+    const gridHTML = allPostsForGrid.map(post => `
       <div class="blog-card" data-category="${post.category}" onclick="window.location.href='/blog/${post.slug}/'">
         <div class="card-img-wrapper">
           <img src="${post.image}" alt="${post.title}" class="card-img" loading="lazy">

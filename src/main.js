@@ -3,7 +3,6 @@ import './components.js';
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('Orden para ver - App Initialized');
 
   // --- Dynamic Franchise Loading ---
   const urlParams = new URLSearchParams(window.location.search);
@@ -14,9 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.location.pathname.includes('franchise.html') ||
     (/^\/contenidos\/.+$/.test(window.location.pathname) && !window.location.pathname.endsWith('index.html'));
 
-  console.log('Path:', window.location.pathname);
-  console.log('isFranchisePage:', isFranchisePage);
-  console.log('Collection ID:', collectionId);
+
 
   if (isFranchisePage) {
     let rawItems = [];

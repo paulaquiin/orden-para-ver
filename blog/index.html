@@ -411,17 +411,17 @@
 
     <!-- HERO_POST_START -->
 
-      <section class="blog-hero" data-category="Análisis de saga" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg-dark)), url('https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?q=80&w=2070&auto=format&fit=crop');">
+      <section class="blog-hero" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg-dark)), url('https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=2070');">
         <div class="container">
           <div class="hero-content">
             <div class="hero-badges">
-              <span class="badge-category">ANÁLISIS DE SAGA</span>
-              <span class="badge-time">8 min de lectura</span>
+              <span class="badge-category">ESTRENOS</span>
+              <span class="badge-time">6 min de lectura</span>
             </div>
-            <h1 class="hero-title">Cómo empezar a ver el Universo Marvel sin <span class="accent-italic">perderte</span></h1>
-            <p class="hero-desc">Una guía rápida y sencilla para adentrarte en el MCU con el orden cronológico definitivo.</p>
+            <h1 class="hero-title">Guía de Películas de Terror 2026: Estrenos más <span class="accent-italic">esperados</span></h1>
+            <p class="hero-desc">Prepárate para los estrenos de películas de terror en 2026 más terroríficos en España. Analizamos las fechas y sagas que dominarán la cartelera este año.</p>
             <div class="hero-actions">
-              <a href="/blog/marvel-orden/" class="btn-primary">Leer artículo completo →</a>
+              <a href="/blog/estrenos-terror-2026/" class="btn-primary">Leer artículo completo →</a>
             </div>
           </div>
         </div>
@@ -434,6 +434,7 @@
             <div class="filter-bar">
                 <button class="filter-btn active" data-filter="all">Todos</button>
                 <button class="filter-btn" data-filter="Análisis de saga">Análisis de saga</button>
+                <button class="filter-btn" data-filter="Estrenos">Estrenos</button>
                 <button class="filter-btn" data-filter="Premios">Premios</button>
                 <button class="filter-btn" data-filter="Noticias">Noticias</button>
                 <button class="filter-btn" data-filter="Teorías">Teorías</button>
@@ -451,6 +452,11 @@
 
         
 
+
+
+
+
+
 <!-- BLOG_POSTS_START -->
 <div class="blog-grid">
   <div class="empty-state" id="no-results">
@@ -459,6 +465,42 @@
     <p>Estamos preparando las mejores crónicas para esta categoría. ¡Vuelve pronto!</p>
   </div>
   
+      <div class="blog-card" data-category="Estrenos" onclick="window.location.href='/blog/estrenos-terror-2026/'">
+        <div class="card-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1509248961158-e54f6934749c?auto=format&fit=crop&q=80&w=2070" alt="Guía de Películas de Terror 2026: Estrenos más esperados" class="card-img" loading="lazy">
+          <span class="card-badge">ESTRENOS</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Guía de Películas de Terror 2026: Estrenos más esperados</h3>
+          <p class="card-desc">Prepárate para los estrenos de películas de terror en 2026 más terroríficos en España. Analizamos las fechas y sagas que dominarán la cartelera este año.</p>
+          <div class="card-footer">
+            <div class="author">
+              <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-img">
+              <span class="author-name">Paula Quintana</span>
+            </div>
+            <span class="post-date">Hace hoy</span>
+          </div>
+        </div>
+      </div>
+    
+      <div class="blog-card" data-category="Análisis de saga" onclick="window.location.href='/blog/marvel-orden/'">
+        <div class="card-img-wrapper">
+          <img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?q=80&w=2070&auto=format&fit=crop" alt="Cómo empezar a ver el Universo Marvel sin perderte" class="card-img" loading="lazy">
+          <span class="card-badge">ANÁLISIS DE SAGA</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Cómo empezar a ver el Universo Marvel sin perderte</h3>
+          <p class="card-desc">Una guía rápida y sencilla para adentrarte en el MCU con el orden cronológico definitivo.</p>
+          <div class="card-footer">
+            <div class="author">
+              <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-img">
+              <span class="author-name">Paula Quintana</span>
+            </div>
+            <span class="post-date">Hace 3 días</span>
+          </div>
+        </div>
+      </div>
+    
       <div class="blog-card" data-category="Análisis de saga" onclick="window.location.href='/blog/orden-para-ver-star-wars/'">
         <div class="card-img-wrapper">
           <img src="https://images.unsplash.com/photo-1547700055-b61cacebece9?q=80&w=2070&auto=format&fit=crop" alt="Orden para ver Star Wars - Guía Cronológica Completa" class="card-img" loading="lazy">
@@ -502,7 +544,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const filterBtns = document.querySelectorAll('.filter-btn');
             const blogCards = document.querySelectorAll('.blog-card');
-            const heroSection = document.querySelector('.blog-hero');
 
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -512,14 +553,7 @@
 
                     const filter = btn.getAttribute('data-filter');
 
-                    // Filter Hero (optional, but requested by user to change categories and articles)
-                    if (filter === 'all' || heroSection.getAttribute('data-category') === filter) {
-                        heroSection.classList.remove('hidden');
-                    } else {
-                        heroSection.classList.add('hidden');
-                    }
-
-                    // Filter Grid
+                    // Filter Grid (All posts are here now, including the featured one)
                     let visibleCount = 0;
                     blogCards.forEach(card => {
                         if (filter === 'all' || card.getAttribute('data-category') === filter) {
@@ -532,7 +566,7 @@
 
                     // Show/Hide empty state
                     const noResults = document.getElementById('no-results');
-                    if (visibleCount === 0 && (filter !== 'all' || heroSection.classList.contains('hidden'))) {
+                    if (visibleCount === 0) {
                         noResults.style.display = 'flex';
                     } else {
                         noResults.style.display = 'none';
