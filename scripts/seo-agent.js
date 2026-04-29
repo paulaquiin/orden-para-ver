@@ -321,7 +321,9 @@ function generateSEOMeta(tmdbData, query) {
     ? `Descubre el orden correcto para ver ${tmdbData.title}. Guía actualizada con todas las temporadas y el orden cronológico recomendado.`
     : `¿En qué orden ver las películas de ${tmdbData.title}? Guía completa con el orden cronológico definitivo, actualizada a ${new Date().getFullYear()}.`;
 
-  return { title: title.substring(0, 70), description: description.substring(0, 160) };
+  const category = tmdbData.type === 'tv' ? 'Guías de Visionado' : 'Análisis de Saga';
+
+  return { title: title.substring(0, 70), description: description.substring(0, 160), category };
 }
 
 // ─── Save as Markdown ────────────────────────────────────────────────────────
@@ -332,11 +334,18 @@ function savePost(slug, frontMatter, content) {
 
   const filePath = path.join(contentDir, `${slug}.md`);
 
+  // Calcular tiempo de lectura (aprox 200 palabras por minuto)
+  const wordCount = content.split(/\s+/).length;
+  const readTime = Math.max(1, Math.ceil(wordCount / 200));
+
   const md = `---
 title: "${frontMatter.title}"
 description: "${frontMatter.description}"
 date: "${new Date().toISOString().split('T')[0]}"
 image: "${frontMatter.image}"
+category: "${frontMatter.category || 'Cine'}"
+author: "Alex Rivera"
+readTime: "${readTime} min de lectura"
 ---
 
 ${content}

@@ -2,7 +2,10 @@
 title: "Cómo empezar a ver el Universo Marvel sin perderte"
 description: "Una guía rápida y sencilla para adentrarte en el MCU con el orden cronológico definitivo."
 date: "2026-04-26"
-image: "https://via.placeholder.com/800x400/2a2a2a/ff8c5a?text=Marvel+Universe"
+image: "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?q=80&w=2070&auto=format&fit=crop"
+category: "Análisis de saga"
+author: "Paula Quintana"
+readTime: "8 min de lectura"
 ---
 
 Empezar a ver Marvel hoy en día puede parecer una tarea titánica. Con decenas de películas, series y especiales, es normal no saber por dónde empezar.

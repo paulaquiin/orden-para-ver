@@ -1,8 +1,11 @@
 ---
-title: "Orden para ver La guerra de las galaxias - – Guía Cronológica Completa"
-description: "¿En qué orden ver las películas de La guerra de las galaxias -? Guía completa con el orden cronológico definitivo, actualizada a 2026."
+title: "Orden para ver Star Wars - Guía Cronológica Completa"
+description: "¿En qué orden ver las películas de Star Wars? Guía completa con el orden cronológico definitivo, actualizada a 2026."
 date: "2026-04-26"
-image: "https://via.placeholder.com/800x400/1a1a2e/ff8c5a?text=La%20guerra%20de%20las%20galaxias%20-"
+image: "https://images.unsplash.com/photo-1547700055-b61cacebece9?q=80&w=2070&auto=format&fit=crop"
+category: "Análisis de saga"
+author: "Paula Quintana"
+readTime: "12 min de lectura"
 ---
 
 La galaxia muy, muy lejana siempre ha fascinado a millones de fans alrededor del mundo. **Star Wars** no es solo una saga cinematográfica, sino un verdadero fenómeno cultural que ha marcado generaciones. Desde su debut en 1977, con “La guerra de las galaxias”, la historia de Luke Skywalker, la princesa Leia y el temido Darth Vader ha capturado corazones y mentes. Pero, si eres nuevo en esta épica aventura galáctica o simplemente quieres disfrutar de la saga de la mejor manera, es fundamental conocer el **orden para ver Star Wars**.

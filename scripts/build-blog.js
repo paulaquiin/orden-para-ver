@@ -24,15 +24,13 @@ marked.use({
 });
 
 function buildBlog() {
-  console.log('Construyendo el blog...');
+  console.log('🚀 Construyendo el blog con diseño Premium...');
 
-  // Asegurar que existe _template.html
   if (!fs.existsSync(templatePath)) {
     console.error('Error: No se encontró blog/_template.html');
     return;
   }
 
-  // Asegurar que existe index.html
   if (!fs.existsSync(indexPath)) {
     console.error('Error: No se encontró blog/index.html');
     return;
@@ -49,69 +47,141 @@ function buildBlog() {
     console.log('No hay carpeta content/blog o está vacía.');
   }
 
-  const posts = [];
+  const allPosts = [];
 
   files.forEach(file => {
     const filePath = path.join(contentDir, file);
     const content = fs.readFileSync(filePath, 'utf8');
-    
-    // Parsear front-matter y markdown
     const parsed = fm(content);
-    const htmlContent = marked.parse(parsed.body);
     const slug = file.replace('.md', '');
     
-    // Preparar metadatos del post
     const postMeta = {
       slug,
       title: parsed.attributes.title || 'Sin título',
       description: parsed.attributes.description || '',
-      date: parsed.attributes.date ? new Date(parsed.attributes.date).toLocaleDateString('es-ES') : new Date().toLocaleDateString('es-ES'),
-      image: parsed.attributes.image || 'https://via.placeholder.com/600x400?text=Blog',
+      date: parsed.attributes.date || new Date().toISOString().split('T')[0],
+      displayDate: parsed.attributes.date ? new Date(parsed.attributes.date).toLocaleDateString('es-ES') : new Date().toLocaleDateString('es-ES'),
+      image: parsed.attributes.image || 'https://via.placeholder.com/1200x600?text=Blog',
+      category: parsed.attributes.category || 'Noticias',
+      author: parsed.attributes.author || 'Paula Quintana',
+      authorImg: parsed.attributes.authorImg || 'https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff',
+      readTime: parsed.attributes.readTime || '5 min de lectura',
+      body: parsed.body
     };
 
-    posts.push(postMeta);
-
-    // Reemplazar marcadores en el template
-    let finalHTML = templateHTML
-      .replace(/{{TITLE}}/g, postMeta.title)
-      .replace(/{{DESCRIPTION}}/g, postMeta.description)
-      .replace(/{{DATE}}/g, postMeta.date)
-      .replace(/{{IMAGE}}/g, postMeta.image)
-      .replace(/{{CONTENT}}/g, htmlContent);
-
-    // Guardar el post en blog/mi-post/index.html
-    const postDir = path.join(blogDir, slug);
-    if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
-    fs.writeFileSync(path.join(postDir, 'index.html'), finalHTML);
-
-    console.log(`Generado: blog/${slug}/index.html`);
+    allPosts.push(postMeta);
   });
 
-  // Ordenar posts por fecha (más recientes primero) asumiendo formato YYYY-MM-DD o parseable
-  // Si no, lo dejamos en el orden en que se leen. Para un blog simple es suficiente por ahora.
+  // Ordenar posts por fecha (más recientes primero)
+  allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // Generar HTML para la lista de posts en el index
-  const postsListHTML = posts.map(post => `
-    <div class="blog-card" onclick="window.location.href='/blog/${post.slug}/'">
-      <img src="${post.image}" alt="${post.title}" class="blog-poster" loading="lazy">
-      <div class="blog-info" style="padding: 1.5rem;">
-        <div style="font-size: 0.8rem; color: var(--accent-orange); margin-bottom: 0.5rem; font-weight: 600;">${post.date}</div>
-        <h3 class="blog-title" style="margin-bottom: 0.5rem; font-size: 1.25rem;">${post.title}</h3>
-        <p class="blog-desc" style="color: var(--text-gray); font-size: 0.95rem; line-height: 1.5;">${post.description}</p>
+  // 1. Generar páginas individuales
+  allPosts.forEach(post => {
+    const htmlContent = marked.parse(post.body);
+    
+    let finalHTML = templateHTML
+      .replace(/{{TITLE}}/g, post.title)
+      .replace(/{{DESCRIPTION}}/g, post.description)
+      .replace(/{{DATE}}/g, post.displayDate)
+      .replace(/{{IMAGE}}/g, post.image)
+      .replace(/{{CATEGORY}}/g, post.category)
+      .replace(/{{AUTHOR}}/g, post.author)
+      .replace(/{{AUTHOR_IMG}}/g, post.authorImg)
+      .replace(/{{READ_TIME}}/g, post.readTime)
+      .replace(/{{CONTENT}}/g, htmlContent);
+
+    const postDir = path.join(blogDir, post.slug);
+    if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
+    fs.writeFileSync(path.join(postDir, 'index.html'), finalHTML);
+    console.log(`  ✅ Generado: blog/${post.slug}/index.html`);
+  });
+
+  // 2. Generar el INDEX con el nuevo diseño
+  if (allPosts.length > 0) {
+    const hero = allPosts[0];
+    const rest = allPosts.slice(1);
+
+    // Formatear el título del Hero para resaltar palabras (la última o la más larga)
+    // En la imagen, "Mesías" está en naranja e itálica.
+    // Haremos algo similar: envolver la última palabra en <span class="gradient-text italic">
+    const titleWords = hero.title.split(' ');
+    const lastWord = titleWords.pop();
+    const heroTitleFormatted = `${titleWords.join(' ')} <span class="accent-italic">${lastWord}</span>`;
+
+    const heroHTML = `
+      <section class="blog-hero" data-category="${hero.category}" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--bg-dark)), url('${hero.image}');">
+        <div class="container">
+          <div class="hero-content">
+            <div class="hero-badges">
+              <span class="badge-category">${hero.category.toUpperCase()}</span>
+              <span class="badge-time">${hero.readTime}</span>
+            </div>
+            <h1 class="hero-title">${heroTitleFormatted}</h1>
+            <p class="hero-desc">${hero.description}</p>
+            <div class="hero-actions">
+              <a href="/blog/${hero.slug}/" class="btn-primary">Leer artículo completo →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    `;
+
+    const gridHTML = rest.map(post => `
+      <div class="blog-card" data-category="${post.category}" onclick="window.location.href='/blog/${post.slug}/'">
+        <div class="card-img-wrapper">
+          <img src="${post.image}" alt="${post.title}" class="card-img" loading="lazy">
+          <span class="card-badge">${post.category.toUpperCase()}</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">${post.title}</h3>
+          <p class="card-desc">${post.description}</p>
+          <div class="card-footer">
+            <div class="author">
+              <img src="${post.authorImg}" alt="${post.author}" class="author-img">
+              <span class="author-name">${post.author}</span>
+            </div>
+            <span class="post-date">Hace ${calculateRelativeDate(post.date)}</span>
+          </div>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
 
-  // Inyectar en index.html
-  // Buscamos el bloque <!-- BLOG_POSTS_START --> ... <!-- BLOG_POSTS_END -->
-  const regex = /<!-- BLOG_POSTS_START -->[\s\S]*<!-- BLOG_POSTS_END -->/;
-  if (regex.test(indexHTML)) {
-    indexHTML = indexHTML.replace(regex, `<!-- BLOG_POSTS_START -->\n<div class="explore-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">\n${postsListHTML}\n</div>\n<!-- BLOG_POSTS_END -->`);
+    // Inyectar Hero
+    const heroRegex = /<!-- HERO_POST_START -->[\s\S]*<!-- HERO_POST_END -->/;
+    if (heroRegex.test(indexHTML)) {
+      indexHTML = indexHTML.replace(heroRegex, `<!-- HERO_POST_START -->\n${heroHTML}\n<!-- HERO_POST_END -->`);
+    }
+
+    // Inyectar Grid
+    const gridRegex = /<!-- BLOG_POSTS_START -->[\s\S]*<!-- BLOG_POSTS_END -->/;
+    if (gridRegex.test(indexHTML)) {
+      const gridWrapper = `
+<!-- BLOG_POSTS_START -->
+<div class="blog-grid">
+  <div class="empty-state" id="no-results">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px; opacity: 0.6; color: var(--accent-orange);"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <h3>Próximamente más contenido</h3>
+    <p>Estamos preparando las mejores crónicas para esta categoría. ¡Vuelve pronto!</p>
+  </div>
+  ${gridHTML}
+</div>
+<!-- BLOG_POSTS_END -->`;
+      indexHTML = indexHTML.replace(gridRegex, gridWrapper);
+    }
+
     fs.writeFileSync(indexPath, indexHTML);
-    console.log('Actualizado: blog/index.html');
-  } else {
-    console.log('No se encontró el marcador <!-- BLOG_POSTS_START --> en blog/index.html');
+    console.log('  ✨ Actualizado: blog/index.html');
   }
+}
+
+function calculateRelativeDate(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  if (days === 0) return 'hoy';
+  if (days === 1) return 'ayer';
+  if (days < 7) return `${days} días`;
+  if (days < 30) return `${Math.floor(days / 7)} semanas`;
+  return `${Math.floor(days / 30)} meses`;
 }
 
 buildBlog();

@@ -5,104 +5,196 @@
     <link rel="icon" type="image/png" href="/favicon.png?v=5" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orden para ver La guerra de las galaxias - – Guía Cronológica Completa | Blog Orden para ver</title>
-    <meta name="description" content="¿En qué orden ver las películas de La guerra de las galaxias -? Guía completa con el orden cronológico definitivo, actualizada a 2026.">
+    <title>Orden para ver Star Wars - Guía Cronológica Completa | Blog Orden para ver</title>
+    <meta name="description" content="¿En qué orden ver las películas de Star Wars? Guía completa con el orden cronológico definitivo, actualizada a 2026.">
     
     <link rel="stylesheet" href="/src/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        .article-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 100px 20px 60px;
+        :root {
+            --bg-dark: #07070a;
+            --accent-orange: #ff8c5a;
+            --text-muted: #a0a0b0;
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
-        .article-header {
-            text-align: center;
-            margin-bottom: 40px;
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
         }
-        .article-date {
-            color: var(--accent-orange);
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            display: block;
+
+        .article-hero {
+            position: relative;
+            height: 60vh;
+            min-height: 400px;
+            display: flex;
+            align-items: flex-end;
+            background-size: cover;
+            background-position: center;
+            padding-bottom: 60px;
+            margin-top: -80px;
         }
-        .article-title {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            line-height: 1.2;
+
+        .article-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), var(--bg-dark));
         }
-        .article-hero-img {
+
+        .hero-container {
+            position: relative;
+            z-index: 2;
             width: 100%;
-            height: auto;
-            max-height: 450px;
-            object-fit: cover;
-            border-radius: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .category-tag {
+            background: rgba(255, 140, 90, 0.2);
+            color: var(--accent-orange);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .read-time {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .article-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .article-body-wrapper {
+            max-width: 800px;
+            margin: 40px auto 100px;
+            padding: 0 20px;
+        }
+
+        .author-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 40px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
         }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--accent-orange);
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .pub-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
         .article-content {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             line-height: 1.8;
-            color: var(--text-gray);
+            color: #d1d1e0;
         }
+
         .article-content h2 {
             color: white;
             font-size: 2rem;
-            margin: 40px 0 20px;
             font-weight: 700;
+            margin: 50px 0 24px;
         }
+
         .article-content h3 {
             color: white;
             font-size: 1.5rem;
-            margin: 30px 0 15px;
             font-weight: 600;
+            margin: 40px 0 20px;
         }
+
         .article-content p {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
-        .article-content ul, .article-content ol {
-            margin-bottom: 20px;
-            padding-left: 20px;
-        }
-        .article-content li {
-            margin-bottom: 10px;
-        }
+
         .article-content strong {
             color: white;
         }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--accent-orange);
+            margin: 40px 0;
+            padding: 20px 30px;
+            background: rgba(255, 140, 90, 0.05);
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #fff;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 24px;
+            padding-left: 20px;
+        }
+
+        .article-content li {
+            margin-bottom: 12px;
+        }
+
         .article-content a {
             color: var(--accent-orange);
             text-decoration: none;
             border-bottom: 1px dashed var(--accent-orange);
+            transition: 0.2s;
         }
+
         .article-content a:hover {
             border-bottom-style: solid;
+            background: rgba(255, 140, 90, 0.1);
         }
-        .article-content blockquote {
-            border-left: 4px solid var(--accent-orange);
-            margin: 30px 0;
-            padding: 20px;
-            background: rgba(255,140,90,0.05);
-            border-radius: 0 10px 10px 0;
-            font-style: italic;
+
+        .back-nav {
+            margin-bottom: 40px;
         }
-        .back-link {
+
+        .btn-back {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: var(--text-gray);
+            color: var(--text-muted);
             text-decoration: none;
             font-weight: 600;
-            margin-bottom: 40px;
-            transition: var(--transition);
+            font-size: 0.9rem;
+            transition: 0.2s;
         }
-        .back-link:hover {
+
+        .btn-back:hover {
             color: var(--accent-orange);
         }
     </style>
@@ -110,22 +202,34 @@
 <body>
     <app-header></app-header>
 
-    <main class="article-container">
-        <a href="/blog/" class="back-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            Volver al Blog
-        </a>
+    <header class="article-hero" style="background-image: url('https://images.unsplash.com/photo-1547700055-b61cacebece9?q=80&w=2070&auto=format&fit=crop');">
+        <div class="hero-container">
+            <div class="article-meta">
+                <span class="category-tag">Análisis de saga</span>
+                <span class="read-time">12 min de lectura</span>
+            </div>
+            <h1 class="article-title">Orden para ver Star Wars - Guía Cronológica Completa</h1>
+        </div>
+    </header>
 
-        <article>
-            <header class="article-header">
-                <span class="article-date">26/4/2026</span>
-                <h1 class="article-title">Orden para ver La guerra de las galaxias - – Guía Cronológica Completa</h1>
-            </header>
+    <main class="article-body-wrapper">
+        <nav class="back-nav">
+            <a href="/blog/" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                Volver a las Crónicas
+            </a>
+        </nav>
 
-            <img src="https://via.placeholder.com/800x400/1a1a2e/ff8c5a?text=La%20guerra%20de%20las%20galaxias%20-" alt="Orden para ver La guerra de las galaxias - – Guía Cronológica Completa" class="article-hero-img">
+        <div class="author-box">
+            <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-avatar">
+            <div class="author-info">
+                <span class="author-name">Paula Quintana</span>
+                <span class="pub-date">Publicado el 26/4/2026</span>
+            </div>
+        </div>
 
-            <div class="article-content">
-                <p>La galaxia muy, muy lejana siempre ha fascinado a millones de fans alrededor del mundo. <strong>Star Wars</strong> no es solo una saga cinematográfica, sino un verdadero fenómeno cultural que ha marcado generaciones. Desde su debut en 1977, con “La guerra de las galaxias”, la historia de Luke Skywalker, la princesa Leia y el temido Darth Vader ha capturado corazones y mentes. Pero, si eres nuevo en esta épica aventura galáctica o simplemente quieres disfrutar de la saga de la mejor manera, es fundamental conocer el <strong>orden para ver Star Wars</strong>.</p>
+        <article class="article-content">
+            <p>La galaxia muy, muy lejana siempre ha fascinado a millones de fans alrededor del mundo. <strong>Star Wars</strong> no es solo una saga cinematográfica, sino un verdadero fenómeno cultural que ha marcado generaciones. Desde su debut en 1977, con “La guerra de las galaxias”, la historia de Luke Skywalker, la princesa Leia y el temido Darth Vader ha capturado corazones y mentes. Pero, si eres nuevo en esta épica aventura galáctica o simplemente quieres disfrutar de la saga de la mejor manera, es fundamental conocer el <strong>orden para ver Star Wars</strong>.</p>
 <p>En este artículo, te guiaré a través de la cronología completa de <strong>Star Wars</strong>, explicándote la importancia de cada película en el contexto de la saga. Ya sea que estés a punto de sumergirte por primera vez en este universo o que desees revivir las emociones, seguir el orden correcto puede marcar la diferencia en tu experiencia. Así que, sin más preámbulos, ¡prepárate para saltar al hiperespacio!</p>
 <h2>Orden cronológico completo</h2>
 <ol>
@@ -163,7 +267,6 @@
 <h2>Conclusión</h2>
 <p>Ahora que conoces el <strong>orden para ver Star Wars</strong>, estás listo para sumergirte en una de las sagas más queridas de la historia del cine. Cada película ofrece una experiencia única que, vista en el orden correcto, se convierte en una travesía épica a través de la lucha entre el bien y el mal, la redención y la esperanza. No olvides visitar <a href="https://ordenparaver.com/contenidos/">Orden para ver</a> para más guías sobre el orden cronológico de tus sagas y series favoritas. ¡Que la Fuerza te acompañe!</p>
 
-            </div>
         </article>
     </main>
 
