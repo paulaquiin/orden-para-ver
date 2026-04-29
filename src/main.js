@@ -1,4 +1,4 @@
-import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders, fetchMovieDetails, fetchTVCredits } from './tmdb.js';
+import { fetchTMDBDetails, getImageUrl, searchTMDB, searchCollectionTMDB, fetchCollectionDetails, fetchWatchProviders, fetchMovieDetails, fetchTVCredits, fetchMovieCredits } from './tmdb.js';
 import './components.js';
 
 // Initialize the app
@@ -119,34 +119,52 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (movieId) {
-      const movieData = await fetchMovieDetails(movieId);
-      if (movieData && movieData.id) {
-        // Truco: si pertenece a una colección, saltamos a la colección directamente
-        if (movieData.belongs_to_collection) {
-          window.location.search = `?collection_id=${movieData.belongs_to_collection.id}`;
-          return;
+      // Soporte para Mega-Franquicias o Películas Unidas (múltiples IDs separados por coma)
+      const ids = movieId.split(',');
+      let allMovies = [];
+
+      for (const id of ids) {
+        const movieData = await fetchMovieDetails(id);
+        if (movieData && movieData.id) {
+          // Si es un ID único y pertenece a una colección, saltamos a la colección directamente
+          if (ids.length === 1 && movieData.belongs_to_collection) {
+            window.location.search = `?collection_id=${movieData.belongs_to_collection.id}`;
+            return;
+          }
+
+          if (!pageTitle) {
+            pageTitle = ids.length > 1 ? movieData.title.split(':')[0].trim() + ' (Saga)' : movieData.title;
+            pageSummary = movieData.overview || `Detalles de la película ${movieData.title}.`;
+          }
+
+          const providersData = await fetchWatchProviders('movie', movieData.id);
+          let flatrateES = [];
+          if (providersData && providersData.results && providersData.results.ES) {
+            let rawProviders = providersData.results.ES.flatrate || [];
+            flatrateES = rawProviders.filter(p => !p.provider_name.toLowerCase().includes('amazon channel'));
+          }
+
+          allMovies.push({
+            title: movieData.title,
+            releaseYear: movieData.release_date ? movieData.release_date.substring(0, 4) : '',
+            description: movieData.overview || 'Sin descripción disponible.',
+            poster: getImageUrl(movieData.poster_path),
+            fallbackType: 'Película',
+            dotColor: 'orange',
+            rawDate: movieData.release_date || '',
+            providers: flatrateES
+          });
         }
+      }
 
-        pageTitle = movieData.title;
-        pageSummary = movieData.overview || `Detalles de la película ${movieData.title}.`;
-
-        const providersData = await fetchWatchProviders('movie', movieData.id);
-        let flatrateES = [];
-        if (providersData && providersData.results && providersData.results.ES) {
-          let rawProviders = providersData.results.ES.flatrate || [];
-          flatrateES = rawProviders.filter(p => !p.provider_name.toLowerCase().includes('amazon channel'));
-        }
-
-        rawItems = [{
-          title: movieData.title,
-          releaseYear: movieData.release_date ? movieData.release_date.substring(0, 4) : '',
-          description: movieData.overview || 'Sin descripción disponible.',
-          poster: getImageUrl(movieData.poster_path),
-          fallbackType: 'Película',
-          dotColor: 'orange',
-          rawDate: movieData.release_date || '',
-          providers: flatrateES
-        }];
+      if (allMovies.length > 0) {
+        // Ordenar películas por fecha de estreno
+        allMovies.sort((a, b) => {
+          const dateA = new Date(a.rawDate || '9999-12-31');
+          const dateB = new Date(b.rawDate || '9999-12-31');
+          return dateA - dateB;
+        });
+        rawItems = allMovies;
       }
     } else if (collectionId) {
       // Soporte para Mega-Franquicias (Múltiples IDs separados por coma)
@@ -156,13 +174,54 @@ document.addEventListener('DOMContentLoaded', async () => {
       for (const id of ids) {
         const collectionData = await fetchCollectionDetails(id);
         if (collectionData && collectionData.id) {
-          if (!pageTitle) { // Toma el título y resumen de la primera colección principal
-            // Si hay varias, le damos un nombre de Mega-Franquicia
+          if (!pageTitle) {
             pageTitle = ids.length > 1 ? collectionData.name.replace(/Collection|Colección/gi, '').trim() + ' (Mega-Franquicia)' : collectionData.name;
             pageSummary = collectionData.overview || `Explora la saga completa de ${collectionData.name}.`;
           }
           if (collectionData.parts) {
             allParts = allParts.concat(collectionData.parts);
+          }
+
+          // BÚSQUEDA INTELIGENTE PARA AMPLIAR LA COLECCIÓN (Prequelas/Secuelas no listadas)
+          const searchBase = collectionData.name.replace(/Collection|Colección/gi, '').trim();
+          const extraResults = await searchTMDB(searchBase);
+          
+          if (extraResults?.results) {
+            // Obtenemos una muestra de actores de la colección original para comparar
+            const samplePart = collectionData.parts?.[0];
+            let collectionActors = new Set();
+            if (samplePart) {
+              const credits = await fetchMovieCredits(samplePart.id);
+              collectionActors = new Set((credits?.cast || []).slice(0, 20).map(a => a.id));
+            }
+
+            for (const res of extraResults.results) {
+              if (res.media_type !== 'movie') continue;
+              // Si ya está en la colección, ignorar
+              if (collectionData.parts?.find(p => p.id === res.id)) continue;
+
+              const title = (res.title || '').toLowerCase();
+              const base = searchBase.toLowerCase();
+              
+              // Criterio: Empieza por el mismo nombre significativo o comparte actores
+              const isNameMatch = title.startsWith(base.substring(0, 10));
+              
+              let sharesActors = false;
+              if (!isNameMatch) {
+                const resCredits = await fetchMovieCredits(res.id);
+                const resActors = (resCredits?.cast || []).slice(0, 20).map(a => a.id);
+                for (const actId of resActors) {
+                  if (collectionActors.has(actId)) {
+                    sharesActors = true;
+                    break;
+                  }
+                }
+              }
+
+              if (isNameMatch || sharesActors) {
+                allParts.push(res);
+              }
+            }
           }
         }
       }
@@ -274,7 +333,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       if (ctxEl) {
         if (tvId) ctxEl.textContent = 'SERIE DE TELEVISIÓN';
-        else if (movieId) ctxEl.textContent = 'PELÍCULA INDEPENDIENTE';
         else ctxEl.textContent = 'CRONOLOGÍA OFICIAL';
       }
 
@@ -469,10 +527,69 @@ document.addEventListener('DOMContentLoaded', async () => {
           }
         } else {
           const movieDetails = await fetchTMDBDetails('movie', res.id);
+          
           if (movieDetails && movieDetails.belongs_to_collection) {
             window.location.href = `/franchise/?collection_id=${movieDetails.belongs_to_collection.id}`;
-          } else {
-            window.location.href = `/franchise/?movie_id=${res.id}`;
+          } else if (movieDetails) {
+            // BÚSQUEDA INTELIGENTE DE SAGAS PARA PELÍCULAS
+            // 1. Intentamos extraer un nombre base (antes de ":" o los primeros 3 términos)
+            let queryBase = (movieDetails.title || movieDetails.original_title).split(':')[0].split(' - ')[0].trim();
+            
+            // Si el nombre base es muy largo (más de 3 palabras), probamos a acortarlo para la búsqueda
+            const words = queryBase.split(' ');
+            if (words.length > 3) {
+              queryBase = words.slice(0, 3).join(' ');
+            }
+
+            const multi = await searchTMDB(queryBase);
+            const baseCredits = await fetchMovieCredits(movieDetails.id);
+            const baseActors = new Set((baseCredits?.cast || []).slice(0, 30).map(actor => actor.id));
+
+            const candidatePromises = multi.results.map(async m => {
+              if (m.media_type !== 'movie') return null;
+              if (m.id === movieDetails.id) return m;
+
+              const titleA = (movieDetails.title || '').toLowerCase();
+              const titleB = (m.title || '').toLowerCase();
+              
+              // CRITERIO 1: Comparten Nombre Base significativo (ej: "Los Juegos del Hambre")
+              // Si ambas empiezan igual y la coincidencia es de más de 10 caracteres, es muy probable que sea la misma saga
+              const minLength = 10;
+              const commonPrefix = titleA.substring(0, minLength);
+              const isNameMatch = titleB.startsWith(commonPrefix) || titleA.startsWith(titleB.substring(0, minLength));
+
+              // CRITERIO 2: Comparten Actores
+              const mCredits = await fetchMovieCredits(m.id);
+              const mActors = (mCredits?.cast || []).slice(0, 30).map(a => a.id);
+              let commonActors = 0;
+              for (let id of mActors) {
+                if (baseActors.has(id)) commonActors++;
+              }
+              
+              // UNIMOS SI:
+              // - Tienen 2+ actores en común (Saga confirmada)
+              // - Tienen 1 actor + coincidencia de nombre parcial
+              // - Tienen nombre base idéntico (Prequelas/Secuelas sin actores comunes)
+              if (commonActors >= 2 || (commonActors >= 1 && isNameMatch) || (isNameMatch && queryBase.length > 8)) {
+                return m;
+              }
+              
+              return null;
+            });
+
+            const sameUniverseRaw = await Promise.all(candidatePromises);
+            const sameUniverse = sameUniverseRaw.filter(Boolean);
+
+            // Eliminar duplicados por ID
+            const uniqueMap = new Map();
+            sameUniverse.forEach(m => uniqueMap.set(m.id, m));
+            const finalUniverse = Array.from(uniqueMap.values());
+
+            if (finalUniverse.length > 1) {
+              window.location.href = `/franchise/?movie_id=${finalUniverse.map(m => m.id).join(',')}`;
+            } else {
+              window.location.href = `/franchise/?movie_id=${movieDetails.id}`;
+            }
           }
         }
       };

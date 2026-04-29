@@ -84,6 +84,18 @@ export async function fetchTVCredits(id) {
   }
 }
 
+export async function fetchMovieCredits(id) {
+  try {
+    const url = `https://api.themoviedb.org/3/movie/${id}/credits?language=es-ES`;
+    const response = await fetch(url, OPTIONS);
+    if (!response.ok) throw new Error('Network response was not ok');
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching Movie credits:", error);
+    return null;
+  }
+}
+
 export async function discoverTMDB(type, params = {}) {
   try {
     const queryParams = new URLSearchParams({
