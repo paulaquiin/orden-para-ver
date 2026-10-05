@@ -24,7 +24,7 @@
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
@@ -32,122 +32,118 @@
       <!-- Header / Nav -->
       <app-header></app-header>
 
-      <!-- Main Content -->
-      <main id="home-main">
-        <!-- Hero Section -->
-        <section class="hero">
-          <div class="container">
-            <h1 class="hero-title">Domina el <span class="gradient-text">Orden Cronológico</span>.</h1>
-            <div class="search-container">
-              <input type="text" placeholder="¿Qué franquicia quieres ver en orden?" class="search-input" />
-              <button class="search-btn">Buscar</button>
-              <div id="searchResults" class="search-results-overlay"></div>
+      <main id="home-main" class="home-refresh">
+        <section class="home-hero">
+          <div class="container home-hero-grid">
+            <div class="home-hero-copy">
+              <span class="eyebrow type-label">TU PRÓXIMA HISTORIA EMPIEZA AQUÍ</span>
+              <h1 class="type-display-xl">Descubre cada universo en el <span>orden correcto.</span></h1>
+              <p class="type-body-lg">Guías claras para ver películas, series y sagas sin perderte nada por el camino.</p>
+
+              <div class="search-container home-search">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+                <input type="text" placeholder="Busca sagas, películas o series..." class="search-input" aria-label="Buscar una saga, película o serie" />
+                <button class="search-btn">Buscar</button>
+                <div id="searchResults" class="search-results-overlay"></div>
+              </div>
+
+              <div class="quick-searches" aria-label="Búsquedas populares">
+                <button class="quick-chip" data-query="Harry Potter">Harry Potter</button>
+                <button class="quick-chip" data-query="Marvel">Marvel</button>
+                <button class="quick-chip" data-query="Star Wars">Star Wars</button>
+                <button class="quick-chip" data-query="El Señor de los Anillos">El Señor de los Anillos</button>
+              </div>
             </div>
-            <p class="hero-stats">MÁS DE 500 UNIVERSOS CINEMATOGRÁFICOS DISPONIBLES</p>
+
+            <a class="hero-visual" href="/franchise/?collection_id=86311" aria-label="Explorar la cronología de Los Vengadores">
+              <img src="/images/mcu-banner.png" alt="Universo fantástico con un portal entre mundos" />
+              <span class="hero-visual-shade"></span>
+              <span class="hero-visual-label">GUÍA DESTACADA</span>
+              <span class="hero-visual-title">El universo Marvel,<br />de principio a fin</span>
+              <span class="hero-visual-action">Explorar cronología <b>↗</b></span>
+            </a>
           </div>
         </section>
 
-      <!-- Trending Timelines Section -->
-      <section class="trending">
-        <div class="container">
-          <div class="section-header">
-            <div class="section-title-group">
-              <h2 class="section-title">Cronologías en Tendencia</h2>
-              <p class="section-subtitle">Las sagas más consultadas de la semana. Listas actualizadas con los últimos estrenos.</p>
-            </div>
-            <div class="carousel-nav">
-              <button class="nav-btn prev">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
-              <button class="nav-btn next">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-              </button>
+        <section class="format-section">
+          <div class="container format-grid">
+            <a class="format-card" href="/libros/">
+              <span class="format-icon books-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H11v17H7.5A3.5 3.5 0 0 0 4 22V5.5Z"/><path d="M20 5.5A3.5 3.5 0 0 0 16.5 2H13v17h3.5A3.5 3.5 0 0 1 20 22V5.5Z"/></svg></span>
+              <span><strong>Libros</strong><small>Sagas y novelas</small></span><b>→</b>
+            </a>
+            <a class="format-card" href="/explorar/?type=movie">
+              <span class="format-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 6l2-3m4 3 2-3m4 3 2-3"/></svg></span>
+              <span><strong>Películas</strong><small>Del estreno más reciente</small></span><b>→</b>
+            </a>
+            <a class="format-card" href="/explorar/?type=tv">
+              <span class="format-icon tv-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m8 2 4 3 4-3M8 22h8"/></svg></span>
+              <span><strong>Series</strong><small>Temporadas y spin-offs</small></span><b>→</b>
+            </a>
+            <a class="format-card" href="/explorar/?type=animation">
+              <span class="format-icon animation-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/><path d="M4 4h3M17 4h3M4 20h3M17 20h3M4 8v3M4 13v3M20 8v3M20 13v3"/></svg></span>
+              <span><strong>Animación</strong><small>Historias para todos</small></span><b>→</b>
+            </a>
+          </div>
+        </section>
+
+        <section class="discovery-section">
+          <div class="container discovery-grid">
+            <article class="start-card">
+              <div class="block-heading"><span>✦</span><h2>Empieza por aquí</h2></div>
+              <div class="start-card-body">
+                <a class="start-cover" href="/franchise/?collection_id=86311"><img src="/images/mcu-banner.png" alt="Saga de Los Vengadores" /></a>
+                <div class="start-content">
+                  <div class="start-title-row"><h3>Los Vengadores</h3><span>Imprescindible</span></div>
+                  <p>El recorrido esencial por la saga que convirtió a Marvel en un universo conectado.</p>
+                  <ol class="route-preview">
+                    <li><b>1</b><span>Capitana Marvel</span><small>1995</small></li>
+                    <li><b>2</b><span>Iron Man</span><small>2010</small></li>
+                    <li><b>3</b><span>El increíble Hulk</span><small>2011</small></li>
+                    <li><b>4</b><span>Iron Man 2</span><small>2011</small></li>
+                    <li><b>5</b><span>Thor</span><small>2011</small></li>
+                  </ol>
+                  <a class="route-cta" href="/franchise/?collection_id=86311">Ver guía completa <span>→</span></a>
+                </div>
+              </div>
+            </article>
+
+            <aside class="home-sidebar">
+              <section class="sidebar-card">
+                <div class="sidebar-heading"><h2>↗ Tendencias</h2><a href="/contenidos/">Ver todas</a></div>
+                <div class="ranking-grid">
+                  <a href="/franchise/?tv_id=95396"><b>1</b><img src="/images/novedades_one_piece.png" alt="" /><span>One Piece</span><em>↗</em></a>
+                  <a href="/franchise/?collection_id=10"><b>2</b><img src="/images/star-wars.png" alt="" /><span>Star Wars</span><em>↗</em></a>
+                  <a href="/franchise/?collection_id=86311"><b>3</b><img src="/images/mcu-banner.png" alt="" /><span>Marvel</span><em>↗</em></a>
+                  <a href="/franchise/?collection_id=263"><b>4</b><img src="/images/dc-universe.png" alt="" /><span>Batman</span><em>↗</em></a>
+                </div>
+              </section>
+
+              <section class="sidebar-card popular-card">
+                <div class="sidebar-heading"><h2>▣ Guías populares</h2><a href="/contenidos/">Ver todas</a></div>
+                <a href="/franchise/?collection_id=10"><img src="/images/star-wars.png" alt="" /><span>Cronología completa de Star Wars</span><small>12 títulos</small></a>
+                <a href="/franchise/?tv_id=5724"><img src="/images/dr-who.png" alt="" /><span>Doctor Who en orden</span><small>Guía completa</small></a>
+                <a href="/franchise/?collection_id=263"><img src="/images/dc-universe.png" alt="" /><span>Las películas de Batman</span><small>11 títulos</small></a>
+              </section>
+
+              <a class="discovery-cta" href="/descubrir/">
+                <span class="compass">⌁</span>
+                <span><strong>¿No sabes por dónde empezar?</strong><small>Cuéntanos qué te gusta y crearemos tu ruta.</small></span>
+                <b>Comenzar</b>
+              </a>
+            </aside>
+          </div>
+        </section>
+
+        <section class="viewing-orders">
+          <div class="container">
+            <div class="orders-intro"><span class="eyebrow type-label">TÚ ELIGES EL VIAJE</span><h2 class="type-display-lg">Dos formas de vivir cada historia</h2></div>
+            <div class="orders-grid">
+              <article><span>01</span><h3>Orden de estreno</h3><p>Vívela como llegó al público, conservando sus giros, sorpresas y evolución original.</p></article>
+              <article><span>02</span><h3>Orden cronológico</h3><p>Sigue los acontecimientos dentro del universo y conecta cada causa con su consecuencia.</p></article>
             </div>
           </div>
-
-          <div class="timeline-grid">
-            <!-- Marvel Card (Main) -->
-            <div class="card card-large mcu-card" onclick="window.location.href='/franchise/?collection_id=86311'" style="cursor: pointer;">
-              <div class="card-badges">
-                <span class="badge badge-orange">CRONOLÓGICO</span>
-                <span class="badge badge-dark">SAGA AVENGERS</span>
-              </div>
-              <div class="card-content">
-                <h3 class="card-title">Saga de Los Vengadores</h3>
-                <p class="card-desc">Desde el inicio de la iniciativa hasta el enfrentamiento final.</p>
-                <button class="btn btn-glass" onclick="window.location.href='/franchise/?collection_id=86311'; event.stopPropagation();">Ver Cronología</button>
-              </div>
-            </div>
-
-            <!-- Star Wars and DC Verticals -->
-            <div class="card card-vertical star-wars-card" onclick="window.location.href='/franchise/?collection_id=10'" style="cursor: pointer;">
-              <div class="card-badges">
-                <span class="badge badge-peach">ORDEN DE ESTRENO</span>
-              </div>
-              <div class="card-content">
-                <h3 class="card-title">Star Wars</h3>
-                <a href="/franchise/?collection_id=10" class="card-link" onclick="event.stopPropagation();">Explorar Saga <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-left:4px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-              </div>
-            </div>
-
-            <div class="card card-vertical dc-card" onclick="window.location.href='/franchise/?collection_id=263'" style="cursor: pointer;">
-              <div class="card-badges">
-                <span class="badge badge-dark">UPDATED</span>
-              </div>
-              <div class="card-content">
-                <h3 class="card-title">Saga Batman</h3>
-                <a href="/franchise/?collection_id=263" class="card-link" onclick="event.stopPropagation();">Explorar Saga <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-left:4px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Doctor Who and Prompt Card -->
-          <div class="timeline-subgrid">
-             <div class="card card-horizontal dr-who-card" onclick="window.location.href='/franchise/?tv_id=5724'" style="cursor:pointer;">
-                <div class="card-content">
-                  <h3 class="card-title">Doctor Who</h3>
-                  <p class="card-desc">La guía definitiva de regeneraciones y saltos temporales.</p>
-                </div>
-             </div>
-             <div class="card card-promo" onclick="window.location.href='/descubrir/'" style="cursor:pointer;">
-                <div class="card-promo-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-orange)"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                </div>
-                <div class="card-promo-text">
-                  <h3>¿No sabes por dónde empezar?</h3>
-                  <p>Usa nuestro generador de rutas personalizadas basado en tus gustos.</p>
-                </div>
-                <span class="promo-arrow">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
-                </span>
-             </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-      <!-- Ways to see the world section -->
-       <section class="philosophies">
-         <div class="container">
-           <h2 class="section-title-center">Dos formas de ver el mundo</h2>
-           <div class="philosophies-grid">
-             <div class="philosophy-item">
-               <div class="phi-icon icon-orange">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-               </div>
-               <h3>ORDEN DE ESTRENO</h3>
-               <p>Experimenta las historias tal y como los creadores las presentaron al mundo. Conserva los giros de guion y la evolución técnica original.</p>
-             </div>
-             <div class="philosophy-item">
-               <div class="phi-icon icon-peach">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-               </div>
-               <h3>ORDEN CRONOLÓGICO</h3>
-               <p>Sigue la línea de tiempo real dentro de la ficción. Ideal para fans que quieren entender las causas y efectos absolutos de cada evento.</p>
-             </div>
-           </div>
-         </div>
-       </section>
+        </section>
+      </main>
 
        <!-- Footer -->
        <app-footer></app-footer>

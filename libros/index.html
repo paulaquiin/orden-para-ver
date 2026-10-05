@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=5" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orden de sagas de libros | Orden para ver</title>
+    <meta name="description" content="Encuentra sagas, trilogías y series de libros en su orden correcto de lectura." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Orden de sagas de libros | Orden para ver" />
+    <meta property="og:description" content="Descubre el orden de lectura de tus sagas y trilogías favoritas." />
+    <meta property="og:image" content="/orden-para-ver-og.jpg" />
+    <meta property="og:url" content="https://ordenparaver.com/libros/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/orden-para-ver-og.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <app-header></app-header>
+
+    <main class="books-page">
+      <section class="books-hero">
+        <div class="books-hero-glow" aria-hidden="true"></div>
+        <div class="container books-hero-layout">
+          <div class="books-hero-copy">
+            <span class="books-kicker type-label">NUEVA BIBLIOTECA</span>
+            <h1 class="type-display-xl">Encuentra el <span class="gradient-text">orden de lectura</span>.</h1>
+            <p class="type-body-lg">Busca una saga, trilogía o universo literario y recorre sus libros entrega a entrega.</p>
+
+            <form class="books-search" id="booksSearchForm" role="search">
+              <label class="sr-only" for="booksSearchInput">Buscar una saga de libros</label>
+              <span class="books-search-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              </span>
+              <input id="booksSearchInput" type="search" minlength="2" maxlength="100" autocomplete="off" placeholder="Ej. Harry Potter, Dune, Nacidos de la Bruma…" />
+              <button type="submit">Buscar saga</button>
+            </form>
+
+            <div class="books-suggestions" aria-label="Búsquedas sugeridas">
+              <span>Prueba con</span>
+              <button type="button" data-book-query="Harry Potter">Harry Potter</button>
+              <button type="button" data-book-query="Dune">Dune</button>
+              <button type="button" data-book-query="Mistborn">Nacidos de la Bruma</button>
+            </div>
+          </div>
+
+          <div class="books-hero-art" aria-hidden="true">
+            <div class="book-shape book-shape-back"><span>DUNE</span></div>
+            <div class="book-shape book-shape-middle"><span>LA SAGA</span></div>
+            <div class="book-shape book-shape-front">
+              <span class="book-shape-mark">01</span>
+              <strong>ORDEN<br />DE LECTURA</strong>
+              <small>Tu próxima historia empieza aquí</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="books-results-section">
+        <div class="container">
+          <div id="booksStatus" class="books-status" aria-live="polite"></div>
+          <div id="booksView">
+            <div class="books-empty-state">
+              <div class="books-empty-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <h2>Una biblioteca de universos por descubrir</h2>
+              <p>Escribe el nombre de una saga para ver sus libros principales en el orden recomendado.</p>
+              <div class="books-feature-list">
+                <span>Orden por entrega</span>
+                <span>Sin recopilatorios</span>
+                <span>Datos de Hardcover</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <app-footer></app-footer>
+    <app-modal></app-modal>
+
+    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/books.js"></script>
+  </body>
+</html>

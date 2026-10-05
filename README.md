@@ -10,6 +10,7 @@
 - **Generador de Rutas:** ¿No sabes por dónde empezar? Utiliza nuestro generador personalizado para encontrar tu próximo maratón.
 - **Búsqueda Avanzada:** Encuentra rápidamente cualquier saga o universo cinematográfico entre más de 500 opciones disponibles.
 - **Actualizaciones Constantes:** Mantente al día con los últimos estrenos y novedades de cada franquicia.
+- **Sagas literarias:** Busca series de libros y consulta sus entregas principales en orden de lectura mediante Hardcover.
 
 ## Tecnologías utilizadas
 
@@ -35,10 +36,32 @@ Si deseas ejecutar el proyecto en tu entorno local:
    npm run dev
    ```
 
+   La página de libros necesita las funciones locales de Cloudflare. Si ya
+   existe `.dev.vars`, añade allí `HARDCOVER_TOKEN`. Si no existe, copia
+   `.dev.vars.example` como `.dev.vars`, sustituye el valor de ejemplo y usa:
+
+   ```bash
+   npm run dev:ai
+   ```
+
+   Este comando genera la web y la sirve con las funciones de Cloudflare en
+   `http://127.0.0.1:8788`. Si cambias el código, detenlo y ejecútalo de nuevo
+   para reconstruir la versión local.
+
+   El secreto debe llamarse `HARDCOVER_TOKEN`. No uses el prefijo `VITE_` y no
+   subas el archivo `.dev.vars` al repositorio.
+
 3. Para construir la versión de producción:
    ```bash
    npm run build
    ```
+
+## Configuración de Hardcover en producción
+
+En Cloudflare, abre **Workers & Pages → tu proyecto → Settings → Variables and
+Secrets → Add**, crea `HARDCOVER_TOKEN`, marca el valor como secreto cifrado y
+vuelve a desplegar el proyecto. El navegador solo llama a `/api/hardcover`; el
+token nunca se envía al cliente.
 
 ---
 Hecho con ❤️ para amantes del cine y las series.

@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="container">
             <div class="timeline-container relative">
               <div class="timeline-line"></div>
-              <div style="text-align:center; color: white; padding: 2rem;">Sincronizando con TMDB...</div>
+              <div class="sync-message">Sincronizando...</div>
             </div>
           </div>
         </section>
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       timelineContainer.innerHTML = `
         <div class="timeline-line"></div>
-        <div style="text-align:center; color: white; padding: 2rem; font-family: 'Outfit', sans-serif;">Cargando saga y plataformas desde TMDB...</div>
+        <div class="sync-message">Sincronizando...</div>
       `;
     }
 
@@ -698,6 +698,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     searchInput.addEventListener('input', (e) => {
       debouncedSearch(e.target.value.trim(), searchBtn);
     });
+
+    document.querySelectorAll('.quick-chip[data-query]').forEach(chip => {
+      chip.addEventListener('click', () => {
+        searchInput.value = chip.dataset.query || '';
+        executeSearch(searchInput.value, searchBtn);
+      });
+    });
   }
 
   // Setup ALL Navbar Search Inputs (desktop + mobile)
@@ -926,5 +933,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 200);
   });
 });
-
-

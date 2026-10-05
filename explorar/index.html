@@ -50,15 +50,16 @@
             padding: 15px;
         }
         .explore-title {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: var(--type-card-title);
+            font-weight: var(--weight-bold);
+            line-height: var(--leading-heading);
             margin-bottom: 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .explore-meta {
-            font-size: 0.8rem;
+            font-size: var(--type-caption);
             color: var(--text-gray);
             display: flex;
             justify-content: space-between;
@@ -72,12 +73,17 @@
             gap: 4px;
         }
         .category-title {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: var(--type-page-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
+            letter-spacing: var(--tracking-display);
             margin-bottom: 10px;
         }
         .category-desc {
             color: var(--text-gray);
+            font-size: var(--type-body-lg);
+            line-height: var(--leading-body);
             margin-bottom: 40px;
             max-width: 600px;
         }

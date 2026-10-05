@@ -23,7 +23,9 @@
         body {
             background-color: var(--bg-dark);
             color: white;
-            font-family: 'Outfit', sans-serif;
+            font-family: var(--font-body);
+            font-size: var(--type-body);
+            line-height: var(--leading-body);
         }
 
         /* --- HERO SECTION --- */
@@ -55,21 +57,23 @@
             color: var(--accent-orange);
             padding: 4px 12px;
             border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-size: var(--type-label);
+            font-weight: var(--weight-bold);
+            letter-spacing: var(--tracking-label);
         }
 
         .badge-time {
             color: var(--text-muted);
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-size: var(--type-caption);
+            font-weight: var(--weight-medium);
         }
 
         .hero-title {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            line-height: 1.1;
-            font-weight: 800;
+            font-family: var(--font-display);
+            font-size: var(--type-display-lg);
+            line-height: var(--leading-display);
+            font-weight: var(--weight-regular);
+            letter-spacing: var(--tracking-display);
             margin-bottom: 24px;
         }
 
@@ -80,8 +84,8 @@
         }
 
         .hero-desc {
-            font-size: 1.2rem;
-            line-height: 1.6;
+            font-size: var(--type-body-lg);
+            line-height: var(--leading-body);
             color: var(--text-muted);
             margin-bottom: 40px;
             max-width: 600px;
@@ -97,7 +101,8 @@
             color: #000;
             padding: 14px 28px;
             border-radius: 12px;
-            font-weight: 700;
+            font-size: var(--type-body-sm);
+            font-weight: var(--weight-bold);
             text-decoration: none;
             transition: 0.3s;
         }
@@ -112,7 +117,8 @@
             color: white;
             padding: 14px 28px;
             border-radius: 12px;
-            font-weight: 600;
+            font-size: var(--type-body-sm);
+            font-weight: var(--weight-semibold);
             border: 1px solid var(--glass-border);
             cursor: pointer;
             transition: 0.3s;
@@ -144,8 +150,8 @@
             border: none;
             background: transparent;
             color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: var(--weight-semibold);
+            font-size: var(--type-body-sm);
             cursor: pointer;
             transition: 0.3s;
         }
@@ -164,15 +170,18 @@
         }
 
         .section-title {
-            font-size: 2rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: var(--type-section-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
+            letter-spacing: var(--tracking-display);
         }
 
         .view-all {
             color: var(--accent-orange);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: var(--weight-semibold);
+            font-size: var(--type-body-sm);
         }
 
         .blog-grid {
@@ -248,9 +257,9 @@
             backdrop-filter: blur(8px);
             padding: 4px 12px;
             border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 1px;
+            font-size: var(--type-label);
+            font-weight: var(--weight-bold);
+            letter-spacing: var(--tracking-label);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -262,9 +271,9 @@
         }
 
         .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            line-height: 1.4;
+            font-size: var(--type-card-title);
+            font-weight: var(--weight-bold);
+            line-height: var(--leading-heading);
             margin-bottom: 12px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -274,8 +283,8 @@
 
         .card-desc {
             color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: var(--type-body-sm);
+            line-height: var(--leading-body);
             margin-bottom: 24px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -306,13 +315,13 @@
         }
 
         .author-name {
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: var(--type-caption);
+            font-weight: var(--weight-medium);
             color: var(--text-muted);
         }
 
         .post-date {
-            font-size: 0.85rem;
+            font-size: var(--type-caption);
             color: var(--text-muted);
         }
 
@@ -334,15 +343,18 @@
         }
 
         .newsletter-title {
-            font-size: 2.5rem;
-            font-weight: 800;
+            font-family: var(--font-display);
+            font-size: var(--type-section-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
+            letter-spacing: var(--tracking-display);
             margin-bottom: 16px;
         }
 
         .newsletter-desc {
             color: var(--text-muted);
-            font-size: 1.1rem;
-            line-height: 1.6;
+            font-size: var(--type-body-lg);
+            line-height: var(--leading-body);
         }
 
         .newsletter-form {
@@ -367,7 +379,7 @@
             border-radius: 12px;
             color: white;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: var(--type-body);
         }
 
         .newsletter-btn {
@@ -376,7 +388,8 @@
             border: none;
             padding: 16px 32px;
             border-radius: 12px;
-            font-weight: 700;
+            font-size: var(--type-body-sm);
+            font-weight: var(--weight-bold);
             cursor: pointer;
             transition: 0.3s;
         }
@@ -387,7 +400,7 @@
         }
 
         .newsletter-legal {
-            font-size: 0.75rem;
+            font-size: var(--type-caption);
             color: var(--text-muted);
             margin-top: 8px;
         }
@@ -400,7 +413,7 @@
             }
 
             .hero-title {
-                font-size: 3rem;
+                font-size: var(--type-page-title);
             }
         }
     </style>
@@ -464,6 +477,14 @@
 
 
 
+
+
+
+
+
+
+
+
 <!-- BLOG_POSTS_START -->
 <div class="blog-grid">
   <div class="empty-state" id="no-results">
@@ -485,7 +506,7 @@
               <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-img">
               <span class="author-name">Paula Quintana</span>
             </div>
-            <span class="post-date">Hace hoy</span>
+            <span class="post-date">Hace 5 meses</span>
           </div>
         </div>
       </div>
@@ -503,7 +524,7 @@
               <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-img">
               <span class="author-name">Paula Quintana</span>
             </div>
-            <span class="post-date">Hace hoy</span>
+            <span class="post-date">Hace 5 meses</span>
           </div>
         </div>
       </div>
@@ -521,7 +542,7 @@
               <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-img">
               <span class="author-name">Paula Quintana</span>
             </div>
-            <span class="post-date">Hace hoy</span>
+            <span class="post-date">Hace 5 meses</span>
           </div>
         </div>
       </div>
@@ -539,7 +560,7 @@
               <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-img">
               <span class="author-name">Paula Quintana</span>
             </div>
-            <span class="post-date">Hace 3 días</span>
+            <span class="post-date">Hace 5 meses</span>
           </div>
         </div>
       </div>
@@ -557,7 +578,7 @@
               <img src="https://ui-avatars.com/api/?name=Paula+Quintana&background=ff8c5a&color=fff" alt="Paula Quintana" class="author-img">
               <span class="author-name">Paula Quintana</span>
             </div>
-            <span class="post-date">Hace 3 días</span>
+            <span class="post-date">Hace 5 meses</span>
           </div>
         </div>
       </div>
@@ -572,8 +593,8 @@
                     la cronología perfecta para tu próxima sesión de cine o series.</p>
             </div>
             <div class="newsletter-form" style="align-items: center;">
-                <a href="/descubrir/" class="btn-primary"
-                    style="padding: 18px 40px; font-size: 1.1rem; width: fit-content;">Descubrir ahora</a>
+                <a href="/descubrir/" class="btn-primary type-body-lg"
+                    style="padding: 18px 40px; width: fit-content;">Descubrir ahora</a>
                 <p class="newsletter-legal">Basado en análisis de géneros y tiempo disponible.</p>
             </div>
         </section>

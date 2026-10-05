@@ -6,7 +6,7 @@
   "scripts": {
     "predev": "node scripts/build-blog.js",
     "dev": "vite",
-    "dev:ai": "node scripts/build-blog.js && wrangler pages dev --compatibility-flag=nodejs_compat -- npx vite",
+    "dev:ai": "node scripts/build-blog.js && vite build && wrangler pages dev dist --compatibility-date=2026-05-01 --compatibility-flag=nodejs_compat",
     "prebuild": "node scripts/build-blog.js",
     "build": "vite build",
     "preview": "vite preview"

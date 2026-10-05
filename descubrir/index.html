@@ -16,13 +16,17 @@
             text-align: center;
         }
         .discover-header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: var(--type-page-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
+            letter-spacing: var(--tracking-display);
             margin-bottom: 1rem;
         }
         .discover-header p {
             color: var(--text-gray);
-            font-size: 1.1rem;
+            font-size: var(--type-body-lg);
+            line-height: var(--leading-body);
             margin-bottom: 3rem;
         }
         .progress-container {
@@ -56,13 +60,15 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
+            font-weight: var(--weight-bold);
+            font-size: var(--type-caption);
             margin-right: 15px;
         }
         .step-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: var(--type-subsection-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
             display: inline-block;
             vertical-align: middle;
         }
@@ -98,7 +104,7 @@
             transition: 0.3s; 
         }
         .genre-card.active .genre-icon { color: var(--accent-orange); }
-        .genre-name { font-size: 0.85rem; font-weight: 500; color: var(--text-gray); }
+        .genre-name { font-size: var(--type-body-sm); font-weight: var(--weight-medium); color: var(--text-gray); }
         .genre-card.active .genre-name { color: white; }
 
         /* Step 2: Time */
@@ -126,16 +132,16 @@
             transform: translateX(-50%);
             background: #ff8c5a;
             color: white;
-            font-size: 0.65rem;
-            font-weight: 800;
+            font-size: var(--type-label);
+            font-weight: var(--weight-bold);
             padding: 4px 12px;
             border-radius: 4px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: var(--tracking-label);
         }
-        .time-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-orange); margin-bottom: 15px; display: block; }
-        .time-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
-        .time-desc { font-size: 0.85rem; color: var(--text-gray); line-height: 1.5; }
+        .time-value { font-size: var(--type-subsection-title); font-weight: var(--weight-bold); color: var(--accent-orange); margin-bottom: 15px; display: block; }
+        .time-title { font-size: var(--type-card-title); font-weight: var(--weight-bold); line-height: var(--leading-heading); margin-bottom: 10px; }
+        .time-desc { font-size: var(--type-body-sm); color: var(--text-gray); line-height: var(--leading-body); }
         .time-card.active { border-color: var(--accent-orange); background: rgba(255,140,90,0.05); }
 
 
@@ -150,19 +156,19 @@
             border: none;
             padding: 18px 60px;
             border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
+            font-size: var(--type-body-lg);
+            font-weight: var(--weight-bold);
             cursor: pointer;
             transition: var(--transition);
             box-shadow: 0 10px 30px rgba(255,140,90,0.3);
         }
         .generate-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,140,90,0.4); }
-        .wait-note { margin-top: 20px; font-size: 0.85rem; color: var(--text-gray); opacity: 0.6; }
+        .wait-note { margin-top: 20px; font-size: var(--type-caption); color: var(--text-gray); opacity: 0.6; }
 
         @media (max-width: 768px) {
             .genres-grid { grid-template-columns: repeat(3, 1fr); }
             .time-grid, .knowledge-grid { grid-template-columns: 1fr; }
-            .discover-header h1 { font-size: 2.5rem; }
+            .discover-header h1 { font-size: var(--type-page-title); }
         }
     </style>
 </head>

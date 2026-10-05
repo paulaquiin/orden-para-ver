@@ -1,0 +1,3 @@
+# Copia este archivo como .dev.vars y sustituye el valor por un token NUEVO.
+# Nunca subas .dev.vars al repositorio ni uses un prefijo VITE_ para este secreto.
+HARDCOVER_TOKEN="tu_token_de_hardcover"

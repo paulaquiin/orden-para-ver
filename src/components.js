@@ -1,3 +1,31 @@
+const THEME_STORAGE_KEY = 'ordenparaver-theme';
+
+function getInitialTheme() {
+  try {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    return savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'dark';
+  } catch {
+    return 'dark';
+  }
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.style.colorScheme = theme;
+
+  document.querySelectorAll('.theme-toggle').forEach((button) => {
+    const isLight = theme === 'light';
+    button.setAttribute('aria-label', isLight ? 'Activar tema oscuro' : 'Activar tema claro');
+    button.setAttribute('title', isLight ? 'Tema oscuro' : 'Tema claro');
+    button.setAttribute('aria-pressed', String(isLight));
+    button.innerHTML = isLight
+      ? `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.4 15.2A8.5 8.5 0 0 1 8.8 3.6 8.5 8.5 0 1 0 20.4 15.2Z"/></svg>`
+      : `<svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>`;
+  });
+}
+
+applyTheme(getInitialTheme());
+
 class AppHeader extends HTMLElement {
   connectedCallback() {
     const currentPath = window.location.pathname;
@@ -12,6 +40,7 @@ class AppHeader extends HTMLElement {
           <nav class="nav-links" id="navLinks">
             <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
             <a href="/contenidos/" class="${currentPath.includes('contenidos') ? 'active' : ''}">Contenido</a>
+            <a href="/libros/" class="${currentPath.includes('libros') ? 'active' : ''}">Libros</a>
             <a href="/novedades/" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
             <a href="/blog/" class="${currentPath.includes('blog') ? 'active' : ''}">Blog</a>
           </nav>
@@ -26,6 +55,7 @@ class AppHeader extends HTMLElement {
               </button>
               <div class="search-results-overlay"></div>
             </div>
+            <button class="theme-toggle" type="button" aria-label="Activar tema claro" title="Tema claro" aria-pressed="false"></button>
             <button class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menú" aria-expanded="false">
               <svg id="hamburgerIcon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
@@ -36,6 +66,7 @@ class AppHeader extends HTMLElement {
         <div class="mobile-nav" id="mobileNav">
           <a href="/" class="${currentPath === '/' || currentPath === '/index.html' ? 'active' : ''}">Cronologías</a>
           <a href="/contenidos/" class="${currentPath.includes('contenidos') ? 'active' : ''}">Contenido</a>
+          <a href="/libros/" class="${currentPath.includes('libros') ? 'active' : ''}">Libros</a>
           <a href="/novedades/" class="${currentPath.includes('novedades') ? 'active' : ''}">Novedades</a>
           <a href="/blog/" class="${currentPath.includes('blog') ? 'active' : ''}">Blog</a>
           <div class="mobile-nav-search">
@@ -54,6 +85,19 @@ class AppHeader extends HTMLElement {
 
     const btn = this.querySelector('#hamburgerBtn');
     const mobileNav = this.querySelector('#mobileNav');
+    const themeToggle = this.querySelector('.theme-toggle');
+
+    applyTheme(document.documentElement.dataset.theme || getInitialTheme());
+    themeToggle?.addEventListener('click', () => {
+      const nextTheme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+      } catch {
+        // The visual preference still applies for this visit if storage is unavailable.
+      }
+      applyTheme(nextTheme);
+    });
+
     btn?.addEventListener('click', () => {
       const isOpen = mobileNav.classList.toggle('open');
       btn.setAttribute('aria-expanded', isOpen);

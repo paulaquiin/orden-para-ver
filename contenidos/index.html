@@ -20,24 +20,27 @@
             align-items: center;
         }
         .hero-badge {
-            font-size: 0.75rem;
+            font-size: var(--type-label);
             color: var(--accent-orange);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: var(--tracking-label);
             margin-bottom: 1rem;
             display: block;
-            font-weight: 700;
+            font-weight: var(--weight-bold);
         }
         .hero-title-large {
-            font-size: 4.5rem;
-            font-weight: 700;
-            line-height: 1;
+            font-family: var(--font-display);
+            font-size: var(--type-display-lg);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-display);
+            letter-spacing: var(--tracking-display);
             margin-bottom: 1.5rem;
             max-width: 800px;
         }
         .hero-description {
             color: var(--text-gray);
-            font-size: 1.1rem;
+            font-size: var(--type-body-lg);
+            line-height: var(--leading-body);
             max-width: 600px;
             margin-bottom: 2.5rem;
         }
@@ -57,8 +60,11 @@
             margin-bottom: 2rem;
         }
         .section-header-compact h2 {
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: var(--type-section-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
+            letter-spacing: var(--tracking-display);
         }
 
         /* Master Franchises Grid */
@@ -84,8 +90,8 @@
             padding: 25px;
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
         }
-        .master-card-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 5px; }
-        .master-card-info { color: var(--text-gray); font-size: 0.75rem; }
+        .master-card-title { font-size: var(--type-card-title); font-weight: var(--weight-bold); line-height: var(--leading-heading); margin-bottom: 5px; }
+        .master-card-info { color: var(--text-gray); font-size: var(--type-caption); }
 
         /* Tendencias Row */
         .trends-grid {
@@ -123,8 +129,8 @@
         .trend-card:nth-child(5) { grid-column: span 4; grid-row: span 1; }
 
         .trend-content { position: relative; z-index: 1; }
-        .trend-rank { color: var(--accent-orange); font-size: 0.7rem; font-weight: 800; margin-bottom: 8px; display: block; border: 1px solid var(--accent-orange); display: inline-block; padding: 2px 8px; border-radius: 4px; }
-        .trend-title { font-size: 1.3rem; font-weight: 700; margin-top: 10px; }
+        .trend-rank { color: var(--accent-orange); font-size: var(--type-label); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); margin-bottom: 8px; display: block; border: 1px solid var(--accent-orange); display: inline-block; padding: 2px 8px; border-radius: 4px; }
+        .trend-title { font-size: var(--type-card-title); font-weight: var(--weight-bold); line-height: var(--leading-heading); margin-top: 10px; }
 
         /* Format Pills */
         .format-grid {
@@ -151,14 +157,14 @@
             display: flex;
             align-items: center;
         }
-        .format-name { font-weight: 600; font-size: 0.9rem; }
+        .format-name { font-weight: var(--weight-semibold); font-size: var(--type-body-sm); }
 
         @media (max-width: 968px) {
             .master-grid, .trends-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
             .trend-card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 200px; }
             .format-grid { flex-wrap: wrap; }
             .format-pill { width: calc(50% - 8px); flex: none; }
-            .hero-title-large { font-size: 3rem; }
+            .hero-title-large { font-size: var(--type-page-title); }
         }
     </style>
 </head>

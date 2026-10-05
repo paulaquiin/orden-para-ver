@@ -22,8 +22,9 @@
         body {
             background-color: var(--bg-dark);
             color: white;
-            font-family: 'Outfit', sans-serif;
-            line-height: 1.6;
+            font-family: var(--font-body);
+            font-size: var(--type-body);
+            line-height: var(--leading-body);
         }
 
         .article-hero {
@@ -66,20 +67,23 @@
             color: var(--accent-orange);
             padding: 4px 12px;
             border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: var(--type-label);
+            font-weight: var(--weight-bold);
+            letter-spacing: var(--tracking-label);
             text-transform: uppercase;
         }
 
         .read-time {
             color: var(--text-muted);
-            font-size: 0.85rem;
+            font-size: var(--type-caption);
         }
 
         .article-title {
-            font-size: clamp(2rem, 6vw, 3.5rem);
-            font-weight: 800;
-            line-height: 1.1;
+            font-family: var(--font-display);
+            font-size: var(--type-page-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
+            letter-spacing: var(--tracking-display);
             margin-bottom: 20px;
         }
 
@@ -111,32 +115,37 @@
         }
 
         .author-name {
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-weight: var(--weight-semibold);
+            font-size: var(--type-body-sm);
         }
 
         .pub-date {
-            font-size: 0.8rem;
+            font-size: var(--type-caption);
             color: var(--text-muted);
         }
 
         .article-content {
-            font-size: 1.15rem;
-            line-height: 1.8;
+            font-size: var(--type-body-lg);
+            line-height: var(--leading-reading);
             color: #d1d1e0;
         }
 
         .article-content h2 {
             color: white;
-            font-size: 2rem;
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: var(--type-section-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
+            letter-spacing: var(--tracking-display);
             margin: 50px 0 24px;
         }
 
         .article-content h3 {
             color: white;
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: var(--type-subsection-title);
+            font-weight: var(--weight-regular);
+            line-height: var(--leading-heading);
             margin: 40px 0 20px;
         }
 
@@ -189,8 +198,8 @@
             gap: 8px;
             color: var(--text-muted);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: var(--weight-semibold);
+            font-size: var(--type-body-sm);
             transition: 0.2s;
         }
 
