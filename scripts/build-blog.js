@@ -155,8 +155,7 @@ function buildBlog() {
     // Inyectar Grid
     const gridRegex = /<!-- BLOG_POSTS_START -->[\s\S]*<!-- BLOG_POSTS_END -->/;
     if (gridRegex.test(indexHTML)) {
-      const gridWrapper = `
-<!-- BLOG_POSTS_START -->
+      const gridWrapper = `<!-- BLOG_POSTS_START -->
 <div class="blog-grid">
   <div class="empty-state" id="no-results">
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px; opacity: 0.6; color: var(--accent-orange);"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
