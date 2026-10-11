@@ -211,11 +211,11 @@ export async function onRequest(context) {
     return json({ error: 'Método no permitido.' }, 405);
   }
 
-  const token = context.env.HARDCOVER_TOKEN;
+  const token = context.env.HARDCOVER_TOKEN2 || context.env.HARDCOVER_TOKEN;
   if (!token) {
     return json({
       code: 'TOKEN_NOT_CONFIGURED',
-      error: 'Añade HARDCOVER_TOKEN a los secretos del servidor para activar la búsqueda de libros.'
+      error: 'Añade HARDCOVER_TOKEN2 a los secretos del servidor para activar la búsqueda de libros.'
     }, 503);
   }
 

@@ -37,7 +37,7 @@ Si deseas ejecutar el proyecto en tu entorno local:
    ```
 
    La página de libros necesita las funciones locales de Cloudflare. Si ya
-   existe `.dev.vars`, añade allí `HARDCOVER_TOKEN`. Si no existe, copia
+   existe `.dev.vars`, añade allí `HARDCOVER_TOKEN2`. Si no existe, copia
    `.dev.vars.example` como `.dev.vars`, sustituye el valor de ejemplo y usa:
 
    ```bash
@@ -48,7 +48,8 @@ Si deseas ejecutar el proyecto en tu entorno local:
    `http://127.0.0.1:8788`. Si cambias el código, detenlo y ejecútalo de nuevo
    para reconstruir la versión local.
 
-   El secreto debe llamarse `HARDCOVER_TOKEN`. No uses el prefijo `VITE_` y no
+   El secreto debe llamarse `HARDCOVER_TOKEN2` (también se admite
+   `HARDCOVER_TOKEN` como alternativa). No uses el prefijo `VITE_` y no
    subas el archivo `.dev.vars` al repositorio.
 
 3. Para construir la versión de producción:
@@ -59,9 +60,11 @@ Si deseas ejecutar el proyecto en tu entorno local:
 ## Configuración de Hardcover en producción
 
 En Cloudflare, abre **Workers & Pages → tu proyecto → Settings → Variables and
-Secrets → Add**, crea `HARDCOVER_TOKEN`, marca el valor como secreto cifrado y
+Secrets → Add**, crea `HARDCOVER_TOKEN2`, marca el valor como secreto cifrado y
 vuelve a desplegar el proyecto. El navegador solo llama a `/api/hardcover`; el
 token nunca se envía al cliente.
+
+Si ambos secretos están configurados, se usa `HARDCOVER_TOKEN2` con prioridad.
 
 ---
 Hecho con ❤️ para amantes del cine y las series.
