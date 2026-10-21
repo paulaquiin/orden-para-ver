@@ -166,6 +166,15 @@ class AppModal extends HTMLElement {
 }
 customElements.define('app-modal', AppModal);
 
+class AppResultsNotice extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+      <p class="results-notice" role="note">La información es orientativa: puede contener errores u omisiones y está sujeta a cambios. Comprueba el orden y los datos con fuentes oficiales.</p>
+    `;
+  }
+}
+customElements.define('app-results-notice', AppResultsNotice);
+
 // Global Helper
 window.showAlert = function(title, message) {
   const modal = document.querySelector('app-modal');

@@ -221,6 +221,26 @@ body {
   display: block;
 }
 
+app-results-notice { display: block; }
+.results-notice {
+  max-width: 960px;
+  margin: 18px auto 0;
+  color: var(--text-gray);
+  font-size: var(--type-body-sm);
+  line-height: var(--leading-body);
+}
+.search-results-overlay > app-results-notice {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-color);
+  border-top: 1px solid var(--glass-border);
+}
+.search-results-overlay .results-notice {
+  margin: 0;
+  padding: 12px 18px;
+  font-size: var(--type-caption);
+}
+
 .search-result-item {
   display: flex;
   align-items: center;

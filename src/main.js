@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               <div class="timeline-line"></div>
               <div class="sync-message">Sincronizando...</div>
             </div>
+            <app-results-notice></app-results-notice>
           </div>
         </section>
       `;
@@ -597,6 +598,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       overlay.appendChild(item);
     });
+    overlay.appendChild(document.createElement('app-results-notice'));
 
     // Close overlay on click outside
     const closeOverlay = (e) => {
