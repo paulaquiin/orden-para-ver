@@ -169,7 +169,10 @@ customElements.define('app-modal', AppModal);
 class AppResultsNotice extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-      <p class="results-notice" role="note">La información es orientativa: puede contener errores u omisiones y está sujeta a cambios. Comprueba el orden y los datos con fuentes oficiales.</p>
+      <p class="results-notice" role="note">
+        <svg class="results-notice-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v4m0 4h.01"/></svg>
+        <span>La información es orientativa: puede contener errores u omisiones y está sujeta a cambios. Comprueba el orden y los datos con fuentes oficiales.</span>
+      </p>
     `;
   }
 }

@@ -223,11 +223,19 @@ body {
 
 app-results-notice { display: block; }
 .results-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
   max-width: 960px;
   margin: 18px auto 0;
   color: var(--text-gray);
   font-size: var(--type-body-sm);
   line-height: var(--leading-body);
+}
+.results-notice-icon {
+  flex: 0 0 18px;
+  margin-top: 2px;
+  color: var(--accent-orange);
 }
 .search-results-overlay > app-results-notice {
   position: sticky;
