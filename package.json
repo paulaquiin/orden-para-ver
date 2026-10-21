@@ -3,13 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "predev": "node scripts/build-blog.js",
     "dev": "vite",
-    "dev:ai": "node scripts/build-blog.js && vite build && wrangler pages dev dist --compatibility-date=2026-05-01 --compatibility-flag=nodejs_compat",
-    "prebuild": "node scripts/build-blog.js",
+    "dev:ai": "npm run build && npm run preview",
     "build": "vite build",
-    "preview": "vite preview"
+    "check:wordpress": "node scripts/check-wordpress.js",
+    "check:blog": "node scripts/verify-blog.js",
+    "test:blog": "node --test tests/blog/*.test.js",
+    "preview": "wrangler pages dev dist --compatibility-date=2026-05-01 --compatibility-flag=nodejs_compat"
   },
   "devDependencies": {
     "vite": "^8.0.4",
@@ -17,7 +21,7 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2",
-    "front-matter": "^4.0.2",
-    "marked": "^18.0.2"
+    "he": "^2.0.0",
+    "sanitize-html": "^2.18.1"
   }
 }

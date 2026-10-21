@@ -15,20 +15,6 @@
             padding: 80px 20px;
             text-align: center;
         }
-        .discover-header h1 {
-            font-family: var(--font-display);
-            font-size: var(--type-page-title);
-            font-weight: var(--weight-regular);
-            line-height: var(--leading-heading);
-            letter-spacing: var(--tracking-display);
-            margin-bottom: 1rem;
-        }
-        .discover-header p {
-            color: var(--text-gray);
-            font-size: var(--type-body-lg);
-            line-height: var(--leading-body);
-            margin-bottom: 3rem;
-        }
         .progress-container {
             width: 300px;
             height: 4px;
@@ -168,7 +154,6 @@
         @media (max-width: 768px) {
             .genres-grid { grid-template-columns: repeat(3, 1fr); }
             .time-grid, .knowledge-grid { grid-template-columns: 1fr; }
-            .discover-header h1 { font-size: var(--type-page-title); }
         }
     </style>
 </head>
@@ -176,9 +161,10 @@
     <app-header></app-header>
 
     <main class="discover-page">
-        <header class="discover-header">
-            <h1 class="gradient-text">¿No sabes por dónde empezar?</h1>
-            <p>Configura tu experiencia cinematográfica ideal en 2 simples pasos.</p>
+        <header class="discover-header page-heading page-heading--center page-heading--spaced">
+            <span class="eyebrow type-label">TU PRÓXIMA HISTORIA</span>
+            <h1 class="page-heading-title">¿No sabes por dónde empezar?</h1>
+            <p class="page-heading-description">Configura tu experiencia cinematográfica ideal en 2 simples pasos.</p>
         </header>
 
         <div class="progress-container">

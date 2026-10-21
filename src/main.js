@@ -96,9 +96,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       const mainElement = document.querySelector('main') || document.body;
       mainElement.innerHTML = `
         <section class="franchise-header">
-          <div class="container" style="text-align: center; padding-top: 100px;">
-            <h1 class="franchise-title" id="franchiseTitle">Cargando Saga...</h1>
-            <p id="franchiseSummary" style="color: var(--text-gray);">Estamos recuperando el orden cronológico.</p>
+          <div class="container page-heading page-heading--center" style="padding-top: 100px;">
+            <span class="eyebrow type-label" id="contextTag">SINCRONIZANDO</span>
+            <h1 class="franchise-title page-heading-title" id="franchiseTitle">Cargando Saga...</h1>
+            <p class="franchise-summary page-heading-description" id="franchiseSummary">Estamos recuperando el orden cronológico.</p>
           </div>
         </section>
         <section class="timeline-section">
@@ -321,7 +322,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.title = `${pageTitle} | Orden para ver`;
       const titleEl = document.querySelector('.franchise-title');
       const sumEl = document.querySelector('.franchise-summary');
-      const ctxEl = document.querySelector('.context-tag');
+      const ctxEl = document.getElementById('contextTag');
 
       if (titleEl) titleEl.textContent = pageTitle;
       if (sumEl) {
@@ -882,14 +883,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     let params = {};
 
     if (type === 'animation') {
-      titleEl.innerHTML = `Lo mejor de la <span class="gradient-text">Animación</span>`;
+      titleEl.innerHTML = `Lo mejor de la <span class="heading-accent">Animación</span>`;
       descEl.textContent = 'Descubre las joyas animadas que han marcado un antes y un después.';
       params.with_genres = 16;
     } else if (type === 'tv') {
-      titleEl.innerHTML = `Mejores <span class="gradient-text">Series de TV</span>`;
+      titleEl.innerHTML = `Mejores <span class="heading-accent">Series de TV</span>`;
       descEl.textContent = 'Las series que todo el mundo debería ver al menos una vez.';
     } else {
-      titleEl.innerHTML = `Mejores <span class="gradient-text">Películas</span>`;
+      titleEl.innerHTML = `Mejores <span class="heading-accent">Películas</span>`;
       descEl.textContent = 'El séptimo arte en su máxima expresión. Clásicos y éxitos modernos.';
     }
 

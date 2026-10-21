@@ -23,16 +23,6 @@
       line-height: var(--leading-reading);
     }
 
-    .legal-content h1 {
-      font-family: var(--font-display);
-      font-size: var(--type-page-title);
-      font-weight: var(--weight-regular);
-      line-height: var(--leading-heading);
-      letter-spacing: var(--tracking-display);
-      color: var(--text-white);
-      margin-bottom: 2rem;
-      text-align: center;
-    }
 
     .legal-content h2 {
       color: var(--text-white);
@@ -55,7 +45,10 @@
     <app-header></app-header>
 
     <main class="legal-content">
-      <h1 class="gradient-text">Términos de Servicio</h1>
+      <header class="page-heading page-heading--center page-heading--spaced">
+        <span class="eyebrow type-label">INFORMACIÓN LEGAL</span>
+        <h1 class="page-heading-title">Términos de Servicio</h1>
+      </header>
 
       <h2>1. Aceptación de los Términos</h2>
       <p>Al acceder y utilizar el sitio web "Orden para ver" o cualquier contenido o servicio relacionado, aceptas estar

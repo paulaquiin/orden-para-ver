@@ -1029,9 +1029,6 @@ body {
    RESPONSIVE — Franchise / Timeline Detail
    ============================================ */
 @media (max-width: 968px) {
-  .franchise-title {
-    font-size: var(--type-page-title);
-  }
 
   /* Timeline line moves to left edge */
   .timeline-line {
@@ -1101,9 +1098,6 @@ body {
 }
 
 @media (max-width: 640px) {
-  .franchise-title {
-    font-size: var(--type-page-title);
-  }
 
   .franchise-summary {
     font-size: var(--type-body-lg);
@@ -1135,9 +1129,6 @@ body {
 }
 
 @media (max-width: 480px) {
-  .franchise-title {
-    font-size: var(--type-page-title);
-  }
 
   .card-poster-wrapper {
     height: 180px;
@@ -1332,24 +1323,7 @@ body {
   background: linear-gradient(to bottom, rgba(255, 140, 90, 0.08), transparent);
 }
 
-.context-tag {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 2px;
-  color: var(--accent-orange);
-  font-weight: 700;
-  margin-bottom: 1rem;
-  display: block;
-}
 
-.franchise-title {
-  font-family: var(--font-display);
-  font-size: var(--type-page-title);
-  font-weight: var(--weight-regular);
-  line-height: var(--leading-heading);
-  letter-spacing: var(--tracking-display);
-  margin-bottom: 1.5rem;
-}
 
 .franchise-summary {
   color: var(--text-gray);
@@ -1933,19 +1907,48 @@ body {
   line-height: 1;
   font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  text-align: left;
 }
 
-.eyebrow::before { content: ''; width: 28px; height: 1px; background: currentColor; }
+.eyebrow::before { content: ''; width: 28px; height: 1px; flex: 0 0 28px; background: currentColor; }
 
-.home-hero-copy h1 {
-  max-width: 760px;
-  margin: 18px 0 18px;
+/* Shared editorial headings: the home is the reference for every page. */
+.page-heading .page-heading-title {
+  margin: 18px 0;
   font-family: var(--font-display);
   font-size: var(--type-display-xl);
   font-weight: var(--weight-regular);
   line-height: var(--leading-display);
   letter-spacing: var(--tracking-display);
+  color: var(--text-white);
+  overflow-wrap: break-word;
 }
+.page-heading .page-heading-description,
+.section-heading .page-heading-description {
+  max-width: 650px;
+  margin: 0;
+  color: var(--text-gray);
+  font-size: var(--type-body-lg);
+  line-height: var(--leading-body);
+}
+.page-heading-title .heading-accent { color: var(--accent-orange); }
+.section-heading .section-heading-title {
+  margin: 18px 0;
+  font-family: var(--font-display);
+  font-size: var(--type-section-title);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-display);
+  color: var(--text-white);
+}
+.page-heading--center .page-heading-title,
+.page-heading--center .page-heading-description { margin-left: auto; margin-right: auto; }
+.page-heading--center { text-align: center; }
+.page-heading--center .eyebrow { text-align: left; }
+.page-heading--spaced { margin-bottom: 40px; }
+.section-heading--spaced { margin-bottom: 40px; }
+
 
 .sync-message {
   padding: 2rem;
@@ -2088,14 +2091,7 @@ body {
   box-shadow: 0 20px 60px rgba(49, 38, 31, .18);
 }
 
-.home-hero-copy h1 span { color: var(--accent-orange); }
 
-.home-hero-copy > p {
-  max-width: 560px;
-  color: var(--home-muted);
-  font-size: var(--type-body-lg);
-  line-height: var(--leading-body);
-}
 
 .home-search {
   max-width: 680px;
@@ -2284,7 +2280,6 @@ body {
 
 @media (max-width: 1100px) {
   .home-hero-grid { grid-template-columns: 1fr 1fr; gap: 38px; }
-  .home-hero-copy h1 { font-size: var(--type-display-xl); }
   .format-grid { grid-template-columns: repeat(2, 1fr); }
   .discovery-grid { grid-template-columns: 1fr; }
   .home-sidebar { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
@@ -2295,8 +2290,6 @@ body {
   .home-refresh .container { padding-left: 20px; padding-right: 20px; }
   .home-hero { padding-top: 42px; }
   .home-hero-grid { grid-template-columns: 1fr; }
-  .home-hero-copy h1 { font-size: var(--type-display-xl); }
-  .home-hero-copy > p { font-size: var(--type-body-lg); }
   .hero-visual { min-height: 390px; }
   .hero-visual-title { left: 30px; bottom: 70px; }
   .hero-visual-action, .hero-visual-label { left: 30px; }
@@ -2312,7 +2305,6 @@ body {
 }
 
 @media (max-width: 480px) {
-  .home-hero-copy h1 { font-size: var(--type-display-xl); }
   .home-search { display: grid; grid-template-columns: auto 1fr; }
   .home-search .search-btn { grid-column: 1 / -1; min-height: 43px; }
   .home-search .search-results-overlay { top: calc(100% + 8px); }
@@ -2412,9 +2404,7 @@ body {
 }
 .books-hero-glow { position: absolute; width: 440px; height: 440px; right: 8%; top: 8%; border-radius: 50%; background: rgba(255, 116, 72, 0.16); filter: blur(110px); }
 .books-hero-layout { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr); align-items: center; min-height: 620px; gap: 80px; padding-top: 90px; padding-bottom: 90px; }
-.books-kicker, .books-section-eyebrow, .books-message-label, .reading-order-label { display: block; color: var(--accent-orange); font-size: var(--type-label); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); }
-.books-hero-copy h1 { max-width: 760px; margin: 14px 0 22px; font-family: var(--font-display); font-size: var(--type-display-xl); font-weight: var(--weight-regular); line-height: var(--leading-display); letter-spacing: var(--tracking-display); }
-.books-hero-copy > p { max-width: 650px; color: var(--text-gray); font-size: var(--type-body-lg); line-height: var(--leading-body); }
+.books-message-label, .reading-order-label { display: block; color: var(--accent-orange); font-size: var(--type-label); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); }
 .books-search { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; max-width: 760px; margin-top: 36px; padding: 8px 8px 8px 20px; border: 1px solid rgba(255,255,255,0.13); border-radius: 18px; background: rgba(255,255,255,0.055); box-shadow: 0 24px 70px rgba(0,0,0,0.24); backdrop-filter: blur(18px); transition: var(--transition); }
 .books-search:focus-within { border-color: rgba(255, 140, 90, 0.75); box-shadow: 0 0 0 4px rgba(255, 140, 90, 0.08), 0 24px 70px rgba(0,0,0,0.3); }
 .books-search-icon { display: flex; color: var(--text-gray); }
@@ -2449,7 +2439,6 @@ body {
 .books-loader { width: 34px; height: 34px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent-orange); border-radius: 50%; animation: books-spin 0.8s linear infinite; }
 @keyframes books-spin { to { transform: rotate(360deg); } }
 .books-section-heading { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin: 10px 0 28px; }
-.books-section-heading h2, .book-detail-header h2 { margin-top: 7px; font-family: var(--font-display); font-size: var(--type-section-title); font-weight: var(--weight-regular); line-height: var(--leading-heading); letter-spacing: var(--tracking-display); }
 .books-section-heading > p { max-width: 430px; color: var(--text-gray); text-align: right; }
 .book-series-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .book-series-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 18px; min-height: 112px; padding: 22px; border: 1px solid var(--glass-border); border-radius: 18px; color: var(--text-white); text-align: left; background: var(--bg-card); font: inherit; cursor: pointer; transition: var(--transition); }
@@ -2464,7 +2453,6 @@ body {
 .book-series-card:hover .book-series-arrow { transform: translateX(4px); }
 .book-detail { max-width: 1050px; margin: 0 auto; }
 .book-detail-header { margin-bottom: 55px; text-align: center; }
-.book-detail-header > p { margin-top: 13px; color: var(--text-gray); }
 .books-back-button { display: block; margin: 0 auto 40px; border: 0; color: var(--text-gray); background: transparent; font: inherit; cursor: pointer; }
 .books-back-button:hover { color: var(--text-white); }
 .reading-order-list { position: relative; display: grid; gap: 28px; list-style: none; }
@@ -2490,7 +2478,6 @@ body {
 @media (max-width: 800px) {
   .books-hero-layout { display: block; min-height: auto; padding-top: 75px; padding-bottom: 75px; }
   .books-hero-art { display: none; }
-  .books-hero-copy h1 { font-size: var(--type-display-xl); }
   .books-section-heading { display: block; }
   .books-section-heading > p { margin-top: 12px; text-align: left; }
   .book-series-grid { grid-template-columns: 1fr; }

@@ -66,5 +66,41 @@ token nunca se envía al cliente.
 
 Si ambos secretos están configurados, se usa `HARDCOVER_TOKEN2` con prioridad.
 
+## Conexión del blog con WordPress
+
+El backend del blog es `https://api.ordenparaver.net`, con español como único
+idioma y URLs públicas bajo `https://ordenparaver.net/blog/`.
+
+Comprueba la conexión y el contrato público de Monitor SEO con:
+
+```bash
+npm run check:wordpress
+```
+
+El blog se renderiza en servidor con Cloudflare Pages Functions y consulta
+WordPress en cada visita. Para comprobar las pruebas y los datos reales:
+
+```bash
+npm run test:blog
+npm run check:blog
+```
+
+Usa Node.js 22.12 o posterior. `npm run dev` incluye el blog en Vite;
+`npm run build` y `npm run preview` permiten probar el runtime de Cloudflare.
+Los artículos Markdown, sus páginas HTML y los generadores antiguos se han
+eliminado. El blog publica únicamente los artículos disponibles en WordPress.
+
+La arquitectura, las variables de Monitor SEO, las verificaciones y el despliegue
+están documentados en [docs/blog-wordpress.md](docs/blog-wordpress.md).
+
+## Encabezados compartidos
+
+Todas las páginas usan el encabezado editorial de la home: `eyebrow type-label`
+para la etiqueta con raya, `page-heading-title` para el título principal y
+`page-heading-description` para el subtítulo, dentro de `page-heading`.
+Las secciones usan `section-heading` y `section-heading-title`. Estos estilos
+se definen en `src/style.css`; las páginas solo ajustan el espacio y la
+alineación. No se deben crear variantes locales de tipografía o de la etiqueta.
+
 ---
 Hecho con ❤️ para amantes del cine y las series.

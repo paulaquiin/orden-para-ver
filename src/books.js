@@ -47,9 +47,9 @@ function renderSearchResults(series, query) {
 
   view.innerHTML = `
     <div class="books-section-heading">
-      <div>
-        <span class="books-section-eyebrow">COINCIDENCIAS</span>
-        <h2>Elige la saga correcta</h2>
+      <div class="section-heading">
+        <span class="eyebrow type-label">COINCIDENCIAS</span>
+        <h2 class="section-heading-title">Elige la saga correcta</h2>
       </div>
       <p>Hardcover puede distinguir series con nombres parecidos o diferentes autores.</p>
     </div>
@@ -93,11 +93,11 @@ function renderSeries(series) {
 
   view.innerHTML = `
     <article class="book-detail">
-      <header class="book-detail-header">
+      <header class="book-detail-header section-heading page-heading--center">
         <button class="books-back-button" id="booksBackButton" type="button">← Volver a resultados</button>
-        <span class="books-section-eyebrow">ORDEN DE LECTURA</span>
-        <h2>${escapeHtml(series.name)}</h2>
-        <p>${escapeHtml(series.author || 'Autor no disponible')} · ${books.length} ${books.length === 1 ? 'entrega principal' : 'entregas principales'}</p>
+        <span class="eyebrow type-label">ORDEN DE LECTURA</span>
+        <h2 class="section-heading-title">${escapeHtml(series.name)}</h2>
+        <p class="page-heading-description">${escapeHtml(series.author || 'Autor no disponible')} · ${books.length} ${books.length === 1 ? 'entrega principal' : 'entregas principales'}</p>
       </header>
 
       <ol class="reading-order-list">

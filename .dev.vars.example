@@ -1,3 +1,9 @@
 # Copia este archivo como .dev.vars y sustituye el valor por un token NUEVO.
 # Nunca subas .dev.vars al repositorio ni uses un prefijo VITE_ para este secreto.
 HARDCOVER_TOKEN2="tu_token_de_hardcover"
+
+# Blog: solo para el receptor de eventos de Monitor SEO. La lectura es pública.
+# Configura el token compartido para activar POST /api/revalidate-blog.
+# BLOG_REVALIDATION_TOKEN=""
+# Opcional: el ID de este proyecto ya está fijado en config/blog.js.
+# MONITOR_SEO_PROJECT_ID=""

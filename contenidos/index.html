@@ -19,34 +19,10 @@
             display: flex;
             align-items: center;
         }
-        .hero-badge {
-            font-size: var(--type-label);
-            color: var(--accent-orange);
-            text-transform: uppercase;
-            letter-spacing: var(--tracking-label);
-            margin-bottom: 1rem;
-            display: block;
-            font-weight: var(--weight-bold);
-        }
-        .hero-title-large {
-            font-family: var(--font-display);
-            font-size: var(--type-display-lg);
-            font-weight: var(--weight-regular);
-            line-height: var(--leading-display);
-            letter-spacing: var(--tracking-display);
-            margin-bottom: 1.5rem;
-            max-width: 800px;
-        }
-        .hero-description {
-            color: var(--text-gray);
-            font-size: var(--type-body-lg);
-            line-height: var(--leading-body);
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-        }
         .hero-btns {
             display: flex;
             gap: 15px;
+            margin-top: 32px;
         }
         
         /* Section Headings */
@@ -58,13 +34,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-        }
-        .section-header-compact h2 {
-            font-family: var(--font-display);
-            font-size: var(--type-section-title);
-            font-weight: var(--weight-regular);
-            line-height: var(--leading-heading);
-            letter-spacing: var(--tracking-display);
         }
 
         /* Master Franchises Grid */
@@ -164,7 +133,6 @@
             .trend-card { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 200px; }
             .format-grid { flex-wrap: wrap; }
             .format-pill { width: calc(50% - 8px); flex: none; }
-            .hero-title-large { font-size: var(--type-page-title); }
         }
     </style>
 </head>
@@ -174,10 +142,10 @@
     <main>
         <!-- Featured Hero -->
         <section class="contents-hero">
-            <div class="container">
-                <span class="hero-badge">UNIVERSO DESTACADO</span>
-                <h1 class="hero-title-large">Jurassic World</h1>
-                <p class="hero-description">65 millones de años de evolución. Descubre el orden cronológico completo desde el parque original de Hammond hasta el dominio global de los dinosaurios.</p>
+            <div class="container page-heading">
+                <span class="eyebrow type-label">UNIVERSO DESTACADO</span>
+                <h1 class="page-heading-title">Jurassic World</h1>
+                <p class="page-heading-description">65 millones de años de evolución. Descubre el orden cronológico completo desde el parque original de Hammond hasta el dominio global de los dinosaurios.</p>
                 <div class="hero-btns">
                     <button class="btn" style="background: var(--accent-orange); color: white;" onclick="window.location.href='/franchise/?collection_id=328'">Ver Cronología</button>
                 </div>
@@ -187,8 +155,8 @@
         <div class="container">
             <!-- Master Franchises -->
             <section class="content-section">
-                <div class="section-header-compact">
-                    <h2>Franquicias Maestras</h2>
+                <div class="section-header-compact section-heading">
+                    <h2 class="section-heading-title">Franquicias Maestras</h2>
                 </div>
                 <div class="master-grid">
                     <div class="master-card" onclick="window.location.href='/franchise/?collection_id=404609'">
@@ -224,8 +192,8 @@
 
             <!-- Trending (5 Items) -->
             <section class="content-section">
-                <div class="section-header-compact">
-                    <h2>Tendencias Actuales</h2>
+                <div class="section-header-compact section-heading">
+                    <h2 class="section-heading-title">Tendencias Actuales</h2>
                 </div>
                 <div class="trends-grid">
                     <div class="trend-card" onclick="window.location.href='/franchise/?tv_id=71912'" style="background-image: url('https://image.tmdb.org/t/p/w1280/foGkPxpw9h8zln81j63mix5B7m8.jpg')">
@@ -263,8 +231,8 @@
 
             <!-- By Format -->
             <section class="content-section">
-                <div class="section-header-compact">
-                    <h2>Explorar por Formato</h2>
+                <div class="section-header-compact section-heading">
+                    <h2 class="section-heading-title">Explorar por Formato</h2>
                 </div>
                 <div class="format-grid">
                     <div class="format-pill" onclick="window.location.href='/explorar/?type=movie'">
